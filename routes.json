@@ -1,0 +1,7 @@
+{
+    "/api/*": "/$1",
+    "/bkc/infors": "/bkcReqInfors",
+    "/bkc/details": "/bkcReqDetails",
+    "/bkc/drivers": "/bkcDrivers",
+    "/bkc/cars": "/bkcCars"
+}

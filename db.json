@@ -1,0 +1,131 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Nguyễn Đình Huy",
+      "phone": "0931335283"
+    }
+  ],
+  "bkcReqInfors": [
+    {
+      "name": "Nguyễn Đình Huy",
+      "phone": "0931335283",
+      "pickupTime": "11hAM",
+      "returnTime": "",
+      "pickupLocation": "144 Võ Văn Tần",
+      "comeLocation": "Đồng Tháp",
+      "totalPersonInCar": "2",
+      "ccPersons": "huynd@gmail.com",
+      "id": 70
+    },
+    {
+      "name": "Nguyễn Thị A",
+      "phone": "098412342",
+      "pickupTime": "12hAM",
+      "returnTime": "",
+      "pickupLocation": "22 Nguyễn Thị Minh Khai",
+      "comeLocation": "Đồng Nai",
+      "totalPersonInCar": "3",
+      "ccPersons": "ant@gmail.com",
+      "id": 89
+    }
+  ],
+  "bkcReqDetails": [
+      {
+        "id": 1,
+        "pickupLocation": "22 Nguyen Thi Minh Khai",
+        "arriveTime": "12hAM",
+        "employeeName": "Nguyen Van A",
+        "guestName": "",
+        "phone": "0943554234",
+        "note": "Khong",
+        "idBook": 70
+      },
+      {
+        "id": 2,
+        "pickupLocation": "Vo Van Tan",
+        "arriveTime": "10hAM",
+        "employeeName": "Nguyen Dinh Huy",
+        "guestName": "",
+        "phone": "0943223456",
+        "note": "",
+        "idBook": 70
+      },
+      {
+        "id": 3,
+        "pickupLocation": "11 Trương Định",
+        "arriveTime": "2hhAM",
+        "employeeName": "Nguyễn Văn A",
+        "guestName": "",
+        "phone": "0283223456",
+        "note": "",
+        "idBook": 89
+      },
+      {
+        "id": 4,
+        "pickupLocation": "22 Phạm Văn Dồng",
+        "arriveTime": "3hhAM",
+        "employeeName": "Nguyễn Văn C",
+        "guestName": "",
+        "phone": "0283223456",
+        "note": "",
+        "idBook": 89
+      },
+      {
+        "id": 5,
+        "pickupLocation": "44 Nam Cao",
+        "arriveTime": "2hhAM",
+        "employeeName": "Nguyễn Thị D",
+        "guestName": "",
+        "phone": "0283223456",
+        "note": "Đến sớm 10 phút",
+        "idBook": 89
+      }
+  ],
+  "bkcDrivers": [
+    {
+      "driverId": 1,
+      "driverName": "Nguyễn Văn Đậu",
+      "driverPhone": "0934565654"
+    },
+    {
+      "driverId": 2,
+      "driverName": "Trần Thị Cúc",
+      "driverPhone": "0934565654"
+    },
+    {
+      "driverId": 3,
+      "driverName": "Nguyễn Văn Tăng",
+      "driverPhone": "0934565654"
+    }
+  ],
+  "bkcCars": [
+    {
+      "carId": 1,
+      "driverId": 1,
+      "carNumber": "G0LD-98234",
+      "quantity": 7,
+      "status": "Còn Trống",
+      "personBook": "",
+      "dateBook": ""
+    },
+    {
+      "carId": 2,
+      "driverId": 2,
+      "carNumber": "G0LD-19567",
+      "quantity": 10,
+      "status": "Còn Trống",
+      "personBook": "",
+      "dateBook": ""
+    },
+    {
+      "carId": 3,
+      "driverId": 3,
+      "carNumber": "G0LD-00995",
+      "quantity": 20,
+      "status": "Còn Trống",
+      "personBook": "",
+      "dateBook": ""
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+.table_detail{
+    max-height: 500px;
+    overflow: scroll;
+    td{
+        vertical-align: middle;
+        text-align: center;
+    }
+    th{
+        vertical-align: middle;
+        text-align: center;
+    }
+}
+.table_detail_responsive{
+    height: 300px;
+    max-height: 300px;
+    border: 1px solid #212529;
+}
+.bkc_form{
+    // input{
+    //     width: 50%;
+    // }
+}
+.w_5{
+    width: 5%;
+}
+.w_4{
+    width: 4%;
+}
+.w_10{
+    width: 10%;
+}
+.w_12{
+    width: 12%;
+}
+.w_15{
+    width: 15%;
+}
+.w_20{
+    width: 20%;
+}
+.w_25{
+    width: 25%;
+}

@@ -1,0 +1,2 @@
+export const SET_PAGE_ACTIVE = "SET_PAGE_ACTIVE";
+export const SAVE_ACCESSTOKEN = "SAVE_ACCESSTOKEN";
