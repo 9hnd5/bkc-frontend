@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import BKCDetailRow from "./BKCDetailRow";
-function BKCDetailTable(props) {
-    const bkcDetails = useSelector(state => state.bkc.bkcDetails);
-    const displayBkcDetails = bkcDetails.map((bkcDetail, index) => {
-        return <BKCDetailRow bkcDetail={bkcDetail} key={index} />
+import { BookDetailRow } from "./BookDetailRow";
+export const BookDetailTable = (props) => {
+    const bookDetails = useSelector(state => state.bkc.bookDetails);
+    const displayBkcDetails = bookDetails.map((bookDetail, index) => {
+        return <BookDetailRow bookDetail={bookDetail} key={index} />
     });
     return (
         <div className="row">
@@ -12,11 +12,11 @@ function BKCDetailTable(props) {
                     <table className="table table-sm table-striped table-bordered table_detail">
                         <thead>
                             <tr>
-                                <th scope="col" className="w_4" >Id</th>
+                                <th scope="col" className="w_4" >STT</th>
                                 <th scope="col" className="w_12" >Nơi Đón</th>
-                                <th scope="col" className="w_12" >Nhân Viên</th>
+                                <th scope="col" className="w_12" >Giờ Đón</th>
+                                <th scope="col" className="w_12" >Tên NViên</th>
                                 <th scope="col" className="w_12" >Tên Khách</th>
-                                <th scope="col" className="w_12" >Giờ Đến</th>
                                 <th scope="col" className="w_12" >SĐT</th>
                                 <th scope="col" className="w_12" >Ghi Chú</th>
                                 <th scope="col" className="w_12" >Hành Động</th>
@@ -31,4 +31,3 @@ function BKCDetailTable(props) {
         </div>
     );
 }
-export default BKCDetailTable

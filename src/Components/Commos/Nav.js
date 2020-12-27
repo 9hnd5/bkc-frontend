@@ -4,8 +4,8 @@ function Nav() {
     const pageActive = useSelector(state => state.app.pageActive);
     return (
         <div className="container-fluid">
-            <div className="row d-flex justify-content-center">
-                <div className="col-10">
+            <div className="row">
+                <div className="col-12 col-xl-12">
                     <ul className="nav nav-tabs">
                         <li className="nav-item">
                             <Link className={`nav-link ${pageActive === "BKC_PAGE" ? "active" : "disabled"}`} to="bookingcar">ĐẶT XE</Link>

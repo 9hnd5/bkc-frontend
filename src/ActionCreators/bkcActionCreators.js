@@ -1,27 +1,28 @@
 import {
-    INSERT_BKC_DETAIL,
-    UPDATE_BKC_DETAIL, DELETE_BKC_DETAIL,
+    INSERT_BOOK_DETAIL,
+    UPDATE_BOOK_DETAIL, DELETE_BOOK_DETAIL,
     TOGGLE_BKC_DETAIL_INSERT,
-    INSERT_USER,
+    INSERT_BOOKER,
+    INSERT_BOOK_INFOR,
 } from "../Constants/bkcConstants"
 import { callApi } from "../Helpers/callApi"
 
-export const insertBkcDetail = (bkcDetail) => {
+export const insertBookDetail = (bookDetail) => {
     return {
-        type: INSERT_BKC_DETAIL,
-        bkcDetail
+        type: INSERT_BOOK_DETAIL,
+        bookDetail
     }
 }
-export const updateBkcDetail = (bkcDetail) => {
+export const updateBookDetail = (bookDetail) => {
     return {
-        type: UPDATE_BKC_DETAIL,
-        bkcDetail
+        type: UPDATE_BOOK_DETAIL,
+        bookDetail
     }
 }
-export const deleteBkcDetail = (bkcDetail) => {
+export const deleteBookDetail = (bookDetail) => {
     return {
-        type: DELETE_BKC_DETAIL,
-        bkcDetail
+        type: DELETE_BOOK_DETAIL,
+        bookDetail
     }
 }
 export const toggleBkcDetailModalInsert = () => {
@@ -29,16 +30,29 @@ export const toggleBkcDetailModalInsert = () => {
         type: TOGGLE_BKC_DETAIL_INSERT
     }
 }
-export const insertUser = (user) => {
+export const insertBooker = (booker) => {
     return {
-        type: INSERT_USER,
-        user
+        type: INSERT_BOOKER,
+        booker
+    }
+}
+export const insertBookInfor = (e) => {
+    return {
+        type: INSERT_BOOK_INFOR,
+        e
     }
 }
 
-export const fetchUserRequest = () => {
+export const fetchEmpRequest = () => {
     return async (dispatch) => {
-        const response = await callApi("https://localhost:5001/api/employee/getbyemail/" + "trandoan280367@gmail.com", "POST", null);
-        dispatch(insertUser(response.data));
+        const response = await callApi("https://localhost:5001/api/employee/" + "trandoan280367@gmail.com", "GET", null);
+        console.log("res1", response)
+        dispatch(insertBooker(response.data));
     };
+}
+export const insertBkcRequest = (data) => {
+    return async dispatch => {
+        const response = await callApi("https://localhost:5001/api/bkc/insert", "POST", data)
+        console.log("res", response)
+    }
 }

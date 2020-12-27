@@ -15,7 +15,7 @@ export const saveAccessToken = (accessToken) => {
 }
 export const requestAccessToken = (email) => {
     return async dispatch => {
-        const res = await callApi("https://localhost:5001/api/employee/authenticate", "POST", {email: email});
+        const res = await callApi("https://localhost:5001/api/authenticate", "POST", {email: email});
         const accessToken = res.data;
         dispatch(saveAccessToken(accessToken));
     }

@@ -1,56 +1,68 @@
 import {
-    UPDATE_BKC_DETAIL,
-    INSERT_BKC_DETAIL,
+    UPDATE_BOOK_DETAIL,
+    INSERT_BOOK_DETAIL,
     TOGGLE_BKC_DETAIL_INSERT,
-    DELETE_BKC_DETAIL,
-    INSERT_USER
+    DELETE_BOOK_DETAIL,
+    INSERT_BOOKER,
+    INSERT_BOOK_INFOR,
+    BOOK_INFOR_DEFAULT
 } from "../Constants/bkcConstants";
 
 let initialState = {
     isOpenBkcDetailModalInsert: false,
-    bkcDetails: [],
-    user: {}
+    bookDetails: [],
+    booker: {},
+    bookInfor: {...BOOK_INFOR_DEFAULT}
 };
 export const bkcReducer = (state = initialState, action) => {
     switch (action.type) {
-        case INSERT_BKC_DETAIL:
+        case INSERT_BOOK_DETAIL:
             {
-                const { bkcDetail } = action;
-                const { bkcDetails } = state;
-                bkcDetail.id = bkcDetails.length + 1
+                const { bookDetail } = action;
+                bookDetail.stt = state.bookDetails.length + 1;
                 return {
                     ...state,
-                    bkcDetails: [...state.bkcDetails, bkcDetail]
+                    bookDetails: [...state.bookDetails, bookDetail]
                 }
             }
-        case UPDATE_BKC_DETAIL:
-            {
-                const index = state.bkcDetails.findIndex(bkcDetail => {
-                    return bkcDetail.id === action.bkcDetail.id
-                });
-                const bkcDetailsNew = [...state.bkcDetails];
-                bkcDetailsNew.splice(index, 1, action.bkcDetail);
-                return {
-                    ...state,
-                    bkcDetails: bkcDetailsNew
-                }
-            }
-        case DELETE_BKC_DETAIL:
-            {
-                const index = state.bkcDetails.findIndex(bkcDetail => {
-                    return bkcDetail.id === action.bkcDetail.id
-                });
-                const bkcDetailsNew = [...state.bkcDetails];
-                bkcDetailsNew.splice(index, 1);
-                return {
-                    ...state,
-                    bkcDetails: bkcDetailsNew
-                }
-            }
-        case INSERT_USER: {
+        case INSERT_BOOK_INFOR: {
+            const {e} = action
             return {
                 ...state,
-                user: action.user
+                bookInfor: {
+                    ...state.bookInfor,
+                    [e.target.name]: e.target.value
+                }
+            }
+        }
+        case UPDATE_BOOK_DETAIL:
+            {
+                const index = state.bookDetails.findIndex(bookDetail => {
+                    return bookDetail.id === action.bookDetail.id
+                });
+                const bookDetailsNew = [...state.bookDetails];
+                bookDetailsNew.splice(index, 1, action.bookDetail);
+                return {
+                    ...state,
+                    bookDetails: bookDetailsNew
+                }
+            }
+        case DELETE_BOOK_DETAIL:
+            {
+                const index = state.bookDetails.findIndex(bookDetail => {
+                    return bookDetail.id === action.bookDetail.id
+                });
+                const bookDetailsNew = [...state.bookDetails];
+                bookDetailsNew.splice(index, 1);
+                return {
+                    ...state,
+                    bookDetails: bookDetailsNew
+                }
+            }
+        case INSERT_BOOKER: {
+            return {
+                ...state,
+                booker: action.booker
             }
         }
         case TOGGLE_BKC_DETAIL_INSERT:

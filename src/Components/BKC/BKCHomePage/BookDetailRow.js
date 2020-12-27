@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteBkcDetail, updateBkcDetail } from "../../../ActionCreators/bkcActionCreators";
+import { deleteBookDetail, updateBookDetail } from "../../../ActionCreators/bkcActionCreators";
 
-function BKCDetailRow(props) {
-    const [bkcDetail, setBkcDetail] = useState(props.bkcDetail);
+export const BookDetailRow = (props) => {
+    const [bookDetail, setBookDetail] = useState(props.bookDetail);
     const [isUpdate, setIsUpdate] = useState(false);
     const dispatch = useDispatch();
     useEffect(() => {
-        setBkcDetail(props.bkcDetail);
+        setBookDetail(props.bookDetail);
     }, [props]);
     function handleClick(event) {
         switch (event) {
@@ -18,49 +18,49 @@ function BKCDetailRow(props) {
                 setIsUpdate(false);
                 break;
             case "save":
-                dispatch(updateBkcDetail(bkcDetail));
+                dispatch(updateBookDetail(bookDetail));
                 setIsUpdate(false);
                 break;
             case "delete":
-                dispatch(deleteBkcDetail(bkcDetail));
+                dispatch(deleteBookDetail(bookDetail));
                 break;
             default:
                 break;
         }
     }
     function handleChange(e) {
-        setBkcDetail({
-            ...bkcDetail,
+        setBookDetail({
+            ...bookDetail,
             [e.target.name]: e.target.value
         })
     }
     return (
         <tr>
             <td className="w_4">
-                {bkcDetail.id}
+                {bookDetail.stt}
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bkcDetail.pickupLocation} className="form-control" name="pickupLocation" /> : bkcDetail.pickupLocation}
+                {isUpdate ? <input onChange={handleChange} value={bookDetail.pickupLocation} className="form-control" name="pickupLocation" /> : bookDetail.pickupLocation}
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bkcDetail.arriveTime} className="form-control" name="arriveTime" /> : bkcDetail.arriveTime}
+                {isUpdate ? <input onChange={handleChange} value={bookDetail.pickupTime} className="form-control" name="pickupTime" /> : bookDetail.pickupTime}
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bkcDetail.employeeName} className="form-control" name="employeeName" /> : bkcDetail.employeeName}
+                {isUpdate ? <input onChange={handleChange} value={bookDetail.employeeName} className="form-control" name="employeeName" /> : bookDetail.employeeName}
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bkcDetail.guestName} className="form-control" name="guestName" /> : bkcDetail.guestName}
+                {isUpdate ? <input onChange={handleChange} value={bookDetail.guestName} className="form-control" name="guestName" /> : bookDetail.guestName}
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bkcDetail.phone} className="form-control" name="phone" /> : bkcDetail.phone}
+                {isUpdate ? <input onChange={handleChange} value={bookDetail.phone} className="form-control" name="phone" /> : bookDetail.phone}
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bkcDetail.note} className="form-control" name="note" /> : bkcDetail.note}
+                {isUpdate ? <input onChange={handleChange} value={bookDetail.note} className="form-control" name="note" /> : bookDetail.note}
 
             </td>
             <td className="w-10">
@@ -72,4 +72,3 @@ function BKCDetailRow(props) {
         </tr>
     );
 }
-export default BKCDetailRow;

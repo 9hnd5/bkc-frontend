@@ -2,31 +2,17 @@ import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { insertBkcDetail, toggleBkcDetailModalInsert } from '../../../ActionCreators/bkcActionCreators';
-function BKCDetailModalInsert(props) {
+import { insertBookDetail, toggleBkcDetailModalInsert } from '../../../ActionCreators/bkcActionCreators';
+import { BOOK_DETAIL_DEFAULT } from '../../../Constants/bkcConstants';
+export const ModalInsertBookDetail = (props) => {
     const dispatch = useDispatch();
     const isOpenBkcDetailModalInsert = useSelector(state => state.bkc.isOpenBkcDetailModalInsert)
-    const [bkcDetail, setBkcDetail] = useState({
-        id: "",
-        pickupLocation: "",
-        arriveTime: "",
-        employeeName: "",
-        guestName: "",
-        phone: "",
-        note: ""
-    })
+    const bookDetailDefault = {...BOOK_DETAIL_DEFAULT}
+    const [bookDetail, setBookDetail] = useState(bookDetailDefault)
     function handleClickSave() {
-        dispatch(insertBkcDetail(bkcDetail))
+        dispatch(insertBookDetail(bookDetail))
         dispatch(toggleBkcDetailModalInsert());
-        setBkcDetail({
-            id: "",
-            pickupLocation: "",
-            arriveTime: "",
-            employeeName: "",
-            guestName: "",
-            phone: "",
-            note: ""
-        })
+        setBookDetail(bookDetailDefault)
 
     }
 
@@ -35,12 +21,12 @@ function BKCDetailModalInsert(props) {
     }
 
     function handleChange(e) {
-        setBkcDetail({
-            ...bkcDetail,
+        setBookDetail({
+            ...bookDetail,
             [e.target.name]: e.target.value
         })
     }
-    function onCloseModal(){
+    function onCloseModal() {
         dispatch(toggleBkcDetailModalInsert());
     }
     return (
@@ -59,10 +45,18 @@ function BKCDetailModalInsert(props) {
                 </div>
                 <div className="w-100" />
                 <div className="col">
-                    <input value={bkcDetail.pickupLocation} onChange={handleChange} name="pickupLocation" className="form-control" />
+                    <input
+                        value={bookDetail.pickupLocation}
+                        onChange={handleChange}
+                        name="pickupLocation"
+                        className="form-control" />
                 </div>
                 <div className="col">
-                    <input value={bkcDetail.arriveTime} onChange={handleChange} name="arriveTime" className="form-control" />
+                    <input
+                        value={bookDetail.pickupTime}
+                        onChange={handleChange}
+                        name="pickupTime"
+                        className="form-control" />
                 </div>
                 <div className="w-100" />
                 <div className="col">
@@ -73,10 +67,18 @@ function BKCDetailModalInsert(props) {
                 </div>
                 <div className="w-100" />
                 <div className="col">
-                    <input value={bkcDetail.employeeName} onChange={handleChange} name="employeeName" className="form-control" />
+                    <input
+                        value={bookDetail.employeeName}
+                        onChange={handleChange}
+                        name="employeeName"
+                        className="form-control" />
                 </div>
                 <div className="col">
-                    <input value={bkcDetail.guestName} onChange={handleChange} name="guestName" className="form-control" />
+                    <input
+                        value={bookDetail.guestName}
+                        onChange={handleChange}
+                        name="guestName"
+                        className="form-control" />
                 </div>
                 <div className="w-100" />
                 <div className="col">
@@ -87,10 +89,18 @@ function BKCDetailModalInsert(props) {
                 </div>
                 <div className="w-100" />
                 <div className="col">
-                    <input value={bkcDetail.phone} onChange={handleChange} name="phone" className="form-control" />
+                    <input
+                        value={bookDetail.phone}
+                        onChange={handleChange}
+                        name="phone"
+                        className="form-control" />
                 </div>
                 <div className="col">
-                    <input value={bkcDetail.note} onChange={handleChange} name="note" className="form-control" />
+                    <input
+                        value={bookDetail.note}
+                        onChange={handleChange}
+                        name="note"
+                        className="form-control" />
                 </div>
                 <div className="w-100" />
                 <div className="col-2 mt-2">
@@ -103,4 +113,3 @@ function BKCDetailModalInsert(props) {
         </Modal>
     );
 }
-export default BKCDetailModalInsert;

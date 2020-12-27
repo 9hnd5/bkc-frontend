@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { fetchDriversAndCars, fetchBkcInfors, fetchBkcDetails } from "../../ActionCreators/hrActionCreators";
 import { HRRequestList } from "../../Components/HR/HRHomePage/HRRequestList";
 import "./HRHomePage.scss";
-function HRHomePage() {
+export const HRHome = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         // dispatch(fetchDriversAndCars());
@@ -13,7 +13,7 @@ function HRHomePage() {
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
-                <div className="col-xs-12 col-xl-10">
+                <div className="col-12 col-xl-12">
                     <div className="card">
                         <div className="card-body">
                             <div className="mt-4 mb-4"></div>
@@ -28,4 +28,3 @@ function HRHomePage() {
         </div>
     );
 }
-export default HRHomePage;
