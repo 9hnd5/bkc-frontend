@@ -1,34 +1,40 @@
-import { SAVE_BKC_DETAILS, SAVE_BKC_INFORS, SAVE_CARS, SAVE_DRIVERS } from "../Constants/hrConstants"
+import {
+    SAVE_DATA_APPROVE_BKC,
+    SAVE_DRIVER_CARS,
+    TOOGLE_IS_DATA_APPROVE_VALID
+} from "../Constants/hrConstants"
 
 const initialState = {
-    bkcInfors: [],
-    bkcDetails: [],
-    personBooks: [],
-    drivers: []
+    driverCars: [],
+    isDataApproveValid: false,
+    dataAprroveBkc: {
+        carId: "",
+        inforId: ""
+    },
+    decline:{
+        reason: "",
+        bookerId: ""
+    }
+
 }
 export const hrReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SAVE_BKC_INFORS: {
+        case TOOGLE_IS_DATA_APPROVE_VALID: {
             return {
                 ...state,
-                bkcInfors: action.bkcInfors
-            };
-        }
-        case SAVE_BKC_DETAILS:
-            return{
-                ...state,
-                bkcDetails: action.bkcDetails
-            }
-        case SAVE_CARS: {
-            return {
-                ...state,
-                cars: action.cars
+                isDataApproveValid: action.data
             }
         }
-        case SAVE_DRIVERS: {
+        case SAVE_DATA_APPROVE_BKC: {
             return {
                 ...state,
-                drivers: action.drivers
+                dataApproveBkc: action.data
+            }
+        }
+        case SAVE_DRIVER_CARS: {
+            return {
+                ...state,
+                driverCars: action.driverCars
             }
         }
         default:

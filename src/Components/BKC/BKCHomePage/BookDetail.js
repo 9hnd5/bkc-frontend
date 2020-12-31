@@ -14,7 +14,7 @@ export const BookDetail = () => {
             <div className="col-12">
                 <div className="card">
                     <div className="card-header">
-                        THÔNG TIN NGƯỜI ĐI
+                        <h4>THÔNG TIN NGƯỜI ĐI</h4>
                     </div>
                     <div className="card-body">
                         <BookDetailTable />

@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { BookDetailRow } from "./BookDetailRow";
 export const BookDetailTable = (props) => {
-    const bookDetails = useSelector(state => state.bkc.bookDetails);
-    const displayBkcDetails = bookDetails.map((bookDetail, index) => {
+    const bookingDetails = useSelector(state => state.bkc.bookingDetails);
+    const displayBkcDetails = bookingDetails.map((bookDetail, index) => {
         return <BookDetailRow bookDetail={bookDetail} key={index} />
     });
     return (

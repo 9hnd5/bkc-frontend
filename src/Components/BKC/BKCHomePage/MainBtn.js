@@ -1,41 +1,48 @@
 import { useDispatch, useSelector } from "react-redux";
-import { insertBkcRequest } from "../../../ActionCreators/bkcActionCreators";
+import { requestSaveBookingCar } from "../../../ActionCreators/bkcActionCreators";
 
 export const MainBtn = (props) => {
     const dispatch = useDispatch();
-    const booker = useSelector(state => state.bkc.booker);
-    const bookDetails = useSelector(state => state.bkc.bookDetails);
-    const bookInfor = useSelector(state => state.bkc.bookInfor);
-    console.log("booker", booker);
+    const employee = useSelector(state => state.app.employee);
+    const bookingDetails = useSelector(state => state.bkc.bookingDetails);
+    const bookingInfor = useSelector(state => state.bkc.bookingInfor);
+    const isBkInforValid = useSelector(state => state.bkc.isBkInforValid);
+    const isBkDetailValid = useSelector(state => state.bkc.isBkDetailValid);
     const data = {
-        FullName: booker.employeeId,
-        Phone: booker.phone,
-        BusinessUnitId: booker.businessUnitId,
-        BusinessUnitName: booker.businessUnitName,
-        Department: booker.department,
+        employeeId: employee.id,
+        employeeName: employee.name,
+        Phone: employee.phone,
+        buId: employee.buId,
+        buName: employee.buName,
+        department: employee.department,
+        status: "Waiting",
 
-        PickupTime: bookInfor.pickupTime,
-        ReturnTime:bookInfor.returnTime,
-        Location:bookInfor.location,
-        Destination: bookInfor.destination,
-        TotalPerson: bookInfor.totalPerson,
+        PickupTime: bookingInfor.pickupTime,
+        ReturnTime: bookingInfor.returnTime,
+        Location: bookingInfor.location,
+        Destination: bookingInfor.destination,
+        TotalPerson: bookingInfor.totalPerson,
 
-        Details: bookDetails
+        BookingDetailRequests: bookingDetails
 
     }
-    function handleClickSave(){
-        dispatch(insertBkcRequest(data));
+    function handleClickSave() {
+        dispatch(requestSaveBookingCar(data));
     }
-    function handleClickCancel(){
+    function handleClickCancel() {
 
     }
     return (
         <div className="row">
-            <div className="col-12 col-xl-1">
-                <button onClick={handleClickSave} className="btn btn-default btn-block">ĐỒNG Ý</button>
-            </div>
-            <div className="col-12 col-xl-1">
-                <button onClick={handleClickCancel} className="btn btn-default btn-block">HỦY BỎ</button>
+            <div className="col-2">
+                <button
+                    onClick={handleClickSave}
+                    className="btn btn-outline-primary btn-sm"
+                    disabled={isBkInforValid && isBkDetailValid ? false : true}
+                >
+                    <i className="fas fa-save mr-1"></i>
+                    ĐỒNG Ý
+                </button>
             </div>
         </div>
     );

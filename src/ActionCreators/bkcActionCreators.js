@@ -1,28 +1,48 @@
 import {
-    INSERT_BOOK_DETAIL,
-    UPDATE_BOOK_DETAIL, DELETE_BOOK_DETAIL,
+    INSERT_BOOKING_DETAIL,
+    UPDATE_BOOKING_DETAIL,
+    DELETE_BOOKING_DETAIL,
     TOGGLE_BKC_DETAIL_INSERT,
-    INSERT_BOOKER,
-    INSERT_BOOK_INFOR,
+    INSERT_BOOKING_INFOR,
+    TOGGLE_BKINFOR_VALID,
+    TOGGLE_BKDETAIL_VALID,
 } from "../Constants/bkcConstants"
 import { callApi } from "../Helpers/callApi"
 
-export const insertBookDetail = (bookDetail) => {
+export const toggleBkInforValid = (isBkInforValid) => {
     return {
-        type: INSERT_BOOK_DETAIL,
-        bookDetail
+        type: TOGGLE_BKINFOR_VALID,
+        isBkInforValid
     }
 }
-export const updateBookDetail = (bookDetail) => {
+export const toggleBkDetailValid = (isBkDetailValid) => {
     return {
-        type: UPDATE_BOOK_DETAIL,
-        bookDetail
+        type: TOGGLE_BKDETAIL_VALID,
+        isBkDetailValid
     }
 }
-export const deleteBookDetail = (bookDetail) => {
+export const insertBookingInfor = (data) => {
     return {
-        type: DELETE_BOOK_DETAIL,
-        bookDetail
+        type: INSERT_BOOKING_INFOR,
+        data
+    }
+}
+export const insertBookingDetail = (bookingDetail) => {
+    return {
+        type: INSERT_BOOKING_DETAIL,
+        bookingDetail
+    }
+}
+export const updateBookingDetail = (bookingDetail) => {
+    return {
+        type: UPDATE_BOOKING_DETAIL,
+        bookingDetail
+    }
+}
+export const deleteBookingDetail = (bookingDetail) => {
+    return {
+        type: DELETE_BOOKING_DETAIL,
+        bookingDetail
     }
 }
 export const toggleBkcDetailModalInsert = () => {
@@ -30,29 +50,12 @@ export const toggleBkcDetailModalInsert = () => {
         type: TOGGLE_BKC_DETAIL_INSERT
     }
 }
-export const insertBooker = (booker) => {
-    return {
-        type: INSERT_BOOKER,
-        booker
-    }
-}
-export const insertBookInfor = (e) => {
-    return {
-        type: INSERT_BOOK_INFOR,
-        e
-    }
-}
 
-export const fetchEmpRequest = () => {
-    return async (dispatch) => {
-        const response = await callApi("https://localhost:5001/api/employee/" + "trandoan280367@gmail.com", "GET", null);
-        console.log("res1", response)
-        dispatch(insertBooker(response.data));
-    };
-}
-export const insertBkcRequest = (data) => {
+
+export const requestSaveBookingCar = (data) => {
     return async dispatch => {
-        const response = await callApi("https://localhost:5001/api/bkc/insert", "POST", data)
-        console.log("res", response)
+        const res = await callApi("https://localhost:5001/api/bkc/approve", "POST", data)
+
+        console.log("res", res)
     }
 }

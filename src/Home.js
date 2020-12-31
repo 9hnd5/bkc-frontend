@@ -10,9 +10,7 @@ const config = {
     ]
 };
 export const Home = () => {
-    let [error, setError] = useState(null);
     let [isAuthenticated, setIsAuthenticatied] = useState(false);
-    let [user, setUser] = useState({});
     let publicClientApplication = new PublicClientApplication({
         auth: {
             clientId: config.appId,

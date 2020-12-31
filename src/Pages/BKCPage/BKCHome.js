@@ -1,57 +1,36 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import './BKCHome.scss';
-import {MainBtn} from '../../Components/BKC/BKCHomePage/MainBtn';
-import { fetchEmpRequest } from '../../ActionCreators/bkcActionCreators';
+import { MainBtn } from '../../Components/BKC/BKCHomePage/MainBtn';
 import { BookerInfor } from '../../Components/BKC/BKCHomePage/BookerInfor';
 import { BookInfor } from '../../Components/BKC/BKCHomePage/BookInfor';
 import { BookDetail } from '../../Components/BKC/BKCHomePage/BookDetail'
+// import { useSelector } from 'react-redux';
+// import { useHistory } from 'react-router-dom';
 export const BKCHome = (props) => {
-    const dispatch = useDispatch();
-    // const user = useSelector(state => state.bkc.user);
-    let bkcDetails = useSelector(state => state.bkc.bkcDetails);
-    useEffect(() => {
-        dispatch(fetchEmpRequest());
-    }, []);
-    // function handleClick(event) {
-    //     const id = randomId();
-    //     bkcFormInfor.id = id;
-    //     bkcDetails = bkcDetails.map(bkcDetail => {
-    //         return {
-    //             ...bkcDetail,
-    //             idBook: id
-    //         }
-    //     });
-    //     switch (event) {
-    //         case "save": {
-    //             callApi("http://localhost:3001/bkcRequest", "POST", bkcFormInfor);
-    //             callApi("http://localhost:3001/bkcReqDetail", "POST", bkcDetails)
-    //             break;
-    //         }
-    //         default: {
-    //             break;
-    //         }
-    //     }
+    // const user = useSelector(state => state.app.user);
+    // const history = useHistory();
+    // console.log("user", user);
+    // if (Object.keys(user).length == 0) {
+    //     alert("Please Login To Go This Page");
+    //     history.push("/");
+    //     return (
+    //         <div>please login</div>
+    //     )
+
     // }
-    // useEffect(() => {
-    //     setBkcFormInfor({
-    //         ...BKC_FORM_INFOR_DEFAULT,
-    //         name: user.name,
-    //         phone: user.phone,
-    //     })
-    // }, [user]);
+
     return (
         <div className="container-fluid">
-            <div className="row">
-                <div className="col-12 col-xl-12">
+            <div className="row d-flex justify-content-center">
+                <div className="col-11 col-xl-11">
                     <div className="card">
                         <div className="card-body">
                             <BookerInfor />
-                            <div className="mt-4"></div>
+                            <div className="mt-2"></div>
                             <BookInfor />
-                            <div className="mt-4"></div>
+                            <div className="mt-2"></div>
                             <BookDetail />
-                            <div className="mt-4"></div>
+                            <div className="mt-2"></div>
                             <MainBtn />
                         </div>
                     </div>
@@ -60,4 +39,5 @@ export const BKCHome = (props) => {
 
         </div>
     );
+
 }

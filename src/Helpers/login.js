@@ -16,40 +16,39 @@ let publicClientApplication = new PublicClientApplication({
         redirectUri: config.redirectUri
     },
     cache: {
-        cacheLocation: "sessionStorage",
+        cacheLocation: "localStorage",
         storeAuthStateInCookie: true
     }
 });
 export const login = async () => {
-    {
-        try {
-            // Login via popup
-            await publicClientApplication.loginPopup(
-                {
-                    scopes: config.scopes,
-                    prompt: "select_account"
-                });
-            // After login, get the user's profile
-            const user = getUserProfile();
-            return user;
-        }
-        catch (err) {
-            console.log("Error while login: ", err);
-            return null;
-        }
+    try {
+        // Login via popup
+        await publicClientApplication.loginPopup(
+            {
+                scopes: config.scopes,
+                prompt: "select_account"
+            });
+        // After login, get the user's profile
+        const user = getUserProfile();
+        return user;
     }
+    catch (err) {
+        console.log("Error while login: ", err);
+        return null;
+    }
+
 }
 export const logout = () => {
     publicClientApplication.logout();
 }
-export const getAccount = async () => {
+export const getAllAccount = async () => {
     const accounts = publicClientApplication.getAllAccounts();
     if (accounts && accounts.length > 0) {
         // Enhance user object with data from Graph
-        console.log('account:', accounts);
-        return;
+        return accounts;
     }
     console.log("Not have any account");
+    return null;
 }
 export const getAccessToken = async (scopes) => {
     try {

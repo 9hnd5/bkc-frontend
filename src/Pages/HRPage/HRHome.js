@@ -1,19 +1,18 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { fetchDriversAndCars, fetchBkcInfors, fetchBkcDetails } from "../../ActionCreators/hrActionCreators";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBookerBkInforBkDetail } from "../../ActionCreators/appActionCreators";
 import { HRRequestList } from "../../Components/HR/HRHomePage/HRRequestList";
 import "./HRHomePage.scss";
 export const HRHome = () => {
     const dispatch = useDispatch();
+    const employee = useSelector(state => state.app.employee);
     useEffect(() => {
-        // dispatch(fetchDriversAndCars());
-        // dispatch(fetchBkcInfors());
-        // dispatch(fetchBkcDetails());
-    });
+        dispatch(fetchBookerBkInforBkDetail(employee.buId));
+    }, []);
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
-                <div className="col-12 col-xl-12">
+                <div className="col-11 col-xl-11">
                     <div className="card">
                         <div className="card-body">
                             <div className="mt-4 mb-4"></div>

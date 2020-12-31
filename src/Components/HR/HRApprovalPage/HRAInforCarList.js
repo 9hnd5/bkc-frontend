@@ -1,27 +1,32 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDriverCars } from "../../../ActionCreators/hrActionCreators";
 import { HRAInforCarItem } from "./HRAInforCarItem"
 
 export const HRAInforCarList = (props) => {
-    const cars = useSelector(state => state.hr.cars);
-    const drivers = useSelector(state => state.hr.drivers);
-    let carDrivers = []
-    for (const driver of drivers) {
-        for (const car of cars) {
-            if (driver.driverId == car.driverId) {
-                carDrivers.push({ ...driver, ...car });
-                break;
-            }
-        }
-    }
-    const displayCarDrivers = carDrivers.map((carDriver, index) => {
-        return <HRAInforCarItem key={index} carDriver={carDriver} />
+    const dispatch = useDispatch();
+    const employee = useSelector(state => state.app.employee);
+    const { inforId } = props;
+    const bookerBkInforBkDetail = useSelector(state => state.app.bookerBkInforBkDetails).find(ifd => {
+        return ifd.booker.id == inforId;
     });
+    const { bookingInfor } = bookerBkInforBkDetail;
+    const driverCars = useSelector(state => state.hr.driverCars);
+    console.log("driverCars", driverCars);
+    const displayCarDrivers = driverCars.map((driverCar, index) => {
+        return <HRAInforCarItem key={index} driverCar={driverCar} bookingInfor={bookingInfor} />
+    });
+    useEffect(() => {
+        dispatch(fetchDriverCars(employee.buId));
+    }, []);
     return (
         <div className="row">
             <div className="col-12">
                 <div className="card">
+                    <div className="card-header">
+                        <h4>THÔNG TIN XE VÀ TÀI XẾ</h4>
+                    </div>
                     <div className="card-body">
-                        <h5>THÔNG TIN XE VÀ TÀI XẾ</h5>
                         <div className="table-responsive">
                             <table className="table table-sm table-bordered table-striped">
                                 <thead>
@@ -30,11 +35,10 @@ export const HRAInforCarList = (props) => {
                                         <th>SDT TX</th>
                                         <th>Biển Số</th>
                                         <th>Số Chổ</th>
+                                        <th>Còn Trống</th>
                                         <th>Trạng Thái</th>
-                                        <th>Người Đặt</th>
-                                        <th>Người Duyệt</th>
                                         <th>Ngày Đặt</th>
-                                        <th>Hành Động</th>
+                                        <th>Chọn Xe</th>
                                     </tr>
                                 </thead>
                                 <tbody>

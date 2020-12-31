@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteBookDetail, updateBookDetail } from "../../../ActionCreators/bkcActionCreators";
+import { deleteBookingDetail, updateBookingDetail } from "../../../ActionCreators/bkcActionCreators";
 
 export const BookDetailRow = (props) => {
     const [bookDetail, setBookDetail] = useState(props.bookDetail);
@@ -18,11 +18,11 @@ export const BookDetailRow = (props) => {
                 setIsUpdate(false);
                 break;
             case "save":
-                dispatch(updateBookDetail(bookDetail));
+                dispatch(updateBookingDetail(bookDetail));
                 setIsUpdate(false);
                 break;
             case "delete":
-                dispatch(deleteBookDetail(bookDetail));
+                dispatch(deleteBookingDetail(bookDetail));
                 break;
             default:
                 break;
@@ -65,8 +65,8 @@ export const BookDetailRow = (props) => {
             </td>
             <td className="w-10">
                 <div className="d-flex justify-content-center">
-                    <button onClick={() => handleClick(isUpdate ? "save" : "update")} className="btn btn-outline-success mr-2">{isUpdate ? "LƯU" : "SỬA"}</button>
-                    <button onClick={() => handleClick(isUpdate ? "cancel" : "delete")} className="btn btn-outline-danger">{isUpdate ? "HỦY" : "XÓA"}</button>
+                    <button onClick={() => handleClick(isUpdate ? "save" : "update")} className="btn btn-outline-primary btn-sm mr-2">{isUpdate ? "LƯU" : "SỬA"}</button>
+                    <button onClick={() => handleClick(isUpdate ? "cancel" : "delete")} className="btn btn-outline-danger btn-sm">{isUpdate ? "HỦY" : "XÓA"}</button>
                 </div>
             </td>
         </tr>

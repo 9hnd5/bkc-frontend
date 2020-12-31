@@ -1,6 +1,12 @@
-import { SAVE_BKC_DETAILS, SAVE_BKC_INFORS, SAVE_CARS, SAVE_DRIVERS, SAVE_PERSON_BOOKS } from "../Constants/hrConstants";
+import { SAVE_BKC_DETAILS, SAVE_BKC_INFORS, SAVE_CARS, SAVE_DATA_APPROVE_BKC, SAVE_DRIVERS, SAVE_DRIVER_CARS, TOOGLE_IS_DATA_APPROVE_VALID } from "../Constants/hrConstants";
 import { callApi } from "../Helpers/callApi";
 
+export const toggleIsDataApproveValid = (data) => {
+    return {
+        type: TOOGLE_IS_DATA_APPROVE_VALID,
+        data
+    }
+}
 export const saveBkcInfors = bkcInfors => {
     return {
         type: SAVE_BKC_INFORS,
@@ -25,8 +31,18 @@ export const saveDrivers = drivers => {
         drivers
     }
 }
-
-
+export const saveDriverCars = (driverCars) => {
+    return {
+        type: SAVE_DRIVER_CARS,
+        driverCars
+    }
+}
+export const saveDataApproveBkc = (data) => {
+    return {
+        type: SAVE_DATA_APPROVE_BKC,
+        data
+    }
+}
 
 
 export const fetchBkcInfors = () => {
@@ -43,15 +59,21 @@ export const fetchBkcDetails = () => {
         dispatch(saveBkcDetails(bkcDetails));
     }
 }
-export const fetchDriversAndCars = () => {
+export const fetchDriverCars = (buId) => {
     return async dispatch => {
-        const res1 = await callApi("http://localhost:3000/api/bkc/cars", "GET", null);
-        const res2 = await callApi("http://localhost:3000/api/bkc/drivers", "GET", null);
-        const cars = res1.data;
-        const drivers = res2.data;
-        dispatch(saveCars(cars));
-        dispatch(saveDrivers(drivers));
-        console.log("cars", cars);
-        console.log("drivers", drivers);
+        const res = await callApi(`https://localhost:5001/api/bkc/drivercar/${buId}`, "GET", null);
+        dispatch(saveDriverCars(res.data.driverCars));
+    }
+}
+export const saveCarRequest = (data) => {
+    return async dispatch => {
+        const res = await callApi(`https://localhost:5001/api/bkc/savecar`, "POST", data)
+        console.log("asdasd", res);
+    }
+}
+export const requestApproveBkc = (data) => {
+    return async dispatch => {
+        const res = await callApi(`https://localhost:5001/api/bkc/approvebkc`, "POST", data);
+        console.log("res", res);
     }
 }
