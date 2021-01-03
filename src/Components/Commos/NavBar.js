@@ -2,12 +2,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { requestAuthenticate, saveAccessToken, saveAuthenticate, saveEmployee } from '../../ActionCreators/appActionCreators';
+import './NavBar.scss';
 import { login, logout } from '../../Helpers/login';
-function Nav() {
+export const NavBar = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const user = useSelector(state => state.app.user);
     const isAuth = useSelector(state => state.app.isAuth);
+    const pageName = useSelector(state => state.app.pageName);
     async function handleClick(e) {
         if (e === "logout") {
             // logout();
@@ -26,7 +28,7 @@ function Nav() {
             // }else{
             //     console.log("Login fail, please try again");
             // }
-            
+
             // huy.ndinh@greenfeed.com.vn Head Office admin
             // chi.tn@greenfeed.com.vn Head Office employee
             // lieu.pt@greenfeed.com.vn Head Office employee
@@ -43,28 +45,46 @@ function Nav() {
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
-                <div className="col-11 col-xl-11">
+                <div className="col-12 col-xl-12">
                     <nav className="navbar navbar-expand-lg navbar-light bg-success">
-                        <a className="navbar-brand">BOOKING CAR APP</a>
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <a className="navbar-brand"><i className="fas fa-home"></i></a>
+                        <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul className="navbar-nav mr-auto">
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/">Home Page</Link>
+                                <li className={pageName === "Home" ? "nav-item active" : "nav-item"}>
+                                    <Link className="nav-link" to="/">
+                                        <i className="fas fa-home mr-1"></i>
+                                        Trang Chủ
+                                    </Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/historybooking">History Booking</Link>
+                                <li className={pageName === "HistoryBooking" ? "nav-item active" : "nav-item"}>
+                                    <Link className="nav-link" to="/history-booking">
+                                        <i className="fas fa-history mr-1"></i>
+                                        Lịch Sử Đặt Xe
+                                    </Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/bookingcar">Booking Car</Link>
+                                <li className={pageName === "BookingCar" ? "nav-item active" : "nav-item"}>
+                                    <Link className="nav-link" to="/request-booking">
+                                        <i className="fas fa-car mr-1"></i>
+                                        Yêu Cầu Đặt Xe
+                                    </Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/hr-page">HR</Link>
+                                <li className={pageName === "Admin" ? "nav-item active" : "nav-item"}>
+                                    <Link className="nav-link" to="/admin">
+                                        <i className="fas fa-user-cog mr-1"></i>
+                                        Admin
+                                    </Link>
                                 </li>
                             </ul>
 
                             <button
                                 onClick={() => handleClick(!isAuth ? "login" : "logout")}
-                                className="btn btn-outline-primary btn-sm my-2 my-sm-0">{!isAuth ? "Log in" : "Log out"}
+                                className="btn btn-light btn-sm my-2 my-sm-0"
+                            >
+                                <i className={!isAuth? "fas fa-arrow-alt-circle-right mr-1": "fas fa-arrow-alt-circle-left mr-1"}></i>
+                                {!isAuth ? "Log in" : "Log out"}
                             </button>
 
                         </div>
@@ -74,4 +94,3 @@ function Nav() {
         </div>
     );
 }
-export default Nav

@@ -4,32 +4,53 @@ import {
     TOGGLE_BKC_DETAIL_INSERT,
     DELETE_BOOKING_DETAIL,
     INSERT_BOOKING_INFOR,
-    BOOK_INFOR_DEFAULT,
     TOGGLE_BKINFOR_VALID,
-    TOGGLE_BKDETAIL_VALID
+    TOGGLE_BKDETAIL_VALID,
+    EMPTY_BOOKING_INFOR,
+    EMPTY_BOOKING_DETAILS,
+    SET_LOADING
 } from "../Constants/bkcConstants";
 
 let initialState = {
     isOpenBkcDetailModalInsert: false,
-    bookingDetails: [],
     booker: {},
-    bookingInfor: { ...BOOK_INFOR_DEFAULT },
+    bookingInfor: {},
+    bookingDetails: [],
 
-    isBkInforValid: false,
-    isBkDetailValid: false
+    isBkcInforValid: false,
+    isBkcDetailValid: false,
+    isLoading: false
 };
 export const bkcReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_LOADING: {
+            return{
+                ...state,
+                isLoading: action.isLoading
+            }
+        }
+        case EMPTY_BOOKING_INFOR: {
+            return {
+                ...state,
+                bookingInfor: {}
+            }
+        }
+        case EMPTY_BOOKING_DETAILS: {
+            return {
+                ...state, 
+                bookingDetails: []
+            }
+        }
         case TOGGLE_BKINFOR_VALID: {
             return {
                 ...state,
-                isBkInforValid: action.isBkInforValid
+                isBkcInforValid: action.isBkcInforValid
             }
         }
         case TOGGLE_BKDETAIL_VALID: {
             return {
                 ...state,
-                isBkDetailValid: action.isBkDetailValid
+                isBkcDetailValid: action.isBkcDetailValid
             }
         }
         case INSERT_BOOKING_DETAIL:

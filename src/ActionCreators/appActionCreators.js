@@ -4,6 +4,7 @@ import {
     SAVE_BOOKER_BOOKING_DETAILS,
     SAVE_EMPLOYEE,
     SAVE_ERROR_MESSAGE,
+    SAVE_PAGE_NAME,
     UPDATE_STATUS_BOOKER_DECLINE
 } from "../Constants/appConstants"
 import { callApi } from "../Helpers/callApi"
@@ -42,6 +43,12 @@ export const saveErrorMessage = (errorMessage) => {
     return {
         type: SAVE_ERROR_MESSAGE,
         errorMessage
+    }
+}
+export const savePageName = (pageName) => {
+    return {
+        type: SAVE_PAGE_NAME,
+        pageName
     }
 }
 

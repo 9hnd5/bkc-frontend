@@ -8,6 +8,7 @@ import Tooltip from '../../Commos/Tooltip';
 import { NOT_EMPTY, ONLY_NUMBER, validation } from '../../../Helpers/validation';
 export const ModalInsertBookDetail = (props) => {
     const dispatch = useDispatch();
+    const {onChange} = props;
     const isOpenBkcDetailModalInsert = useSelector(state => state.bkc.isOpenBkcDetailModalInsert)
     const bookingDetailDefault = { ...BOOK_DETAIL_DEFAULT }
     const [bookDetail, setBookDetail] = useState(bookingDetailDefault)
@@ -15,10 +16,7 @@ export const ModalInsertBookDetail = (props) => {
         pickupLocation: "",
         pickupTime: "",
         employeeName: "",
-        // guestName: "",
         phone: "",
-        // note: ""
-
     });
     const [isDisable, setIsDisable] = useState(false);
     function handleClickSave() {
@@ -28,13 +26,12 @@ export const ModalInsertBookDetail = (props) => {
             dispatch(toggleBkDetailValid(true))
             dispatch(toggleBkcDetailModalInsert());
             setBookDetail({ ...bookingDetailDefault })
+
             setError({
                 pickupLocation: "",
                 pickupTime: "",
                 employeeName: "",
-                // guestName: "",
                 phone: "",
-                // note: ""
             })
             setIsDisable(true);
         }
@@ -105,9 +102,7 @@ export const ModalInsertBookDetail = (props) => {
             pickupLocation: "",
             pickupTime: "",
             employeeName: "",
-            // guestName: "",
             phone: "",
-            // note: ""
         })
         setIsDisable(true);
     }

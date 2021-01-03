@@ -4,17 +4,25 @@ import {
     SAVE_BOOKER_BOOKING_DETAILS,
     SAVE_EMPLOYEE,
     UPDATE_STATUS_BOOKER_DECLINE,
-    SAVE_ERROR_MESSAGE
+    SAVE_ERROR_MESSAGE,
+    SAVE_PAGE_NAME
 } from "../Constants/appConstants";
 const initialState = {
     accessToken: "",
     employee: {},
     isAuth: false,
     bookerBkInforBkDetails: [],
-    errorMessage: ""
+    errorMessage: "",
+    pageName: "Home"
 }
 export const appReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SAVE_PAGE_NAME: {
+            return {
+                ...state, 
+                pageName: action.pageName
+            }
+        }
         case SAVE_ERROR_MESSAGE: {
             return {
                 ...state,

@@ -20,7 +20,7 @@ export const HistoryBookingTable = () => {
         );
     })
     return (
-        <div className="table-responsive">
+        <div className="table-responsive" style={{height: "500px"}}>
             <table className="table table-hover table-sm table-striped table-bordered">
                 <thead>
                     <tr>

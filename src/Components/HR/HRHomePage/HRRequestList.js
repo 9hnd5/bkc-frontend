@@ -40,7 +40,7 @@ export const HRRequestList = () => {
                 <h4>THÔNG TIN YÊU CẦU ĐẶT XE</h4>
             </div>
             <div className="card-body">
-                <div className="table-responsive hr_table_request" style={{ height: "300px" }}>
+                <div className="table-responsive hr_table_request" style={{ height: "500px" }}>
                     <table className="table table-sm table-bordered table-striped table-hover">
                         <thead>
                             <tr>

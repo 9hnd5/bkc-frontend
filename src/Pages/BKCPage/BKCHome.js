@@ -1,37 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './BKCHome.scss';
 import { MainBtn } from '../../Components/BKC/BKCHomePage/MainBtn';
-import { BookerInfor } from '../../Components/BKC/BKCHomePage/BookerInfor';
-import { BookInfor } from '../../Components/BKC/BKCHomePage/BookInfor';
-import { BookDetail } from '../../Components/BKC/BKCHomePage/BookDetail'
-// import { useSelector } from 'react-redux';
-// import { useHistory } from 'react-router-dom';
+import { Booker } from '../../Components/BKC/BKCHomePage/Booker';
+import { BookingInfor } from '../../Components/BKC/BKCHomePage/BookingInfor';
+import { BookingDetail } from '../../Components/BKC/BKCHomePage/BookingDetail'
+import { ModalInsertBookDetail } from '../../Components/BKC/BKCHomePage/ModalInsertBookDetail';
+import { useDispatch } from 'react-redux';
+import { emptyBookingDetails, emptyBookingInfor } from '../../ActionCreators/bkcActionCreators';
+import { savePageName } from '../../ActionCreators/appActionCreators';
+
+
 export const BKCHome = (props) => {
-    // const user = useSelector(state => state.app.user);
-    // const history = useHistory();
-    // console.log("user", user);
-    // if (Object.keys(user).length == 0) {
-    //     alert("Please Login To Go This Page");
-    //     history.push("/");
-    //     return (
-    //         <div>please login</div>
-    //     )
-
-    // }
-
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(emptyBookingInfor());
+        dispatch(emptyBookingDetails());
+        dispatch(savePageName("BookingCar"))
+    }, []);
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
-                <div className="col-11 col-xl-11">
+                <div className="col-12 col-xl-12">
                     <div className="card">
                         <div className="card-body">
-                            <BookerInfor />
-                            <div className="mt-2"></div>
-                            <BookInfor />
-                            <div className="mt-2"></div>
-                            <BookDetail />
-                            <div className="mt-2"></div>
+                            <Booker />
+                            <div className="mt-1"></div>
+                            <BookingInfor />
+                            <div className="mt-1"></div>
+                            <BookingDetail />
+                            <div className="mt-1"></div>
                             <MainBtn />
+                            <div className="mt-1"></div>
+                            <ModalInsertBookDetail />
                         </div>
                     </div>
                 </div>

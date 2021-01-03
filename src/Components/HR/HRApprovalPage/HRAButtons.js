@@ -10,11 +10,11 @@ export const HRAButtons = () => {
     function handleClick(e) {
         if (e === "save") {
             dispatch(requestApproveBkc(dataApproveBkc));
-            history.push("/hr-page");
+            history.push("/admin");
         }
         if (e === "back") {
             dispatch(toggleIsDataApproveValid(false));
-            history.push("/hr-page");
+            history.push("/admin");
         }
     }
     return (
@@ -25,9 +25,16 @@ export const HRAButtons = () => {
                     onClick={() => handleClick("save")}
                     className="btn btn-outline-primary btn-sm mr-2"
                 >
+                    <i className="fas fa-check mr-1"></i>
                     ĐỒNG Ý
                 </button>
-                <button onClick={() => handleClick("back")} className="btn btn-outline-danger btn-sm">QUAY LẠI</button>
+                <button
+                    onClick={() => handleClick("back")}
+                    className="btn btn-outline-danger btn-sm"
+                >
+                    <i className="fas fa-arrow-left mr-1"></i>
+                    QUAY LẠI
+                    </button>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-export const BookerInfor = () => {
+export const Booker = () => {
     const employee = useSelector(state => state.app.employee);
     return (
         <div className="row">

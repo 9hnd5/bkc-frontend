@@ -7,7 +7,7 @@ export const HRRequestItem = (props) => {
         if (e == "processed") {
             history.push(`process/${booker.id}`)
         }
-        if(e == "decline"){
+        if (e == "decline") {
             props.onOpenModal(booker.id);
         }
     }
@@ -16,50 +16,56 @@ export const HRRequestItem = (props) => {
     let status = null;
     switch (booker.status) {
         case "Success":
-            status="Đã Duyệt"
+            status = "Đã Duyệt"
             break;
         case "Waiting":
-            status="Chưa Duyệt"
+            status = "Chưa Duyệt"
             break;
         case "Decline":
-            status="Từ Chối"
+            status = "Từ Chối"
             break;
         default:
             break;
     }
     return (
         <tr>
-            <td style={{ width: "5%" }}>
+            <td>
                 {index + 1}
             </td>
-            <td style={{ width: "8%" }}>{status}</td>
-            <td style={{ width: "20%" }}>
+            <td>
+                {status}
+            </td>
+            <td >
                 {booker.employeeName}
             </td>
-            <td style={{ width: "25%" }}>
+            <td>
                 {`${bookingInfor.location} - ${bookingInfor.destination}`}
             </td>
-            <td style={{ width: "25%" }}>{bookingInfor.pickupTime}</td>
-            <td style={{ width: "15%" }}>
-                <div className="row">
-                    <div className="col-12 d-flex justify-content-center">
-                        <button
-                            onClick={() => handleClick("processed")}
-                            className="btn btn-outline-primary btn-sm mr-2"
-                            disabled={booker.status == "Success" || booker.status == "Decline" ? true : false}
-                        >
-                            XỬ LÝ
-                        </button>
-                        <button
-                            onClick={() => handleClick("decline")}
-                            className="btn btn-outline-danger btn-sm"
-                            disabled={booker.status == "Success" || booker.status == "Decline" ? true : false}
-                        >
-                            TỪ CHỐI
-                        </button>
-                    </div>
-                </div>
+            <td>
+                {bookingInfor.pickupTime}
             </td>
-        </tr>
+            <td style={{ width: "12%" }}>
+                <div className="d-flex justify-content-center">
+                    <button
+                        onClick={() => handleClick("processed")}
+                        className="btn btn-outline-primary btn-sm mr-2"
+                        disabled={booker.status == "Success" || booker.status == "Decline" ? true : false}
+                    >
+                        <i className="fas fa-chevron-circle-right mr-1"></i>
+                            XỬ LÝ
+                    </button>
+                    <button
+
+                        onClick={() => handleClick("decline")}
+                        className="btn btn-outline-danger btn-sm"
+                        disabled={booker.status == "Success" || booker.status == "Decline" ? true : false}
+                    >
+                        <i className="fas fa-ban mr-1"></i>
+                            TỪ CHỐI
+                    </button>
+                </div>
+
+            </td>
+        </tr >
     );
 }

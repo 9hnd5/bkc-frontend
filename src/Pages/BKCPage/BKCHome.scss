@@ -36,7 +36,11 @@
     width: 25%;
 }
 .bkc_form{
-    .react-datepicker-wrapper{
-        width: 100%;
-    }
+    // .react-datepicker-wrapper{
+    //     width: 100%;
+    // }
+}
+.Toastify__toast-container--top-center {
+    top: 70px !important;
+    right: 10px !important;
 }

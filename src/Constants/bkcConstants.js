@@ -6,15 +6,21 @@ export const INSERT_BOOKER = "INSERT_BOOKER";
 export const INSERT_BOOKING_INFOR = "INSERT_BOOKING_INFOR";
 export const TOGGLE_BKINFOR_VALID = "TOGGLE_BKINFOR_VALID";
 export const TOGGLE_BKDETAIL_VALID = "TOGGLE_BKDETAIL_VALID";
+export const EMPTY_BOOKING_INFOR = "EMPTY_BOOKING_INFOR";
+export const EMPTY_BOOKING_DETAILS = "EMPTY_BOOKING_DETAILS";
+export const SET_LOADING = "SET_LOADING";
 
 
+export const STATUS = {
+    WAITING: "WAITING"
+}
 export const BOOK_INFOR_DEFAULT = {
-    pickupTime: "",
-    returnTime: "",
-    location: "",
-    destination: "",
-    totalPerson: "",
-    ccPersons: ""
+    pickupTime: null,
+    returnTime: null,
+    location: null,
+    destination: null,
+    totalPerson: null,
+    ccPersons: null
 }
 export const BOOK_DETAIL_DEFAULT = {
     pickupLocation: "",

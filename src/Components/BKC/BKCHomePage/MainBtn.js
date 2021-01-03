@@ -1,13 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { requestSaveBookingCar } from "../../../ActionCreators/bkcActionCreators";
+import { STATUS } from "../../../Constants/bkcConstants";
+import { NotificationManager } from 'react-notifications'
+import { toast, Zoom } from 'react-toastify';
 
 export const MainBtn = (props) => {
     const dispatch = useDispatch();
     const employee = useSelector(state => state.app.employee);
     const bookingDetails = useSelector(state => state.bkc.bookingDetails);
     const bookingInfor = useSelector(state => state.bkc.bookingInfor);
-    const isBkInforValid = useSelector(state => state.bkc.isBkInforValid);
-    const isBkDetailValid = useSelector(state => state.bkc.isBkDetailValid);
+    const isBkcInforValid = useSelector(state => state.bkc.isBkcInforValid);
+    const isBkcDetailValid = useSelector(state => state.bkc.isBkcDetailValid);
+    const isLoading = useSelector(state => state.bkc.isLoading);
+    console.log("isLoading", isLoading);
+    const disabled = (isLoading == false) && (isBkcInforValid && isBkcDetailValid) ? false : true
+    console.log("disabled", disabled);
     const data = {
         employeeId: employee.id,
         employeeName: employee.name,
@@ -15,7 +22,7 @@ export const MainBtn = (props) => {
         buId: employee.buId,
         buName: employee.buName,
         department: employee.department,
-        status: "Waiting",
+        status: STATUS.WAITING,
 
         PickupTime: bookingInfor.pickupTime,
         ReturnTime: bookingInfor.returnTime,
@@ -28,9 +35,7 @@ export const MainBtn = (props) => {
     }
     function handleClickSave() {
         dispatch(requestSaveBookingCar(data));
-    }
-    function handleClickCancel() {
-
+        // NotificationManager.info("heheh", "success");
     }
     return (
         <div className="row">
@@ -38,10 +43,10 @@ export const MainBtn = (props) => {
                 <button
                     onClick={handleClickSave}
                     className="btn btn-outline-primary btn-sm"
-                    disabled={isBkInforValid && isBkDetailValid ? false : true}
+                    disabled={disabled}
                 >
-                    <i className="fas fa-save mr-1"></i>
-                    ĐỒNG Ý
+                    <i className="fas fa-paper-plane mr-1"></i>
+                    GỬI YÊU CẦU
                 </button>
             </div>
         </div>

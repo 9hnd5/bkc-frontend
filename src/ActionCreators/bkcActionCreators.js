@@ -6,25 +6,39 @@ import {
     INSERT_BOOKING_INFOR,
     TOGGLE_BKINFOR_VALID,
     TOGGLE_BKDETAIL_VALID,
+    EMPTY_BOOKING_INFOR,
+    EMPTY_BOOKING_DETAILS,
+    SET_LOADING
 } from "../Constants/bkcConstants"
 import { callApi } from "../Helpers/callApi"
+import { notification, NOTIFICATION_TYPE } from "../Helpers/notification"
 
-export const toggleBkInforValid = (isBkInforValid) => {
+export const toggleBkInforValid = (isBkcInforValid) => {
     return {
         type: TOGGLE_BKINFOR_VALID,
-        isBkInforValid
+        isBkcInforValid
     }
 }
-export const toggleBkDetailValid = (isBkDetailValid) => {
+export const toggleBkDetailValid = (isBkcDetailValid) => {
     return {
         type: TOGGLE_BKDETAIL_VALID,
-        isBkDetailValid
+        isBkcDetailValid
     }
 }
 export const insertBookingInfor = (data) => {
     return {
         type: INSERT_BOOKING_INFOR,
         data
+    }
+}
+export const emptyBookingInfor = () => {
+    return {
+        type: EMPTY_BOOKING_INFOR
+    }
+}
+export const emptyBookingDetails = () => {
+    return {
+        type: EMPTY_BOOKING_DETAILS
     }
 }
 export const insertBookingDetail = (bookingDetail) => {
@@ -50,12 +64,31 @@ export const toggleBkcDetailModalInsert = () => {
         type: TOGGLE_BKC_DETAIL_INSERT
     }
 }
-
+export const setLoading = (isLoading) => {
+    return {
+        type: SET_LOADING,
+        isLoading
+    }
+}
 
 export const requestSaveBookingCar = (data) => {
     return async dispatch => {
-        const res = await callApi("https://localhost:5001/api/bkc/approve", "POST", data)
-
+        dispatch(setLoading(true));
+        // const res = await callApi("https://localhost:5001/api/bkc/approve", "POST", data)
+        const res = {
+            status: 300,
+            data: "error"
+        }
+        const t = setTimeout(() => {
+            if (!(res.status == 200)) {
+                notification(NOTIFICATION_TYPE.ERROR, res.data);
+                dispatch(setLoading(false))
+                return;
+            }
+            notification(NOTIFICATION_TYPE.SUCCESS, res.data);
+            dispatch(setLoading(false))
+            clearTimeout(t);
+        }, 2000)
         console.log("res", res)
     }
 }

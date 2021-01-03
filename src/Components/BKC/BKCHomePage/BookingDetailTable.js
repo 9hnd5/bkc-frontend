@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { BookDetailRow } from "./BookDetailRow";
-export const BookDetailTable = (props) => {
+import { BookingDetailItem } from "./BookingDetailItem";
+export const BookingDetailTable = (props) => {
     const bookingDetails = useSelector(state => state.bkc.bookingDetails);
     const displayBkcDetails = bookingDetails.map((bookDetail, index) => {
-        return <BookDetailRow bookDetail={bookDetail} key={index} />
+        return <BookingDetailItem bookDetail={bookDetail} key={index} />
     });
     return (
         <div className="row">

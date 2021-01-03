@@ -8,14 +8,13 @@ const HRApprovalPage = () => {
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
-                <div className="col-11 col-xl-11">
+                <div className="col-12 col-xl-12">
                     <div className="card">
                         <div className="card-body">
-                            <div className="mt-2"></div>
                             <HRAInformation inforId={inforId} />
-                            <div className="mt-2"></div>
+                            <div className="mt-1"></div>
                             <HRAInforCarList inforId={inforId} />
-                            <div className="mt-2"></div>
+                            <div className="mt-1"></div>
                             <HRAButtons />
                         </div>
                     </div>

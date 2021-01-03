@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { requestAuthenticate } from "../../ActionCreators/appActionCreators";
+import { requestAuthenticate, savePageName } from "../../ActionCreators/appActionCreators";
 import { getAllAccount } from "./../../Helpers/login";
 
 export const Home = () => {
@@ -14,6 +14,7 @@ export const Home = () => {
                 dispatch(requestAuthenticate(accounts[0].username));
             }
         }
+        dispatch(savePageName("Home"));
     }, []);
     return (
         <div className="container-fluid">

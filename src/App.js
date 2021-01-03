@@ -3,29 +3,45 @@ import './App.scss'
 import '@fortawesome/fontawesome-free/css/all.css';
 import { HRHome } from "./Pages/HRPage/HRHome";
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import Nav from "./Components/Commos/Nav";
+import { NavBar } from "./Components/Commos/NavBar";
 import HRApprovalPage from "./Pages/HRPage/HRApprovalPage";
 import { BKCHome } from "./Pages/BKCPage/BKCHome";
 import { Home } from "./Pages/Home/Home";
 import { useSelector } from "react-redux";
 import { HistoryBooking } from "./Pages/HistoryBooking/HistoryBooking";
+import { NotificationContainer } from 'react-notifications';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-notifications/lib/notifications.css';
 function App() {
   return (
     <div className="App">
       <ErrorBoundary>
+        <NotificationContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Router>
-          <div className="mt-2"></div>
-          <Nav />
+          {/* <div className="mt-5"></div> */}
+          <NavBar />
           <div className="mt-1 mb-1"></div>
           <Switch>
             <Route path="/" exact component={Home} />
-            <PrivateRoute path="/historybooking" roles={["Admin", "Employee"]}>
+            <PrivateRoute path="/history-booking" roles={["Admin", "Employee"]}>
               <HistoryBooking />
             </PrivateRoute>
-            <PrivateRoute path="/bookingcar" roles={["Admin", "Employee"]}>
+            <PrivateRoute path="/request-booking" roles={["Admin", "Employee"]}>
               <BKCHome />
             </PrivateRoute>
-            <PrivateRoute path="/hr-page" roles={["Admin"]}>
+            <PrivateRoute path="/admin" roles={["Admin"]}>
               <HRHome />
             </PrivateRoute>
             <PrivateRoute path="/process/:inforId" roles={["Admin"]}>
@@ -54,7 +70,7 @@ function PrivateRoute({ children, ...rest }) {
       }
     }
   }
-  if(!isAuth) console.log("Not have permission");
+  if (!isAuth) console.log("Not have permission");
   return (
     <Route
       path={path}

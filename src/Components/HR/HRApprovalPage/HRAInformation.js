@@ -64,7 +64,7 @@ export const HRAInformation = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="w-100 mt-2"></div>
+            <div className="w-100 mt-1"></div>
             <div className="col-12">
                 <div className="card">
                     <div className="card-header">
