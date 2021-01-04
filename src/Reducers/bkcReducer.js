@@ -8,14 +8,17 @@ import {
     TOGGLE_BKDETAIL_VALID,
     EMPTY_BOOKING_INFOR,
     EMPTY_BOOKING_DETAILS,
-    SET_LOADING
+    SET_LOADING,
+    SAVE_LIST_FILTER_EMPLOYEE,
+    BOOKING_INFOR_DEFAULT
 } from "../Constants/bkcConstants";
 
 let initialState = {
     isOpenBkcDetailModalInsert: false,
     booker: {},
-    bookingInfor: {},
+    bookingInfor: {...BOOKING_INFOR_DEFAULT},
     bookingDetails: [],
+    listFilterEmployee: [],
 
     isBkcInforValid: false,
     isBkcDetailValid: false,
@@ -23,6 +26,12 @@ let initialState = {
 };
 export const bkcReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SAVE_LIST_FILTER_EMPLOYEE: {
+            return{
+                ...state,
+                listFilterEmployee: action.listFilterEmployee
+            }
+        }
         case SET_LOADING: {
             return{
                 ...state,
@@ -63,10 +72,13 @@ export const bkcReducer = (state = initialState, action) => {
                 }
             }
         case INSERT_BOOKING_INFOR: {
-            const { data } = action
+            const { name, value } = action
             return {
                 ...state,
-                bookingInfor: data
+                bookingInfor:{
+                    ...state.bookingInfor,
+                    [name]: value
+                }
             }
         }
         case UPDATE_BOOKING_DETAIL:

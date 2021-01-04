@@ -9,7 +9,7 @@ export const HRHome = () => {
     useEffect(() => {
         dispatch(fetchBookerBkInforBkDetail(employee.buId));
         dispatch(savePageName("Admin"));
-    }, []);
+    });
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">

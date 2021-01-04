@@ -8,7 +8,8 @@ import {
     TOGGLE_BKDETAIL_VALID,
     EMPTY_BOOKING_INFOR,
     EMPTY_BOOKING_DETAILS,
-    SET_LOADING
+    SET_LOADING,
+    SAVE_LIST_FILTER_EMPLOYEE
 } from "../Constants/bkcConstants"
 import { callApi } from "../Helpers/callApi"
 import { notification, NOTIFICATION_TYPE } from "../Helpers/notification"
@@ -25,10 +26,11 @@ export const toggleBkDetailValid = (isBkcDetailValid) => {
         isBkcDetailValid
     }
 }
-export const insertBookingInfor = (data) => {
+export const insertBookingInfor = (name, value) => {
     return {
         type: INSERT_BOOKING_INFOR,
-        data
+        name,
+        value
     }
 }
 export const emptyBookingInfor = () => {
@@ -70,25 +72,40 @@ export const setLoading = (isLoading) => {
         isLoading
     }
 }
+export const saveFilterListEmployee = (listFilterEmployee) => {
+    return {
+        type: SAVE_LIST_FILTER_EMPLOYEE,
+        listFilterEmployee
+    }
+}
+
+
 
 export const requestSaveBookingCar = (data) => {
     return async dispatch => {
         dispatch(setLoading(true));
-        // const res = await callApi("https://localhost:5001/api/bkc/approve", "POST", data)
-        const res = {
-            status: 300,
-            data: "error"
-        }
-        const t = setTimeout(() => {
-            if (!(res.status == 200)) {
-                notification(NOTIFICATION_TYPE.ERROR, res.data);
-                dispatch(setLoading(false))
-                return;
-            }
-            notification(NOTIFICATION_TYPE.SUCCESS, res.data);
+        const res = await callApi("https://localhost:5001/api/bkc/approve", "POST", data)
+        if (!(res.status === 200)) {
+            notification(NOTIFICATION_TYPE.ERROR, res.data);
             dispatch(setLoading(false))
-            clearTimeout(t);
-        }, 2000)
-        console.log("res", res)
+            return;
+        }
+        notification(NOTIFICATION_TYPE.SUCCESS, res.data);
+        dispatch(emptyBookingInfor());
+        dispatch(emptyBookingDetails());
+        dispatch(toggleBkDetailValid(false));
+        dispatch(toggleBkInforValid(false));
+        dispatch(setLoading(false))
+    }
+}
+export const requestFilterEmployeeByEmail = (email) => {
+    return async dispatch => {
+        const res = await callApi(`https://localhost:5001/api/bkc/search/${email}`, "GET", null);
+        if (res.status !== 200) {
+            notification(NOTIFICATION_TYPE.ERROR, res.data);
+            return dispatch(saveFilterListEmployee([]));
+        }
+        console.log("res2", res);
+        dispatch(saveFilterListEmployee(res.data));
     }
 }

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BookingDetailItem } from "./BookingDetailItem";
 export const BookingDetailTable = (props) => {

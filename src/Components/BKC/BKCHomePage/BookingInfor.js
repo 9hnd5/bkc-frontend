@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { insertBookingInfor, toggleBkInforValid } from "../../../ActionCreators/bkcActionCreators";
+import { useDispatch, useSelector } from "react-redux";
+import { insertBookingInfor, requestFilterEmployeeByEmail, toggleBkInforValid } from "../../../ActionCreators/bkcActionCreators";
 import { NOT_EMPTY, ONLY_NUMBER, validation } from "../../../Helpers/validation";
 import Tooltip from "../../Commos/Tooltip";
-import * as _ from "lodash";
 import moment from 'moment';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
@@ -14,24 +13,42 @@ import destinationIcon from './../../../Assets/Bootstrap-icon/geo-alt-fill.svg'
 import totalPersonIcon from './../../../Assets/Bootstrap-icon/people.svg'
 import ccMailIcon from './../../../Assets/Bootstrap-icon/badge-cc.svg'
 import React from 'react';
-
+import { AutoComplete1 } from "../../Commos/AutoComplete1";
 function inputDtp(props) {
     return (
         <div className="input-group">
             <div className="input-group-prepend">
-                <img className="input-group-text" src={pickupTimeIcon} />
+                <img alt="" className="input-group-text" src={pickupTimeIcon} />
             </div>
             <input
                 className="form-control"
+                autoComplete="nope"
                 {...props}
             />
         </div>
     );
 }
-
+function inputCcperson(handleChange, handleBlur, handleClickInput, value) {
+    return (
+        <div className="input-group">
+            <div className="input-group-prepend">
+                <img className="input-group-text" alt="" src={ccMailIcon} />
+            </div>
+            <input className="form-control"
+                onChange={handleChange}
+                // onBlur={handleBlur}
+                onClick={handleClickInput}
+                value={value}
+                autoComplete="nope"
+            />
+        </div>
+    )
+}
 export const BookingInfor = (props) => {
     const dispatch = useDispatch();
-    const [bookingInfor, setBookingInfor] = useState({});
+    const bookingInfor = useSelector(state => state.bkc.bookingInfor);
+    console.log("booking infr", bookingInfor);
+    const suggestions = useSelector(state => state.bkc.listFilterEmployee);
     const [error, setError] = useState({
         pickupTime: "",
         returnTime: "",
@@ -40,6 +57,7 @@ export const BookingInfor = (props) => {
         totalPerson: ""
 
     });
+    const [tOut, setTOut] = useState("");
     function handleChange(e) {
         let validateResult = null;
         switch (e.target.name) {
@@ -61,7 +79,6 @@ export const BookingInfor = (props) => {
             }
             case "totalPerson": {
                 validateResult = validation(e.target.value, [NOT_EMPTY, ONLY_NUMBER]);
-                console.log("val", validateResult);
                 break;
             }
             default:
@@ -77,22 +94,19 @@ export const BookingInfor = (props) => {
                 [e.target.name]: validateResult
             })
         }
-        setBookingInfor({
-            ...bookingInfor,
-            [e.target.name]: e.target.value
-        });
+        dispatch(insertBookingInfor(e.target.name, e.target.value));
     }
     useEffect(() => {
         let arrayValue = Object.values(error);
         if (arrayValue.length === 0) {
             dispatch(toggleBkInforValid(true));
-            dispatch(insertBookingInfor(bookingInfor));
+            // dispatch(insertBookingInfor(bookingInfor));
         }
         else {
             dispatch(toggleBkInforValid(false));
-            dispatch(insertBookingInfor({}));
+            // dispatch(insertBookingInfor({}));
         }
-    }, [bookingInfor])
+    }, [bookingInfor, dispatch, error])
 
     function handleChangePickup(momentObject) {
         let pickupTime = null;
@@ -107,10 +121,7 @@ export const BookingInfor = (props) => {
                     pickupTime: "This field is not valid"
                 })
             }
-            setBookingInfor({
-                ...bookingInfor,
-                pickupTime: pickupTime.format("DD/MM/YYYY")
-            });
+            dispatch(insertBookingInfor("pickupTime", pickupTime.format("DD/MM/YYYY")));
 
         } else {
             pickupTime = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY"], true);
@@ -123,10 +134,7 @@ export const BookingInfor = (props) => {
                     pickupTime: "This field is not valid"
                 })
             }
-            setBookingInfor({
-                ...bookingInfor,
-                pickupTime: pickupTime.format("DD-MM-YYYY")
-            });
+            dispatch(insertBookingInfor("pickupTime", pickupTime.format("DD/MM/YYYY")));
         }
 
     }
@@ -143,10 +151,7 @@ export const BookingInfor = (props) => {
                     returnTime: "This field is not valid"
                 })
             }
-            setBookingInfor({
-                ...bookingInfor,
-                returnTime: returnTime.format("DD/MM/YYYY")
-            });
+            dispatch(insertBookingInfor("returnTime", returnTime.format("DD/MM/YYYY")));
         } else {
             returnTime = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
             if (returnTime.isValid()) {
@@ -158,11 +163,25 @@ export const BookingInfor = (props) => {
                     returnTime: "This field is not valid"
                 })
             }
-            setBookingInfor({
-                ...bookingInfor,
-                returnTime: returnTime.format("DD/MM/YYYY")
-            });
+           
+            dispatch(insertBookingInfor("returnTime", returnTime.format("DD/MM/YYYY")));
         }
+    }
+    function handleChangeCcPerson(value) {
+        if (tOut) {
+            clearTimeout(tOut);
+        }
+        const t = setTimeout(() => {
+            console.log("Starting search");
+            if (value.length >= 3) {
+                dispatch(requestFilterEmployeeByEmail(value));
+            }
+        }, 2000);
+        setTOut(t);
+        dispatch(insertBookingInfor("ccPerson", value));
+    }
+    function handleClickCcPerson(value) {
+        dispatch(insertBookingInfor("ccPerson", value));
     }
     return (
         <div className="row bkc_form">
@@ -190,6 +209,7 @@ export const BookingInfor = (props) => {
                                         inputProps={{ name: "pickupTime", placeholder: "dd/mm/yyyy" }}
                                         onChange={handleChangePickup}
                                     />
+
                                 </Tooltip>
                             </div>
                             <div className="col-6 col-xl-4">
@@ -216,13 +236,14 @@ export const BookingInfor = (props) => {
                                 <Tooltip active={error.location ? true : false} content={error.location} direction="top">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <img className="input-group-text" src={locationIcon} />
+                                            <img alt="" className="input-group-text" src={locationIcon} />
                                         </div>
                                         <input
                                             onChange={handleChange}
                                             className="form-control"
                                             name="location"
                                             value={bookingInfor.location}
+                                            autoComplete={"nope"}
                                         />
                                     </div>
                                 </Tooltip>
@@ -232,12 +253,13 @@ export const BookingInfor = (props) => {
                                 <Tooltip active={error.destination ? true : false} content={error.destination} direction="top">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <img className="input-group-text" src={destinationIcon} />
+                                            <img alt="" className="input-group-text" src={destinationIcon} />
                                         </div>
                                         <input onChange={handleChange}
                                             className="form-control"
                                             name="destination"
                                             value={bookingInfor.destination}
+                                            autoComplete="nope"
                                         />
                                     </div>
 
@@ -257,23 +279,22 @@ export const BookingInfor = (props) => {
 
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <img className="input-group-text" src={totalPersonIcon} />
+                                            <img alt="" className="input-group-text" src={totalPersonIcon} />
                                         </div>
                                         <input
                                             onChange={handleChange}
                                             className="form-control"
                                             name="totalPerson"
                                             value={bookingInfor.totalPerson}
+                                            autoComplete="nope"
                                         />
                                     </div>
                                 </Tooltip>
                             </div>
                             <div className="col-6 col-xl-4">
-
-
-                                <div className="input-group">
+                                {/* <div className="input-group">
                                     <div className="input-group-prepend">
-                                        <img className="input-group-text" src={ccMailIcon} />
+                                        <img alt="" className="input-group-text" src={ccMailIcon} />
                                     </div>
                                     <input
                                         onChange={handleChange}
@@ -281,7 +302,18 @@ export const BookingInfor = (props) => {
                                         name="ccPersons"
                                         value={bookingInfor.ccPersons}
                                     />
-                                </div>
+                                </div> */}
+                                {/* <Autocomplete
+                                    suggestions={["a", "b", "c", "cc", "ccc"]}
+                                    value={bookingInfor.ccPerson}
+                                    onChange={handleChange}
+                                /> */}
+                                <AutoComplete1
+                                    suggestions={suggestions}
+                                    onChange={handleChangeCcPerson}
+                                    onClick={handleClickCcPerson}
+                                    inputCustom={inputCcperson}
+                                />
                             </div>
                         </div>
                     </div>

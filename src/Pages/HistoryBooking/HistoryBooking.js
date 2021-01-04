@@ -9,7 +9,7 @@ export const HistoryBooking = () => {
     useEffect(() => {
         dispatch(fetchBookerBkInforBkDetail(employee.buId));
         dispatch(savePageName("HistoryBooking"));
-    }, [])
+    })
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">

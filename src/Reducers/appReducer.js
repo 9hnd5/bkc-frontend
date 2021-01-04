@@ -32,9 +32,9 @@ export const appReducer = (state = initialState, action) => {
         case UPDATE_STATUS_BOOKER_DECLINE: {
             const { bookerId } = action;
             const index = state.bookerBkInforBkDetails.findIndex((item) => {
-                return item.booker.id == bookerId;
+                return item.booker.id === bookerId;
             })
-            if (index == -1) return { ...state };
+            if (index === -1) return { ...state };
             const temp = [...state.bookerBkInforBkDetails];
             temp[index].booker.status = "Decline";
             return {

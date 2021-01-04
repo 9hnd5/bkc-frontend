@@ -4,7 +4,7 @@ export const HistoryBookingTable = () => {
     const bookerBkInforBkDetails = useSelector(state => state.app.bookerBkInforBkDetails);
     const employee = useSelector(state => state.app.employee);
     const bookerBkInforBkDetail = bookerBkInforBkDetails.filter((item) => {
-        return item.booker.employeeId == employee.id;
+        return item.booker.employeeId === employee.id;
     });
     const display = bookerBkInforBkDetail.map((item, index) => {
         return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { saveDataApproveBkc, toggleIsDataApproveValid } from "../../../ActionCreators/hrActionCreators"
 import Tooltip from '../../../Components/Commos/Tooltip';
 import { NOT_EMPTY, validation } from "../../../Helpers/validation";

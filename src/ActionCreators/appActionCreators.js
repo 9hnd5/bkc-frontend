@@ -57,7 +57,6 @@ export const savePageName = (pageName) => {
 export const requestAuthenticate = (email) => {
     return async dispatch => {
         const res = await callApi("https://localhost:5001/api/authenticate", "POST", { email: email });
-        console.log("res", res);
         const employee = res.data.employee
         const token = res.data.token;
         dispatch(saveAccessToken(token));
@@ -77,7 +76,6 @@ export const fetchBookerBkInforBkDetail = (buId) => {
             }
             bookerBkInforBkDetails.push(data);
         });
-        console.log("bk", bookerBkInforBkDetails);
         dispatch(saveBookerBkInforBkDetail(bookerBkInforBkDetails))
     }
 }
@@ -85,7 +83,7 @@ export const requestDeclineBkc = (data) => {
     return async dispatch => {
         const res = await callApi("https://localhost:5001/api/bkc/decline", "POST", data);
         console.log("res decline", res);
-        if (res.status == 200) {
+        if (res.status === 200) {
             const { bookerId } = data;
             dispatch(updateStatusBookerToDecline(bookerId));
         }

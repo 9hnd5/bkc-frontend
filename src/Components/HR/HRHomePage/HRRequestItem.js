@@ -4,15 +4,14 @@ export const HRRequestItem = (props) => {
     const history = useHistory();
     const { index } = props;
     function handleClick(e) {
-        if (e == "processed") {
+        if (e === "processed") {
             history.push(`process/${booker.id}`)
         }
-        if (e == "decline") {
+        if (e === "decline") {
             props.onOpenModal(booker.id);
         }
     }
     const { booker, bookingInfor } = props.bookerBkInforBkDetail
-    console.log("booker", booker);
     let status = null;
     switch (booker.status) {
         case "Success":
@@ -49,7 +48,7 @@ export const HRRequestItem = (props) => {
                     <button
                         onClick={() => handleClick("processed")}
                         className="btn btn-outline-primary btn-sm mr-2"
-                        disabled={booker.status == "Success" || booker.status == "Decline" ? true : false}
+                        disabled={booker.status === "Success" || booker.status === "Decline" ? true : false}
                     >
                         <i className="fas fa-chevron-circle-right mr-1"></i>
                             XỬ LÝ
@@ -58,7 +57,7 @@ export const HRRequestItem = (props) => {
 
                         onClick={() => handleClick("decline")}
                         className="btn btn-outline-danger btn-sm"
-                        disabled={booker.status == "Success" || booker.status == "Decline" ? true : false}
+                        disabled={booker.status === "Success" || booker.status === "Decline" ? true : false}
                     >
                         <i className="fas fa-ban mr-1"></i>
                             TỪ CHỐI

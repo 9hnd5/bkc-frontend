@@ -64,7 +64,7 @@ function PrivateRoute({ children, ...rest }) {
   }
   else {
     for (let r of roles) {
-      if (r == employee.role) {
+      if (r === employee.role) {
         isAuth = true;
         break;
       }

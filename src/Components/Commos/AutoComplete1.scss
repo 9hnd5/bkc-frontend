@@ -1,0 +1,33 @@
+.suggestions {
+  overflow-y: auto;
+  height: 200px;
+  width: 100%;
+  z-index: 3;
+  position: absolute;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 0.25rem;
+}
+.suggestions button {
+  cursor: pointer;
+  border-right: none;
+  border-left: none;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

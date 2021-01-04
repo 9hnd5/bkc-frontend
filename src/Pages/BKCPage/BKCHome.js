@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './BKCHome.scss';
 import { MainBtn } from '../../Components/BKC/BKCHomePage/MainBtn';
 import { Booker } from '../../Components/BKC/BKCHomePage/Booker';
@@ -13,10 +13,10 @@ import { savePageName } from '../../ActionCreators/appActionCreators';
 export const BKCHome = (props) => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(emptyBookingInfor());
-        dispatch(emptyBookingDetails());
+        // dispatch(emptyBookingInfor());
+        // dispatch(emptyBookingDetails());
         dispatch(savePageName("BookingCar"))
-    }, []);
+    });
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">

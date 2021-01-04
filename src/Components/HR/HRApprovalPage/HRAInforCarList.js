@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDriverCars } from "../../../ActionCreators/hrActionCreators";
 import { HRAInforCarItem } from "./HRAInforCarItem"
@@ -8,17 +8,16 @@ export const HRAInforCarList = (props) => {
     const employee = useSelector(state => state.app.employee);
     const { inforId } = props;
     const bookerBkInforBkDetail = useSelector(state => state.app.bookerBkInforBkDetails).find(ifd => {
-        return ifd.booker.id == inforId;
+        return ifd.booker.id === inforId;
     });
     const { bookingInfor } = bookerBkInforBkDetail;
     const driverCars = useSelector(state => state.hr.driverCars);
-    console.log("driverCars", driverCars);
     const displayCarDrivers = driverCars.map((driverCar, index) => {
         return <HRAInforCarItem key={index} driverCar={driverCar} bookingInfor={bookingInfor} />
     });
     useEffect(() => {
         dispatch(fetchDriverCars(employee.buId));
-    }, []);
+    });
     return (
         <div className="row">
             <div className="col-12">

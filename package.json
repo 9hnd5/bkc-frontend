@@ -10,10 +10,12 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
     "axios": "^0.21.0",
+    "eslint-plugin-react-hooks": "0.0.0-8e5adfbd7",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
+    "react-autosuggest": "^10.0.4",
     "react-datepicker": "^3.3.0",
     "react-datetime": "^3.0.4",
     "react-dom": "^17.0.1",
@@ -37,7 +39,11 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    }
   },
   "browserslist": {
     "production": [

@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { requestSaveBookingCar } from "../../../ActionCreators/bkcActionCreators";
 import { STATUS } from "../../../Constants/bkcConstants";
-import { NotificationManager } from 'react-notifications'
-import { toast, Zoom } from 'react-toastify';
 
 export const MainBtn = (props) => {
     const dispatch = useDispatch();
@@ -12,9 +10,7 @@ export const MainBtn = (props) => {
     const isBkcInforValid = useSelector(state => state.bkc.isBkcInforValid);
     const isBkcDetailValid = useSelector(state => state.bkc.isBkcDetailValid);
     const isLoading = useSelector(state => state.bkc.isLoading);
-    console.log("isLoading", isLoading);
-    const disabled = (isLoading == false) && (isBkcInforValid && isBkcDetailValid) ? false : true
-    console.log("disabled", disabled);
+    const disabled = (isLoading === false) && (isBkcInforValid && isBkcDetailValid) ? false : true
     const data = {
         employeeId: employee.id,
         employeeName: employee.name,

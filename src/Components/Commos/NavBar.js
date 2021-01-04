@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { requestAuthenticate, saveAccessToken, saveAuthenticate, saveEmployee } from '../../ActionCreators/appActionCreators';
 import './NavBar.scss';
-import { login, logout } from '../../Helpers/login';
+// import { login, logout } from '../../Helpers/login';
 export const NavBar = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const user = useSelector(state => state.app.user);
+    // const user = useSelector(state => state.app.user);
     const isAuth = useSelector(state => state.app.isAuth);
     const pageName = useSelector(state => state.app.pageName);
     async function handleClick(e) {
@@ -47,10 +47,10 @@ export const NavBar = () => {
             <div className="row d-flex justify-content-center">
                 <div className="col-12 col-xl-12">
                     <nav className="navbar navbar-expand-lg navbar-light bg-success">
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
+                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
                         </button>
-                        <a className="navbar-brand"><i className="fas fa-home"></i></a>
+                        <Link to="/" className="navbar-brand"><i className="fas fa-home"></i></Link>
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul className="navbar-nav mr-auto">
                                 <li className={pageName === "Home" ? "nav-item active" : "nav-item"}>

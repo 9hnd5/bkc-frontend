@@ -4,9 +4,9 @@ export const HRAInformation = (props) => {
     const { inforId } = props;
     const bookerBkInforBkDetails = useSelector(state => state.app.bookerBkInforBkDetails);
     const bookerBkInforBkDetail = bookerBkInforBkDetails.find(item => {
-        return item.booker.id == inforId;
+        return item.booker.id === inforId;
     })
-    const { booker, bookingInfor, bookingDetails } = bookerBkInforBkDetail;
+    const { booker, bookingDetails } = bookerBkInforBkDetail;
     const displayDetails = bookingDetails.map((bookingDetail, index) => {
         return (
             <tr key={index}>

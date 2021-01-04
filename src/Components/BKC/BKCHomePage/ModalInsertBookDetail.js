@@ -8,7 +8,6 @@ import Tooltip from '../../Commos/Tooltip';
 import { NOT_EMPTY, ONLY_NUMBER, validation } from '../../../Helpers/validation';
 export const ModalInsertBookDetail = (props) => {
     const dispatch = useDispatch();
-    const {onChange} = props;
     const isOpenBkcDetailModalInsert = useSelector(state => state.bkc.isOpenBkcDetailModalInsert)
     const bookingDetailDefault = { ...BOOK_DETAIL_DEFAULT }
     const [bookDetail, setBookDetail] = useState(bookingDetailDefault)
@@ -107,11 +106,10 @@ export const ModalInsertBookDetail = (props) => {
         setIsDisable(true);
     }
     useEffect(() => {
-        console.log("didmoutn")
         let arrayValue = Object.values(error);
-        if (arrayValue.length == 0) setIsDisable(false);
+        if (arrayValue.length === 0) setIsDisable(false);
         else setIsDisable(true);
-    }, [bookDetail]);
+    }, [bookDetail, error]);
     return (
         <Modal
             open={isOpenBkcDetailModalInsert}
@@ -134,6 +132,7 @@ export const ModalInsertBookDetail = (props) => {
                             onChange={handleChange}
                             name="pickupLocation"
                             className="form-control"
+                            autoComplete="nope"
                         />
                     </Tooltip>
                 </div>
@@ -144,6 +143,7 @@ export const ModalInsertBookDetail = (props) => {
                             onChange={handleChange}
                             name="pickupTime"
                             className="form-control"
+                            autoComplete="nope"
                         />
                     </Tooltip>
                 </div>
@@ -162,7 +162,10 @@ export const ModalInsertBookDetail = (props) => {
                             value={bookDetail.employeeName}
                             onChange={handleChange}
                             name="employeeName"
-                            className="form-control" />
+                            className="form-control"
+                            autoComplete="nope"
+                        />
+
                     </Tooltip>
                 </div>
                 <div className="col-6">
@@ -172,7 +175,9 @@ export const ModalInsertBookDetail = (props) => {
                             value={bookDetail.guestName}
                             onChange={handleChange}
                             name="guestName"
-                            className="form-control" />
+                            className="form-control"
+                            autoComplete="nope"
+                        />
                     </Tooltip>
                 </div>
                 <div className="w-100" />
@@ -190,7 +195,9 @@ export const ModalInsertBookDetail = (props) => {
                             value={bookDetail.phone}
                             onChange={handleChange}
                             name="phone"
-                            className="form-control" />
+                            className="form-control"
+                            autoComplete="nope"
+                        />
                     </Tooltip>
                 </div>
                 <div className="col-6">
@@ -200,7 +207,9 @@ export const ModalInsertBookDetail = (props) => {
                             value={bookDetail.note}
                             onChange={handleChange}
                             name="note"
-                            className="form-control" />
+                            className="form-control"
+                            autoComplete="nope"
+                        />
                     </Tooltip>
                 </div>
                 <div className="w-100" />

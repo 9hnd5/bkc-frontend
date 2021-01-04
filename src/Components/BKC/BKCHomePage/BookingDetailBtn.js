@@ -5,10 +5,8 @@ export function BookingDetailBtn(props) {
     const dispatch = useDispatch();
     const bookingInfor = useSelector(state => state.bkc.bookingInfor);
     const bookingDetails = useSelector(state => state.bkc.bookingDetails);
-    console.log("totalPerson", bookingInfor.totalPerson);
-    console.log("length", bookingDetails.length);
     let isDisabled = null;
-    if(bookingInfor.totalPerson == undefined || bookingDetails.length >= bookingInfor.totalPerson){
+    if(bookingInfor.totalPerson === undefined || bookingDetails.length >= bookingInfor.totalPerson){
         isDisabled = true;
     }
     else isDisabled = false;
