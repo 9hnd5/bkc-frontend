@@ -10,7 +10,7 @@ export const MainBtn = (props) => {
     const isBkcInforValid = useSelector(state => state.bkc.isBkcInforValid);
     const isBkcDetailValid = useSelector(state => state.bkc.isBkcDetailValid);
     const isLoading = useSelector(state => state.bkc.isLoading);
-    const disabled = (isLoading === false) && (isBkcInforValid && isBkcDetailValid) ? false : true
+    const disabled = (isLoading === false) && isBkcInforValid && isBkcDetailValid ? false : true
     const data = {
         employeeId: employee.id,
         employeeName: employee.name,
@@ -19,12 +19,14 @@ export const MainBtn = (props) => {
         buName: employee.buName,
         department: employee.department,
         status: STATUS.WAITING,
+        
 
         PickupTime: bookingInfor.pickupTime,
         ReturnTime: bookingInfor.returnTime,
         Location: bookingInfor.location,
         Destination: bookingInfor.destination,
         TotalPerson: bookingInfor.totalPerson,
+        mailToManager: bookingInfor.mailToManager,
 
         BookingDetailRequests: bookingDetails
 

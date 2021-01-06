@@ -2,8 +2,8 @@ import { useSelector } from "react-redux";
 import { BookingDetailItem } from "./BookingDetailItem";
 export const BookingDetailTable = (props) => {
     const bookingDetails = useSelector(state => state.bkc.bookingDetails);
-    const displayBkcDetails = bookingDetails.map((bookDetail, index) => {
-        return <BookingDetailItem bookDetail={bookDetail} key={index} />
+    const displayBkcDetails = bookingDetails.map((bookingDetail, index) => {
+        return <BookingDetailItem bookingDetail={bookingDetail} key={index} />
     });
     return (
         <div className="row">

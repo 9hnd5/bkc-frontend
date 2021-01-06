@@ -9,7 +9,8 @@ import {
     EMPTY_BOOKING_INFOR,
     EMPTY_BOOKING_DETAILS,
     SET_LOADING,
-    SAVE_LIST_FILTER_EMPLOYEE
+    SAVE_LIST_FILTER_EMPLOYEE,
+    BOOKING_INFOR_DEFAULT
 } from "../Constants/bkcConstants"
 import { callApi } from "../Helpers/callApi"
 import { notification, NOTIFICATION_TYPE } from "../Helpers/notification"
@@ -33,14 +34,16 @@ export const insertBookingInfor = (name, value) => {
         value
     }
 }
-export const emptyBookingInfor = () => {
+export const emptyBookingInfor = (bookingInfor) => {
     return {
-        type: EMPTY_BOOKING_INFOR
+        type: EMPTY_BOOKING_INFOR,
+        bookingInfor
     }
 }
-export const emptyBookingDetails = () => {
+export const emptyBookingDetails = (bookingDetails) => {
     return {
-        type: EMPTY_BOOKING_DETAILS
+        type: EMPTY_BOOKING_DETAILS,
+        bookingDetails
     }
 }
 export const insertBookingDetail = (bookingDetail) => {
@@ -84,15 +87,15 @@ export const saveFilterListEmployee = (listFilterEmployee) => {
 export const requestSaveBookingCar = (data) => {
     return async dispatch => {
         dispatch(setLoading(true));
-        const res = await callApi("https://localhost:5001/api/bkc/approve", "POST", data)
+        const res = await callApi("https://localhost:5001/api/bkc/bookers", "POST", data)
         if (!(res.status === 200)) {
             notification(NOTIFICATION_TYPE.ERROR, res.data);
             dispatch(setLoading(false))
             return;
         }
-        notification(NOTIFICATION_TYPE.SUCCESS, res.data);
-        dispatch(emptyBookingInfor());
-        dispatch(emptyBookingDetails());
+        notification(NOTIFICATION_TYPE.SUCCESS, "Đã Gửi Yêu Cầu Đặt Xe Thành Công");
+        dispatch(emptyBookingInfor({...BOOKING_INFOR_DEFAULT}));
+        dispatch(emptyBookingDetails([]));
         dispatch(toggleBkDetailValid(false));
         dispatch(toggleBkInforValid(false));
         dispatch(setLoading(false))
@@ -102,10 +105,9 @@ export const requestFilterEmployeeByEmail = (email) => {
     return async dispatch => {
         const res = await callApi(`https://localhost:5001/api/bkc/search/${email}`, "GET", null);
         if (res.status !== 200) {
-            notification(NOTIFICATION_TYPE.ERROR, res.data);
+            // notification(NOTIFICATION_TYPE.ERROR, res.data);
             return dispatch(saveFilterListEmployee([]));
         }
-        console.log("res2", res);
         dispatch(saveFilterListEmployee(res.data));
     }
 }

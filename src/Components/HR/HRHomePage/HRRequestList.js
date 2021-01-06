@@ -2,36 +2,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { HRRequestItem } from "./HRRequestItem"
 import Modal from 'react-responsive-modal';
 import { useState } from "react";
-import { requestDeclineBkc } from "../../../ActionCreators/appActionCreators";
+import { requestRejectBkc } from "../../../ActionCreators/appActionCreators";
+import { useHistory } from "react-router-dom";
 export const HRRequestList = () => {
     const dispatch = useDispatch();
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [decline, setDecline] = useState({
-        reason: "",
-        bookerId: ""
-    });
+    const [reasonReject, setReasonReject] = useState("");
+    const [bookerId, setBookerId] = useState(null);
     const bookerBkInforBkDetails = useSelector(state => state.app.bookerBkInforBkDetails);
     const displaybkcInfors = bookerBkInforBkDetails.map((bookerBkInforBkDetail, index) => {
         return <HRRequestItem onOpenModal={handleOpenModal} index={index} key={index} bookerBkInforBkDetail={bookerBkInforBkDetail} />
     });
-    function handleCancelModal(){
+    function handleCancelModal() {
         setIsOpenModal(false);
     }
-    function handleOpenModal(bookerId){
+    function handleOpenModal(bookerId) {
+        setBookerId(bookerId);
         setIsOpenModal(true);
-        setDecline({
-            ...decline,
-            bookerId: bookerId
-        })
+
     }
-    function handleChange(e){
-        setDecline({
-            ...decline,
-            [e.target.name]: e.target.value
-        });
+    function handleChange(e) {
+        setReasonReject(e.target.value);
     }
-    function handleClick(){
-        dispatch(requestDeclineBkc(decline));
+    function handleClick() {
+        const rejectObject = {
+            bookerId: bookerId,
+            reasonReject: reasonReject
+        }
+        dispatch(requestRejectBkc(rejectObject));
         setIsOpenModal(false);
     }
     return (
@@ -65,12 +63,24 @@ export const HRRequestList = () => {
                     <h4>Lí Do Từ Chối</h4>
                     <div className="row">
                         <div className="col-12">
-                            <textarea name="reason" onChange={handleChange} value={decline.reason} className="form-control" rows="5"></textarea>
+                            <textarea name="reasonReject" onChange={handleChange} value={reasonReject} className="form-control" rows="5"></textarea>
                         </div>
                         <div className="w-100" />
                         <div className="col-12 mt-2">
-                            <button onClick={handleClick} className="btn btn-outline-primary btn-sm mr-2">LƯU</button>
-                            <button onClick={handleCancelModal} className="btn btn-outline-danger btn-sm">HỦY</button>
+                            <button
+                                onClick={handleClick}
+                                className="btn btn-outline-primary btn-sm mr-2"
+                            >
+                                <i className="fas fa-check-circle mr-1"></i>
+                                XÁC NHẬN
+                            </button>
+                            <button
+                                onClick={handleCancelModal}
+                                className="btn btn-outline-danger btn-sm"
+                            >
+                                <i className="fas fa-backspace mr-1"></i>
+                                QUAY LẠI
+                            </button>
                         </div>
                     </div>
                 </Modal>

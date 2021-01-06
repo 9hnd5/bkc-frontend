@@ -2,9 +2,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { requestAuthenticate, saveAccessToken, saveAuthenticate, saveEmployee } from '../../ActionCreators/appActionCreators';
+import { useTranslation } from 'react-i18next';
 import './NavBar.scss';
+import VNflag from './../../Assets/Bootstrap-icon/vietnam.svg'
 // import { login, logout } from '../../Helpers/login';
 export const NavBar = () => {
+    const { t, i18n } = useTranslation();
     const history = useHistory();
     const dispatch = useDispatch();
     // const user = useSelector(state => state.app.user);
@@ -40,6 +43,7 @@ export const NavBar = () => {
             // dispatch(requestAuthenticate("lieu.pt@greenfeed.com.vn"));
             // dispatch(requestAuthenticate("truyen.nv@greenfeed.com.vn"));
             // dispatch(requestAuthenticate("lecongtru.gf@gmail.com"));
+            // dispatch(requestAuthenticate("khiem.nt@greenfeed.com.vn"));
         }
     }
     return (
@@ -77,14 +81,31 @@ export const NavBar = () => {
                                         Admin
                                     </Link>
                                 </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Ngôn Ngữ
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" href="#">action</a>
+                                    </div>
+                                </li>
+                                {/* <img className="mr-1" src={VNflag} /> */}
+                                <div className="btn-group mr-2" role="group">
+                                    <button class="btn btn-sm btn-primary" type="button">
+                                        Tiếng Anh
+                                        </button>
+                                    <button class="btn btn-sm btn-primary" type="button">
+                                        Tiếng Việt
+                                </button>
+                                </div>
                             </ul>
 
                             <button
                                 onClick={() => handleClick(!isAuth ? "login" : "logout")}
                                 className="btn btn-light btn-sm my-2 my-sm-0"
                             >
-                                <i className={!isAuth? "fas fa-arrow-alt-circle-right mr-1": "fas fa-arrow-alt-circle-left mr-1"}></i>
-                                {!isAuth ? "Log in" : "Log out"}
+                                <i className={!isAuth ? "fas fa-arrow-alt-circle-right mr-1" : "fas fa-arrow-alt-circle-left mr-1"}></i>
+                                {!isAuth ? t("dangnhap") : "Log out"}
                             </button>
 
                         </div>

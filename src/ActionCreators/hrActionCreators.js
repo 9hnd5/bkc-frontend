@@ -1,10 +1,17 @@
-import { SAVE_BKC_DETAILS, SAVE_BKC_INFORS, SAVE_CARS, SAVE_DATA_APPROVE_BKC, SAVE_DRIVERS, SAVE_DRIVER_CARS, TOOGLE_IS_DATA_APPROVE_VALID } from "../Constants/hrConstants";
+import { SAVE_BKC_DETAILS, SAVE_BKC_INFORS, SAVE_CARS, SAVE_DATA_APPROVE_BKC, SAVE_DRIVERS, SAVE_DRIVER_CARS, TOGGLE_IS_APPROVE_SUCCESS, TOOGLE_IS_DATA_APPROVE_VALID } from "../Constants/hrConstants";
 import { callApi } from "../Helpers/callApi";
+import { notification, NOTIFICATION_TYPE } from "../Helpers/notification";
 
 export const toggleIsDataApproveValid = (data) => {
     return {
         type: TOOGLE_IS_DATA_APPROVE_VALID,
         data
+    }
+}
+export const toggleIsApproveSuccess = (isApproveSuccess) => {
+    return {
+        type: TOGGLE_IS_APPROVE_SUCCESS,
+        isApproveSuccess
     }
 }
 export const saveBkcInfors = bkcInfors => {
@@ -73,7 +80,12 @@ export const saveCarRequest = (data) => {
 }
 export const requestApproveBkc = (data) => {
     return async dispatch => {
-        const res = await callApi(`https://localhost:5001/api/bkc/approvebkc`, "POST", data);
-        console.log("res", res);
+        const res = await callApi(`https://localhost:5001/api/bkc/approve`, "POST", data);
+        if(!res.status === 200){
+            dispatch(toggleIsApproveSuccess(false));
+            return notification(NOTIFICATION_TYPE.ERROR, res.data);
+        }
+        dispatch(toggleIsApproveSuccess(true));
+        notification(NOTIFICATION_TYPE.SUCCESS, res.data);
     }
 }

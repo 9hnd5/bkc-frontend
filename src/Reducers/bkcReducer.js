@@ -41,13 +41,13 @@ export const bkcReducer = (state = initialState, action) => {
         case EMPTY_BOOKING_INFOR: {
             return {
                 ...state,
-                bookingInfor: {}
+                bookingInfor: action.bookingInfor
             }
         }
         case EMPTY_BOOKING_DETAILS: {
             return {
                 ...state, 
-                bookingDetails: []
+                bookingDetails: action.bookingDetails
             }
         }
         case TOGGLE_BKINFOR_VALID: {
@@ -84,8 +84,13 @@ export const bkcReducer = (state = initialState, action) => {
         case UPDATE_BOOKING_DETAIL:
             {
                 const index = state.bookingDetails.findIndex(bookingDetail => {
-                    return bookingDetail.id === action.bookingDetail.id
+                    return bookingDetail.stt === +action.bookingDetail.stt
                 });
+                if(index === -1){
+                    return {
+                        ...state
+                    }
+                }
                 const bookingDetailsNew = [...state.bookingDetails];
                 bookingDetailsNew.splice(index, 1, action.bookingDetail);
                 return {
@@ -96,10 +101,15 @@ export const bkcReducer = (state = initialState, action) => {
         case DELETE_BOOKING_DETAIL:
             {
                 const index = state.bookingDetails.findIndex(bookingDetail => {
-                    return bookingDetail.id === action.bookingDetail.id
+                    return bookingDetail.stt === action.bookingDetail.stt
                 });
+                if(index === -1) return {...state};
                 const bookingDetailsNew = [...state.bookingDetails];
                 bookingDetailsNew.splice(index, 1);
+                //Update stt after delete
+                for(let i = 0; i < bookingDetailsNew.length; i++){
+                    bookingDetailsNew[i].stt = i + 1;
+                }
                 return {
                     ...state,
                     bookingDetails: bookingDetailsNew

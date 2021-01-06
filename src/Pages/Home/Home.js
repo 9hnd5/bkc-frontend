@@ -23,7 +23,7 @@ export const Home = () => {
         <div className="container-fluid">
             <div className="row">
                 <div className="col-11 col-xl-11 d-flex justify-content-center">
-                    <h4>Xin Vui Lòng Đăng Nhập</h4>
+                    <h4>{Object.keys(employee).length === 0? "Xin Vui Lòng Đăng Nhập": `Xin Chào ${employee.name} `}</h4>
                 </div>
             </div>
 

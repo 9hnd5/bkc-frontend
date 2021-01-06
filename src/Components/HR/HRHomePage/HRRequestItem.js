@@ -7,7 +7,7 @@ export const HRRequestItem = (props) => {
         if (e === "processed") {
             history.push(`process/${booker.id}`)
         }
-        if (e === "decline") {
+        if (e === "Reject") {
             props.onOpenModal(booker.id);
         }
     }
@@ -20,7 +20,7 @@ export const HRRequestItem = (props) => {
         case "Waiting":
             status = "Chưa Duyệt"
             break;
-        case "Decline":
+        case "Reject":
             status = "Từ Chối"
             break;
         default:
@@ -48,16 +48,16 @@ export const HRRequestItem = (props) => {
                     <button
                         onClick={() => handleClick("processed")}
                         className="btn btn-outline-primary btn-sm mr-2"
-                        disabled={booker.status === "Success" || booker.status === "Decline" ? true : false}
+                        disabled={booker.status === "Success" || booker.status === "Reject" ? true : false}
                     >
                         <i className="fas fa-chevron-circle-right mr-1"></i>
                             XỬ LÝ
                     </button>
                     <button
 
-                        onClick={() => handleClick("decline")}
+                        onClick={() => handleClick("Reject")}
                         className="btn btn-outline-danger btn-sm"
-                        disabled={booker.status === "Success" || booker.status === "Decline" ? true : false}
+                        disabled={booker.status === "Success" || booker.status === "Reject" ? true : false}
                     >
                         <i className="fas fa-ban mr-1"></i>
                             TỪ CHỐI

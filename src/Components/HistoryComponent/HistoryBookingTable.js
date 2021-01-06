@@ -7,20 +7,24 @@ export const HistoryBookingTable = () => {
         return item.booker.employeeId === employee.id;
     });
     const display = bookerBkInforBkDetail.map((item, index) => {
+        let status = null;
+        if (item.booker.status === "Success") status = "Đã Được Duyệt";
+        else if (item.booker.status === "Waiting") status = "Đang Đợi Duyệt";
+        else status = "Từ Chối";
         return (
             <tr key={index}>
-                <td>{index+1}</td>
+                <td>{index + 1}</td>
                 <td>{item.bookingInfor.pickupTime}</td>
                 <td>{item.bookingInfor.returnTime}</td>
                 <td>{item.bookingInfor.location}</td>
                 <td>{item.bookingInfor.destination}</td>
                 <td>{item.bookingInfor.totalPerson}</td>
-                <td>{item.booker.status}</td>
+                <td>{status}</td>
             </tr>
         );
     })
     return (
-        <div className="table-responsive" style={{height: "500px"}}>
+        <div className="table-responsive" style={{ height: "500px" }}>
             <table className="table table-hover table-sm table-striped table-bordered">
                 <thead>
                     <tr>

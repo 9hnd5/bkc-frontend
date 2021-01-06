@@ -24,6 +24,10 @@ export const Booker = () => {
                             <div className="col-6 col-xl-6">
                                 <label>Phòng Ban: {employee.department}</label>
                             </div>
+                            <div className="w-100"></div>
+                            <div className="col-6 col-xl-6">
+                                <label>Người Quản Lý: {employee.department}</label>
+                            </div>
                         </div>
                     </div>
                 </div>

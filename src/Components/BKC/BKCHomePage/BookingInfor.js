@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { insertBookingInfor, requestFilterEmployeeByEmail, toggleBkInforValid } from "../../../ActionCreators/bkcActionCreators";
 import { NOT_EMPTY, ONLY_NUMBER, validation } from "../../../Helpers/validation";
@@ -6,12 +6,10 @@ import Tooltip from "../../Commos/Tooltip";
 import moment from 'moment';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
-import "react-datepicker/dist/react-datepicker.css";
 import pickupTimeIcon from './../../../Assets/Bootstrap-icon/calendar2-check.svg'
 import locationIcon from './../../../Assets/Bootstrap-icon/geo-alt.svg'
 import destinationIcon from './../../../Assets/Bootstrap-icon/geo-alt-fill.svg'
 import totalPersonIcon from './../../../Assets/Bootstrap-icon/people.svg'
-import ccMailIcon from './../../../Assets/Bootstrap-icon/badge-cc.svg'
 import React from 'react';
 import { AutoComplete1 } from "../../Commos/AutoComplete1";
 function inputDtp(props) {
@@ -32,7 +30,8 @@ function inputCcperson(handleChange, handleBlur, handleClickInput, value) {
     return (
         <div className="input-group">
             <div className="input-group-prepend">
-                <img className="input-group-text" alt="" src={ccMailIcon} />
+                {/* <img className="input-group-text" alt="" src={ccMailIcon} /> */}
+                <i className="bi bi-envelope input-group-text" />
             </div>
             <input className="form-control"
                 onChange={handleChange}
@@ -47,16 +46,10 @@ function inputCcperson(handleChange, handleBlur, handleClickInput, value) {
 export const BookingInfor = (props) => {
     const dispatch = useDispatch();
     const bookingInfor = useSelector(state => state.bkc.bookingInfor);
-    console.log("booking infr", bookingInfor);
     const suggestions = useSelector(state => state.bkc.listFilterEmployee);
-    const [error, setError] = useState({
-        pickupTime: "",
-        returnTime: "",
-        location: "",
-        destination: "",
-        totalPerson: ""
-
-    });
+    const [error, setError] = useState({});
+    console.log('error', error);
+    const isFirstRender = useRef(true);
     const [tOut, setTOut] = useState("");
     function handleChange(e) {
         let validateResult = null;
@@ -97,14 +90,16 @@ export const BookingInfor = (props) => {
         dispatch(insertBookingInfor(e.target.name, e.target.value));
     }
     useEffect(() => {
-        let arrayValue = Object.values(error);
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        let arrayValue = Object.keys(error);
         if (arrayValue.length === 0) {
             dispatch(toggleBkInforValid(true));
-            // dispatch(insertBookingInfor(bookingInfor));
         }
         else {
             dispatch(toggleBkInforValid(false));
-            // dispatch(insertBookingInfor({}));
         }
     }, [bookingInfor, dispatch, error])
 
@@ -113,27 +108,21 @@ export const BookingInfor = (props) => {
         if (typeof momentObject === "string" || momentObject instanceof String) {
             pickupTime = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
             if (pickupTime.isValid()) {
-                let { pickupTime, ...rest } = error;
+                let { pickupTime: x, ...rest } = error;
                 setError(rest);
+                dispatch(insertBookingInfor("pickupTime", pickupTime.format("DD/MM/YYYY")));
             } else {
                 setError({
                     ...error,
                     pickupTime: "This field is not valid"
                 })
+                dispatch(insertBookingInfor("pickupTime", momentObject));
             }
-            dispatch(insertBookingInfor("pickupTime", pickupTime.format("DD/MM/YYYY")));
 
         } else {
             pickupTime = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY"], true);
-            if (pickupTime.isValid()) {
-                let { pickupTime, ...rest } = error;
-                setError(rest);
-            } else {
-                setError({
-                    ...error,
-                    pickupTime: "This field is not valid"
-                })
-            }
+            let { pickupTime: x, ...rest } = error;
+            setError(rest);
             dispatch(insertBookingInfor("pickupTime", pickupTime.format("DD/MM/YYYY")));
         }
 
@@ -143,27 +132,20 @@ export const BookingInfor = (props) => {
         if (typeof momentObject === "string" || momentObject instanceof String) {
             returnTime = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
             if (returnTime.isValid()) {
-                let { returnTime, ...rest } = error;
+                let { returnTime: x, ...rest } = error;
                 setError(rest);
+                dispatch(insertBookingInfor("returnTime", returnTime.format("DD/MM/YYYY")));
             } else {
                 setError({
                     ...error,
                     returnTime: "This field is not valid"
                 })
+                dispatch(insertBookingInfor("returnTime", momentObject));
             }
-            dispatch(insertBookingInfor("returnTime", returnTime.format("DD/MM/YYYY")));
         } else {
             returnTime = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
-            if (returnTime.isValid()) {
-                let { returnTime, ...rest } = error;
-                setError(rest);
-            } else {
-                setError({
-                    ...error,
-                    returnTime: "This field is not valid"
-                })
-            }
-           
+            let { returnTime: x, ...rest } = error;
+            setError(rest);
             dispatch(insertBookingInfor("returnTime", returnTime.format("DD/MM/YYYY")));
         }
     }
@@ -176,12 +158,12 @@ export const BookingInfor = (props) => {
             if (value.length >= 3) {
                 dispatch(requestFilterEmployeeByEmail(value));
             }
-        }, 2000);
+        }, 500);
         setTOut(t);
-        dispatch(insertBookingInfor("ccPerson", value));
+        dispatch(insertBookingInfor("mailToManager", value));
     }
     function handleClickCcPerson(value) {
-        dispatch(insertBookingInfor("ccPerson", value));
+        dispatch(insertBookingInfor("mailToManager", value));
     }
     return (
         <div className="row bkc_form">
@@ -193,10 +175,16 @@ export const BookingInfor = (props) => {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-6 col-xl-4">
-                                <label>Ngày Đi</label>
+                                <label className="d-flex align-items-center">
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                                    Ngày Đi
+                                    </label>
                             </div>
                             <div className="col-6 col-xl-4">
-                                <label>Ngày Về</label>
+                                <label className="d-flex align-items-center">
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                                    Ngày Về
+                                </label>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
@@ -206,7 +194,7 @@ export const BookingInfor = (props) => {
                                         dateFormat="DD/MM/YYYY"
                                         timeFormat={false}
                                         closeOnSelect={true}
-                                        inputProps={{ name: "pickupTime", placeholder: "dd/mm/yyyy" }}
+                                        inputProps={{ name: "pickupTime", placeholder: "dd/mm/yyyy", value: bookingInfor.pickupTime }}
                                         onChange={handleChangePickup}
                                     />
 
@@ -219,17 +207,23 @@ export const BookingInfor = (props) => {
                                         dateFormat="DD/MM/YYYY"
                                         timeFormat={false}
                                         closeOnSelect={true}
-                                        inputProps={{ name: "returnTime", placeholder: "dd/mm/yyyy" }}
+                                        inputProps={{ name: "returnTime", placeholder: "dd/mm/yyyy", value: bookingInfor.returnTime }}
                                         onChange={handleChangeReturnTime}
                                     />
                                 </Tooltip>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
-                                <label>Địa Điểm Đón</label>
+                                <label className="d-flex align-items-center">
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                                    Địa Điểm Đón
+                                </label>
                             </div>
                             <div className="col-6 col-xl-4">
-                                <label>Địa Điểm Đến</label>
+                                <label className="d-flex align-items-center">
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                                    Địa Điểm Đến
+                                </label>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
@@ -249,7 +243,6 @@ export const BookingInfor = (props) => {
                                 </Tooltip>
                             </div>
                             <div className="col-6 col-xl-4">
-
                                 <Tooltip active={error.destination ? true : false} content={error.destination} direction="top">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
@@ -267,10 +260,13 @@ export const BookingInfor = (props) => {
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
-                                <label>Số Người Đi</label>
+                                <label className="d-flex align-items-center">
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                                    Số Người Đi
+                                </label>
                             </div>
                             <div className="col-6 col-xl-4">
-                                <label>CC Người Liên Quan</label>
+                                <label>Mail Đến Quản Lý</label>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
@@ -292,27 +288,12 @@ export const BookingInfor = (props) => {
                                 </Tooltip>
                             </div>
                             <div className="col-6 col-xl-4">
-                                {/* <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <img alt="" className="input-group-text" src={ccMailIcon} />
-                                    </div>
-                                    <input
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        name="ccPersons"
-                                        value={bookingInfor.ccPersons}
-                                    />
-                                </div> */}
-                                {/* <Autocomplete
-                                    suggestions={["a", "b", "c", "cc", "ccc"]}
-                                    value={bookingInfor.ccPerson}
-                                    onChange={handleChange}
-                                /> */}
                                 <AutoComplete1
                                     suggestions={suggestions}
                                     onChange={handleChangeCcPerson}
                                     onClick={handleClickCcPerson}
                                     inputCustom={inputCcperson}
+                                    defaultValue={bookingInfor.mailToManager}
                                 />
                             </div>
                         </div>

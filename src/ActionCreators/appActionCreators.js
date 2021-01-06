@@ -8,6 +8,7 @@ import {
     UPDATE_STATUS_BOOKER_DECLINE
 } from "../Constants/appConstants"
 import { callApi } from "../Helpers/callApi"
+import { notification, NOTIFICATION_TYPE } from "../Helpers/notification"
 
 export const saveAccessToken = (accessToken) => {
     return {
@@ -33,7 +34,7 @@ export const saveBookerBkInforBkDetail = (bookerBkInforBkDetails) => {
         bookerBkInforBkDetails
     }
 }
-export const updateStatusBookerToDecline = (bookerId) => {
+export const updateStatusBookerToReject = (bookerId) => {
     return {
         type: UPDATE_STATUS_BOOKER_DECLINE,
         bookerId
@@ -79,16 +80,17 @@ export const fetchBookerBkInforBkDetail = (buId) => {
         dispatch(saveBookerBkInforBkDetail(bookerBkInforBkDetails))
     }
 }
-export const requestDeclineBkc = (data) => {
+export const requestRejectBkc = (data) => {
     return async dispatch => {
-        const res = await callApi("https://localhost:5001/api/bkc/decline", "POST", data);
-        console.log("res decline", res);
+        const res = await callApi("https://localhost:5001/api/bkc/reject", "POST", data);
         if (res.status === 200) {
             const { bookerId } = data;
-            dispatch(updateStatusBookerToDecline(bookerId));
+            dispatch(updateStatusBookerToReject(bookerId));
+            notification(NOTIFICATION_TYPE.SUCCESS, res.data);
         }
         else{
             dispatch(saveErrorMessage(res.data));
+            notification(NOTIFICATION_TYPE.ERROR, res.data);
         }
     }
 }

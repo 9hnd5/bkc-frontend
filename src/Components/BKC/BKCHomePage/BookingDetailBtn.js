@@ -6,17 +6,21 @@ export function BookingDetailBtn(props) {
     const bookingInfor = useSelector(state => state.bkc.bookingInfor);
     const bookingDetails = useSelector(state => state.bkc.bookingDetails);
     let isDisabled = null;
-    if(bookingInfor.totalPerson === undefined || bookingDetails.length >= bookingInfor.totalPerson){
+    if (bookingInfor.totalPerson === undefined || bookingDetails.length >= bookingInfor.totalPerson) {
         isDisabled = true;
     }
     else isDisabled = false;
-    function handleClick(){
+    function handleClick() {
         dispatch(toggleBkcDetailModalInsert());
     }
     return (
         <div className="row">
             <div className="col-4">
-                <button disabled={isDisabled} onClick={handleClick} className="btn btn-outline-primary btn-sm">
+                <button
+                    disabled={isDisabled}
+                    onClick={handleClick}
+                    className="btn btn-outline-primary btn-sm"
+                >
                     <i className='fas fa-plus-square mr-1'></i>
                     THÊM NGƯỜI ĐI
                 </button>

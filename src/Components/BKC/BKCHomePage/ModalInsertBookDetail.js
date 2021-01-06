@@ -1,5 +1,8 @@
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
+import Datetime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { insertBookingDetail, toggleBkcDetailModalInsert, toggleBkDetailValid } from '../../../ActionCreators/bkcActionCreators';
@@ -9,8 +12,9 @@ import { NOT_EMPTY, ONLY_NUMBER, validation } from '../../../Helpers/validation'
 export const ModalInsertBookDetail = (props) => {
     const dispatch = useDispatch();
     const isOpenBkcDetailModalInsert = useSelector(state => state.bkc.isOpenBkcDetailModalInsert)
-    const bookingDetailDefault = { ...BOOK_DETAIL_DEFAULT }
-    const [bookDetail, setBookDetail] = useState(bookingDetailDefault)
+    const bookingDetails = useSelector(state => state.bkc.bookingDetails);
+    const bookingInfor = useSelector(state => state.bkc.bookingInfor);
+    const [bookingDetail, setBookingDetail] = useState({ ...BOOK_DETAIL_DEFAULT })
     const [error, setError] = useState({
         pickupLocation: "",
         pickupTime: "",
@@ -21,11 +25,9 @@ export const ModalInsertBookDetail = (props) => {
     function handleClickSave() {
         let arrayValue = Object.values(error);
         if (arrayValue.length === 0) {
-            dispatch(insertBookingDetail(bookDetail))
-            dispatch(toggleBkDetailValid(true))
+            dispatch(insertBookingDetail(bookingDetail))
             dispatch(toggleBkcDetailModalInsert());
-            setBookDetail({ ...bookingDetailDefault })
-
+            setBookingDetail({ ...BOOK_DETAIL_DEFAULT })
             setError({
                 pickupLocation: "",
                 pickupTime: "",
@@ -38,7 +40,7 @@ export const ModalInsertBookDetail = (props) => {
 
     function handleClickCancel() {
         dispatch(toggleBkcDetailModalInsert());
-        setBookDetail({ ...bookingDetailDefault })
+        setBookingDetail({ ...BOOK_DETAIL_DEFAULT })
         setError({
             pickupLocation: "",
             pickupTime: "",
@@ -90,26 +92,53 @@ export const ModalInsertBookDetail = (props) => {
                 [e.target.name]: validateResult
             })
         }
-        setBookDetail({
-            ...bookDetail,
+        setBookingDetail({
+            ...bookingDetail,
             [e.target.name]: e.target.value
         })
     }
     function onCloseModal() {
         dispatch(toggleBkcDetailModalInsert());
-        setError({
-            pickupLocation: "",
-            pickupTime: "",
-            employeeName: "",
-            phone: "",
-        })
-        setIsDisable(true);
     }
     useEffect(() => {
-        let arrayValue = Object.values(error);
+        let arrayValue = Object.keys(error);
         if (arrayValue.length === 0) setIsDisable(false);
         else setIsDisable(true);
-    }, [bookDetail, error]);
+    }, [bookingDetail, error]);
+    useEffect(() => {
+        if (bookingDetails.length === parseInt(bookingInfor.totalPerson)) {
+            return dispatch(toggleBkDetailValid(true));
+        }
+        dispatch(toggleBkDetailValid(false));
+    }, [bookingDetails, bookingInfor, dispatch]);
+    function handleChangePickupTime(momentObject) {
+        let pickupTime = null;
+        if (typeof momentObject === "string" || momentObject instanceof String) {
+            pickupTime = moment(momentObject, ["H:m", "H:mm"], true);
+            if (pickupTime.isValid()) {
+                let { pickupTime: x, ...rest } = error;
+                setError(rest);
+            } else {
+                setError({
+                    ...error,
+                    pickupTime: "This field is not valid"
+                })
+            }
+            setBookingDetail({
+                ...bookingDetail,
+                pickupTime: pickupTime.format("H:mm")
+            })
+
+        } else {
+            pickupTime = moment(momentObject, ["H:m", "H:mm"], true);
+            let { pickupTime: x, ...rest } = error;
+            setError(rest);
+            setBookingDetail({
+                ...bookingDetail,
+                pickupTime: pickupTime.format("H:mm")
+            })
+        }
+    }
     return (
         <Modal
             open={isOpenBkcDetailModalInsert}
@@ -119,16 +148,22 @@ export const ModalInsertBookDetail = (props) => {
             <h4>THÊM CHI TIẾT</h4>
             <div className="row">
                 <div className="col-6">
-                    <label>Nơi Đón</label>
+                    <label className="d-flex align-items-center">
+                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                        Nơi Đón
+                    </label>
                 </div>
                 <div className="col-6">
-                    <label>Giờ Đón</label>
+                    <label className="d-flex align-items-center">
+                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                        Giờ Đón
+                    </label>
                 </div>
                 <div className="w-100" />
                 <div className="col-6">
                     <Tooltip active={error.pickupLocation ? true : false} content={error.pickupLocation} direction="top">
                         <input
-                            value={bookDetail.pickupLocation}
+                            value={bookingDetail.pickupLocation}
                             onChange={handleChange}
                             name="pickupLocation"
                             className="form-control"
@@ -138,18 +173,20 @@ export const ModalInsertBookDetail = (props) => {
                 </div>
                 <div className="col-6">
                     <Tooltip active={error.pickupTime ? true : false} content={error.pickupTime} direction="top">
-                        <input
-                            value={bookDetail.pickupTime}
-                            onChange={handleChange}
-                            name="pickupTime"
-                            className="form-control"
-                            autoComplete="nope"
+                        <Datetime
+                            dateFormat={false}
+                            timeFormat="H:mm"
+                            onChange={handleChangePickupTime}
+                            initialValue={bookingDetail.pickupTime}
                         />
                     </Tooltip>
                 </div>
                 <div className="w-100" />
                 <div className="col-6">
-                    <label>Tên Nhân Viên</label>
+                    <label className="d-flex align-items-center">
+                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                        Tên Nhân Viên
+                    </label>
                 </div>
                 <div className="col-6">
                     <label>Tên Khách</label>
@@ -159,7 +196,7 @@ export const ModalInsertBookDetail = (props) => {
 
                     <Tooltip active={error.employeeName ? true : false} content={error.employeeName} direction="top">
                         <input
-                            value={bookDetail.employeeName}
+                            value={bookingDetail.employeeName}
                             onChange={handleChange}
                             name="employeeName"
                             className="form-control"
@@ -172,7 +209,7 @@ export const ModalInsertBookDetail = (props) => {
 
                     <Tooltip active={error.guestName ? true : false} content={error.guestName} direction="top">
                         <input
-                            value={bookDetail.guestName}
+                            value={bookingDetail.guestName}
                             onChange={handleChange}
                             name="guestName"
                             className="form-control"
@@ -182,7 +219,10 @@ export const ModalInsertBookDetail = (props) => {
                 </div>
                 <div className="w-100" />
                 <div className="col-6">
-                    <label>Số Điện Thoại</label>
+                    <label className="d-flex align-items-center">
+                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
+                        Số Điện Thoại
+                    </label>
                 </div>
                 <div className="col-6">
                     <label>Ghi Chú</label>
@@ -192,7 +232,7 @@ export const ModalInsertBookDetail = (props) => {
 
                     <Tooltip active={error.phone ? true : false} content={error.phone} direction="top">
                         <input
-                            value={bookDetail.phone}
+                            value={bookingDetail.phone}
                             onChange={handleChange}
                             name="phone"
                             className="form-control"
@@ -204,9 +244,9 @@ export const ModalInsertBookDetail = (props) => {
 
                     <Tooltip active={error.note ? true : false} content={error.note} direction="top">
                         <input
-                            value={bookDetail.note}
+                            value={bookingDetail.noteByBooker}
                             onChange={handleChange}
-                            name="note"
+                            name="noteByBooker"
                             className="form-control"
                             autoComplete="nope"
                         />
@@ -219,8 +259,8 @@ export const ModalInsertBookDetail = (props) => {
                         onClick={handleClickSave}
                         className="btn btn-outline-primary btn-sm mr-2"
                     >
-                        <i className="fas fa-save mr-1"></i>
-                        LƯU
+                        <i className="fas fa-check-circle mr-1"></i>
+                        XÁC NHẬN
                         </button>
                     <button
                         onClick={handleClickCancel}

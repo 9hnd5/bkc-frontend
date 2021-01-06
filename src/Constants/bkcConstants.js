@@ -13,7 +13,7 @@ export const SAVE_LIST_FILTER_EMPLOYEE = "SAVE_LIST_FILTER_EMPLOYEE";
 
 
 export const STATUS = {
-    WAITING: "WAITING"
+    WAITING: "Waiting"
 }
 export const BOOK_INFOR_DEFAULT = {
     pickupTime: null,
@@ -29,7 +29,7 @@ export const BOOK_DETAIL_DEFAULT = {
     employeeName: "",
     guestName: "",
     phone: "",
-    note: ""
+    noteByBooker: ""
 }
 export const BOOKING_INFOR_DEFAULT = {
     pickupTime: "",
@@ -37,5 +37,5 @@ export const BOOKING_INFOR_DEFAULT = {
     location: "",
     destination: "",
     totalPerson: "",
-    ccPersons: ""
+    mailToManager: ""
 }

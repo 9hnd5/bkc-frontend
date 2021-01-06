@@ -10,14 +10,15 @@ export const HRAInforCarList = (props) => {
     const bookerBkInforBkDetail = useSelector(state => state.app.bookerBkInforBkDetails).find(ifd => {
         return ifd.booker.id === inforId;
     });
-    const { bookingInfor } = bookerBkInforBkDetail;
+    const { bookingInfor, booker } = bookerBkInforBkDetail;
     const driverCars = useSelector(state => state.hr.driverCars);
     const displayCarDrivers = driverCars.map((driverCar, index) => {
-        return <HRAInforCarItem key={index} driverCar={driverCar} bookingInfor={bookingInfor} />
+        return <HRAInforCarItem key={index} driverCar={driverCar} bookingInfor={bookingInfor} booker={booker} />
     });
     useEffect(() => {
+        console.log("aaaaa");
         dispatch(fetchDriverCars(employee.buId));
-    });
+    }, [employee.buId]);
     return (
         <div className="row">
             <div className="col-12">
@@ -36,7 +37,6 @@ export const HRAInforCarList = (props) => {
                                         <th>Số Chổ</th>
                                         <th>Còn Trống</th>
                                         <th>Trạng Thái</th>
-                                        <th>Ngày Đặt</th>
                                         <th>Chọn Xe</th>
                                     </tr>
                                 </thead>

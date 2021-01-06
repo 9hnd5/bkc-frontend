@@ -1,6 +1,7 @@
 import ErrorBoundary from "./Components/Commos/ErrorBoundary";
 import './App.scss'
 import '@fortawesome/fontawesome-free/css/all.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { HRHome } from "./Pages/HRPage/HRHome";
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { NavBar } from "./Components/Commos/NavBar";

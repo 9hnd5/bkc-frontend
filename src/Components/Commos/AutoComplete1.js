@@ -1,8 +1,8 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import "./AutoComplete1.scss"
 export const AutoComplete1 = (props) => {
-    const { suggestions, onChange, onClick, inputCustom } = props;
-    const [value, setValue] = useState("");
+    const { suggestions, onChange, onClick, inputCustom, defaultValue } = props;
+    const [value, setValue] = useState(defaultValue);
     const [isShowSuggestions, setIsShowSuggestions] = useState(false);
     let suggestionsList = null;
     if (isShowSuggestions && value.length >= 3 && suggestions.length !== 0) {
@@ -40,6 +40,9 @@ export const AutoComplete1 = (props) => {
     function handleClickInput(){
         setIsShowSuggestions(true);
     }
+    useEffect(() => {
+        setValue(props.defaultValue)
+    }, [props]);
     return (
         <Fragment>
             {

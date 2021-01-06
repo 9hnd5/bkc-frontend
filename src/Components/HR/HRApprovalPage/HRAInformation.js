@@ -12,11 +12,11 @@ export const HRAInformation = (props) => {
             <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{bookingDetail.pickupLocation}</td>
+                <td>{bookingDetail.pickupTime}</td>
                 <td>{bookingDetail.employeeName}</td>
                 <td>{bookingDetail.guestName}</td>
-                <td>{bookingDetail.pickupTime}</td>
                 <td>{bookingDetail.phone}</td>
-                <td>{bookingDetail.note}</td>
+                <td>{bookingDetail.noteByBooker}</td>
             </tr>
         );
     });
@@ -42,24 +42,6 @@ export const HRAInformation = (props) => {
                             <div className="col-6 col-xl-3">
                                 <label>Phòng Ban: {booker.department}</label>
                             </div>
-                            {/* <div className="w-100"></div>
-                            <div className="col-6 col-xl-3">
-                                <label>Thời Gian Đón: {booker.pickupTime} </label>
-                            </div>
-                            <div className="col-6 col-xl-3">
-                                <label>Thời Gian Về: {booker.returnTime}</label>
-                            </div>
-                            <div className="w-100"></div>
-                            <div className="col-6 col-xl-3">
-                                <label>Địa Điểm Đón: {infor.location} </label>
-                            </div>
-                            <div className="col-6 col-xl-3">
-                                <label>Địa Điểm Đến: {infor.destination}</label>
-                            </div>
-                            <div className="w-100"></div>
-                            <div className="col-6 col-xl-3">
-                                <label>Số Người Đi: {infor.totalPerson} </label>
-                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -67,9 +49,9 @@ export const HRAInformation = (props) => {
             <div className="w-100 mt-1"></div>
             <div className="col-12">
                 <div className="card">
-                    <div className="card-header">
+                    {/* <div className="card-header">
                         <h4>THÔNG TIN NGƯỜI ĐI</h4>
-                    </div>
+                    </div> */}
                     <div className="card-body">
                         <div className="table-responsive hra-table-detail">
                             <table className="table table-bordered table-striped table-sm">
@@ -77,9 +59,9 @@ export const HRAInformation = (props) => {
                                     <tr>
                                         <th>STT</th>
                                         <th>Nơi Đón</th>
+                                        <th>Giờ Đón</th>
                                         <th>Nhân Viên</th>
                                         <th>Khách</th>
-                                        <th>Giờ Đến</th>
                                         <th>SDT</th>
                                         <th>Ghi Chú</th>
                                     </tr>
