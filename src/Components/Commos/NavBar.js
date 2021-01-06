@@ -46,6 +46,9 @@ export const NavBar = () => {
             // dispatch(requestAuthenticate("khiem.nt@greenfeed.com.vn"));
         }
     }
+    function handleChangeLanguage(lang){
+        i18n.changeLanguage(lang);
+    }   
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
@@ -81,22 +84,22 @@ export const NavBar = () => {
                                         Admin
                                     </Link>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Ngôn Ngữ
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="#">action</a>
+                                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a className="dropdown-item" href="#">action</a>
                                     </div>
                                 </li>
                                 {/* <img className="mr-1" src={VNflag} /> */}
                                 <div className="btn-group mr-2" role="group">
-                                    <button class="btn btn-sm btn-primary" type="button">
+                                    <button onClick={() => handleChangeLanguage("en")} className="btn btn-sm btn-primary" type="button">
                                         Tiếng Anh
-                                        </button>
-                                    <button class="btn btn-sm btn-primary" type="button">
+                                    </button>
+                                    <button onClick={() => handleChangeLanguage("vn")} className="btn btn-sm btn-primary" type="button">
                                         Tiếng Việt
-                                </button>
+                                    </button>
                                 </div>
                             </ul>
 
