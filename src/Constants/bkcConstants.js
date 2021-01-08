@@ -23,7 +23,7 @@ export const BOOK_INFOR_DEFAULT = {
     totalPerson: null,
     ccPersons: null
 }
-export const BOOK_DETAIL_DEFAULT = {
+export const BOOKING_DETAIL_DEFAULT = {
     pickupLocation: "",
     pickupTime: "",
     employeeName: "",
@@ -32,10 +32,11 @@ export const BOOK_DETAIL_DEFAULT = {
     noteByBooker: ""
 }
 export const BOOKING_INFOR_DEFAULT = {
-    pickupTime: "",
-    returnTime: "",
+    moveDate: "",
+    returnDate: "",
     location: "",
     destination: "",
     totalPerson: "",
-    mailToManager: ""
+    mailToManager: "",
+    reasonBooking: ""
 }

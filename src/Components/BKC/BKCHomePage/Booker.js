@@ -26,7 +26,7 @@ export const Booker = () => {
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-6">
-                                <label>Người Quản Lý: {employee.department}</label>
+                                <label>Người Quản Lý: {employee.lineManagerName}</label>
                             </div>
                         </div>
                     </div>

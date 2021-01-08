@@ -26,12 +26,14 @@ export const BookingDetailItem = (props) => {
                 setBookingDetail({ ...prevBookingDetail });
                 break;
             case "save":
-                dispatch(updateBookingDetail(bookingDetail));
+                // dispatch(updateBookingDetail(bookingDetail));
+                props.onSaveUpdate(bookingDetail);
                 setIsUpdate(false);
                 setPrevBookingDetail({ ...bookingDetail });
                 break;
             case "delete":
-                dispatch(deleteBookingDetail(bookingDetail));
+                props.onDelete(bookingDetail);
+                // dispatch(deleteBookingDetail(bookingDetail));
                 dispatch(toggleBkDetailValid(false));
                 break;
             default:

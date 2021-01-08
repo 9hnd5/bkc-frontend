@@ -5,3 +5,11 @@ export const SAVE_BOOKER_BOOKING_DETAILS = "SAVE_BOOKER_BOOKING_DETAILS";
 export const UPDATE_STATUS_BOOKER_DECLINE = "UPDATE_STATUS_BOOKER_DECLINE";
 export const SAVE_ERROR_MESSAGE = "SAVE_ERROR_MESSAGE";
 export const SAVE_PAGE_NAME = "SAVE_PAGE_NAME";
+
+
+
+export const ROLE = {
+    SUPER_ADMIN: "SuperAdmin",
+    ADMIN: "Admin",
+    MEMBER: "Member"
+}

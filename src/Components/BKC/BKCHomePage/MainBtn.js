@@ -19,7 +19,7 @@ export const MainBtn = (props) => {
         buName: employee.buName,
         department: employee.department,
         status: STATUS.WAITING,
-        
+
 
         PickupTime: bookingInfor.pickupTime,
         ReturnTime: bookingInfor.returnTime,
@@ -38,14 +38,24 @@ export const MainBtn = (props) => {
     return (
         <div className="row">
             <div className="col-2">
-                <button
-                    onClick={handleClickSave}
-                    className="btn btn-outline-primary btn-sm"
-                    disabled={disabled}
-                >
-                    <i className="fas fa-paper-plane mr-1"></i>
-                    GỬI YÊU CẦU
+                <div className="btn-group" role="group">
+                    <button
+                        onClick={handleClickSave}
+                        className="btn btn-outline-primary btn-sm"
+                        disabled={disabled}
+                    >
+                        <i className="fas fa-paper-plane mr-1"></i>
+                    LƯU VÀ GỬI
                 </button>
+                    <button
+                        onClick={props.onSave}
+                        className="btn btn-outline-primary btn-sm"
+                        disabled={disabled}
+                    >
+                        <i className="fas fa-save mr-1"></i>
+                    LƯU TẠM THỜI
+                </button>
+                </div>
             </div>
         </div>
     );

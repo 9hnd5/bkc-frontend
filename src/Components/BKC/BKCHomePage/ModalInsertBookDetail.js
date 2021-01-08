@@ -6,28 +6,34 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { insertBookingDetail, toggleBkcDetailModalInsert, toggleBkDetailValid } from '../../../ActionCreators/bkcActionCreators';
-import { BOOK_DETAIL_DEFAULT } from '../../../Constants/bkcConstants';
+import { BOOKING_DETAIL_DEFAULT } from '../../../Constants/bkcConstants';
 import Tooltip from '../../Commos/Tooltip';
+import Select from 'react-select';
 import { NOT_EMPTY, ONLY_NUMBER, validation } from '../../../Helpers/validation';
+import { MultipleSelect } from '../../Commos/MultipleSelect';
+import { callApi } from '../../../Helpers/callApi';
 export const ModalInsertBookDetail = (props) => {
     const dispatch = useDispatch();
     const isOpenBkcDetailModalInsert = useSelector(state => state.bkc.isOpenBkcDetailModalInsert)
     const bookingDetails = useSelector(state => state.bkc.bookingDetails);
     const bookingInfor = useSelector(state => state.bkc.bookingInfor);
-    const [bookingDetail, setBookingDetail] = useState({ ...BOOK_DETAIL_DEFAULT })
+    const [suggestionsName, setSuggestionsName] = useState([]);
+    const [bookingDetail, setBookingDetail] = useState({ ...BOOKING_DETAIL_DEFAULT })
     const [error, setError] = useState({
         pickupLocation: "",
         pickupTime: "",
         employeeName: "",
         phone: "",
     });
+    console.log("bookingDetail", bookingDetail);
     const [isDisable, setIsDisable] = useState(false);
     function handleClickSave() {
         let arrayValue = Object.values(error);
         if (arrayValue.length === 0) {
-            dispatch(insertBookingDetail(bookingDetail))
+            // dispatch(insertBookingDetail(bookingDetail))
+            props.onSave(bookingDetail);
             dispatch(toggleBkcDetailModalInsert());
-            setBookingDetail({ ...BOOK_DETAIL_DEFAULT })
+            setBookingDetail({ ...BOOKING_DETAIL_DEFAULT })
             setError({
                 pickupLocation: "",
                 pickupTime: "",
@@ -40,7 +46,7 @@ export const ModalInsertBookDetail = (props) => {
 
     function handleClickCancel() {
         dispatch(toggleBkcDetailModalInsert());
-        setBookingDetail({ ...BOOK_DETAIL_DEFAULT })
+        setBookingDetail({ ...BOOKING_DETAIL_DEFAULT })
         setError({
             pickupLocation: "",
             pickupTime: "",
@@ -52,7 +58,7 @@ export const ModalInsertBookDetail = (props) => {
         setIsDisable(true);
     }
 
-    function handleChange(e) {
+    async function handleChange(e) {
         let validateResult = null;
         switch (e.target.name) {
             case "pickupLocation": {
@@ -64,7 +70,8 @@ export const ModalInsertBookDetail = (props) => {
                 break;
             }
             case "employeeName": {
-                validateResult = validation(e.target.value, [NOT_EMPTY]);
+                // validateResult = validation(e.target.value, [NOT_EMPTY]);\
+                
                 break;
             }
             case "guestName": {
@@ -139,6 +146,28 @@ export const ModalInsertBookDetail = (props) => {
             })
         }
     }
+    function handleSelectedEmployeeName(item){
+        setBookingDetail({
+            ...bookingDetail,
+            employeeName: item
+        })
+    }
+    useEffect(() => {
+        if (!(bookingDetail.employeeName.length >= 3)) return;
+        const fetchListEmployeeName = async () => {
+            const res = await callApi(`https://localhost:5001/api/bkc/search-by-employee-name/${bookingDetail.employeeName}`);
+            const employees = res.data
+            const suggestionsName=[];
+            for(let i = 0; i < employees.length; i++){
+                suggestionsName.push({
+                    label: employees[i].name + " " + employees[i].buName,
+                    value: employees[i].name
+                }); 
+            }
+            setSuggestionsName(suggestionsName);
+        }
+        fetchListEmployeeName();
+    }, [bookingDetail.employeeName]);
     return (
         <Modal
             open={isOpenBkcDetailModalInsert}
@@ -194,7 +223,7 @@ export const ModalInsertBookDetail = (props) => {
                 <div className="w-100" />
                 <div className="col-6">
 
-                    <Tooltip active={error.employeeName ? true : false} content={error.employeeName} direction="top">
+                    {/* <Tooltip active={error.employeeName ? true : false} content={error.employeeName} direction="top">
                         <input
                             value={bookingDetail.employeeName}
                             onChange={handleChange}
@@ -203,7 +232,24 @@ export const ModalInsertBookDetail = (props) => {
                             autoComplete="nope"
                         />
 
-                    </Tooltip>
+                    </Tooltip> */}
+                    {/* <Select 
+                        defaultValue={bookingDetail.employeeName}
+                        onChange={setSelectedOption}
+                        options={options}
+                        isMulti
+                    /> */}
+                    <MultipleSelect
+                        suggestions={suggestionsName}
+                        onChange={handleChange}
+                        className="form-control"
+                        name="employeeName"
+                        onSelectedItem={handleSelectedEmployeeName}
+                    />
+                    {/* <select className="custom-select" multiple={true}>
+                        <option value="a">a</option>
+                        <option value="b">b</option>
+                    </select> */}
                 </div>
                 <div className="col-6">
 

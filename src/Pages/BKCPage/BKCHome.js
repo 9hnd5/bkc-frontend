@@ -4,7 +4,6 @@ import { MainBtn } from '../../Components/BKC/BKCHomePage/MainBtn';
 import { Booker } from '../../Components/BKC/BKCHomePage/Booker';
 import { BookingInfor } from '../../Components/BKC/BKCHomePage/BookingInfor';
 import { BookingDetail } from '../../Components/BKC/BKCHomePage/BookingDetail'
-import { ModalInsertBookDetail } from '../../Components/BKC/BKCHomePage/ModalInsertBookDetail';
 import { useDispatch } from 'react-redux';
 import { emptyBookingDetails, emptyBookingInfor } from '../../ActionCreators/bkcActionCreators';
 import { savePageName } from '../../ActionCreators/appActionCreators';
@@ -17,6 +16,9 @@ export const BKCHome = (props) => {
         // dispatch(emptyBookingDetails());
         dispatch(savePageName("BookingCar"))
     });
+    function handleSave(booker, bookingInfor, bookingDetails){
+
+    }
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
@@ -29,9 +31,8 @@ export const BKCHome = (props) => {
                             <div className="mt-1"></div>
                             <BookingDetail />
                             <div className="mt-1"></div>
-                            <MainBtn />
+                            <MainBtn onSave={handleSave} />
                             <div className="mt-1"></div>
-                            <ModalInsertBookDetail />
                         </div>
                     </div>
                 </div>

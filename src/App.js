@@ -14,6 +14,7 @@ import { NotificationContainer } from 'react-notifications';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-notifications/lib/notifications.css';
+import { ROLE } from "./Constants/appConstants";
 function App() {
   return (
     <div className="App">
@@ -36,16 +37,16 @@ function App() {
           <div className="mt-1 mb-1"></div>
           <Switch>
             <Route path="/" exact component={Home} />
-            <PrivateRoute path="/history-booking" roles={["Admin", "Employee"]}>
+            <PrivateRoute path="/history-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
               <HistoryBooking />
             </PrivateRoute>
-            <PrivateRoute path="/request-booking" roles={["Admin", "Employee"]}>
+            <PrivateRoute path="/request-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
               <BKCHome />
             </PrivateRoute>
-            <PrivateRoute path="/admin" roles={["Admin"]}>
+            <PrivateRoute path="/admin" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
               <HRHome />
             </PrivateRoute>
-            <PrivateRoute path="/process/:inforId" roles={["Admin"]}>
+            <PrivateRoute path="/process/:inforId" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
               <HRApprovalPage />
             </PrivateRoute>
           </Switch>

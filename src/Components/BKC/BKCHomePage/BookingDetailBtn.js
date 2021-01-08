@@ -17,7 +17,7 @@ export function BookingDetailBtn(props) {
         <div className="row">
             <div className="col-4">
                 <button
-                    disabled={isDisabled}
+                    // disabled={isDisabled}
                     onClick={handleClick}
                     className="btn btn-outline-primary btn-sm"
                 >

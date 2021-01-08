@@ -5,6 +5,7 @@ import { requestAuthenticate, saveAccessToken, saveAuthenticate, saveEmployee } 
 import { useTranslation } from 'react-i18next';
 import './NavBar.scss';
 import VNflag from './../../Assets/Bootstrap-icon/vietnam.svg'
+import { ROLE } from '../../Constants/appConstants';
 // import { login, logout } from '../../Helpers/login';
 export const NavBar = () => {
     const { t, i18n } = useTranslation();
@@ -13,6 +14,10 @@ export const NavBar = () => {
     // const user = useSelector(state => state.app.user);
     const isAuth = useSelector(state => state.app.isAuth);
     const pageName = useSelector(state => state.app.pageName);
+    const employee = useSelector(state => state.app.employee);
+    console.log("role", employee.role);
+    const isShowNavBar = Object.keys(employee).length !== 0? true: false;
+    const isShowBtnAdmin = (employee.role === ROLE.SUPER_ADMIN || employee.role === ROLE.ADMIN)? true: false;
     async function handleClick(e) {
         if (e === "logout") {
             // logout();
@@ -46,20 +51,20 @@ export const NavBar = () => {
             // dispatch(requestAuthenticate("khiem.nt@greenfeed.com.vn"));
         }
     }
-    function handleChangeLanguage(lang){
+    function handleChangeLanguage(lang) {
         i18n.changeLanguage(lang);
-    }   
+    }
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center">
                 <div className="col-12 col-xl-12">
-                    <nav className="navbar navbar-expand-lg navbar-light bg-success">
+                    <nav className="navbar navbar-expand-lg navbar-light bg-success shift">
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
                         <Link to="/" className="navbar-brand"><i className="fas fa-home"></i></Link>
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-                            <ul className="navbar-nav mr-auto">
+                            <ul style={{display: isShowNavBar? "": "none"}} className="navbar-nav mr-auto">
                                 <li className={pageName === "Home" ? "nav-item active" : "nav-item"}>
                                     <Link className="nav-link" to="/">
                                         <i className="fas fa-home mr-1"></i>
@@ -78,20 +83,23 @@ export const NavBar = () => {
                                         Yêu Cầu Đặt Xe
                                     </Link>
                                 </li>
-                                <li className={pageName === "Admin" ? "nav-item active" : "nav-item"}>
+                                <li
+                                    className={pageName === "Admin" ? "nav-item active" : "nav-item"}
+                                    style={{ display: isShowBtnAdmin? "": "none" }}
+                                >
                                     <Link className="nav-link" to="/admin">
                                         <i className="fas fa-user-cog mr-1"></i>
                                         Admin
                                     </Link>
                                 </li>
-                                <li className="nav-item dropdown">
+                                {/* <li className="nav-item dropdown">
                                     <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Ngôn Ngữ
                                     </a>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <a className="dropdown-item" href="#">action</a>
                                     </div>
-                                </li>
+                                </li> */}
                                 {/* <img className="mr-1" src={VNflag} /> */}
                                 <div className="btn-group mr-2" role="group">
                                     <button onClick={() => handleChangeLanguage("en")} className="btn btn-sm btn-primary" type="button">
@@ -103,14 +111,15 @@ export const NavBar = () => {
                                 </div>
                             </ul>
 
+                        </div>
+                        <div className="btn__login">
                             <button
                                 onClick={() => handleClick(!isAuth ? "login" : "logout")}
                                 className="btn btn-light btn-sm my-2 my-sm-0"
                             >
                                 <i className={!isAuth ? "fas fa-arrow-alt-circle-right mr-1" : "fas fa-arrow-alt-circle-left mr-1"}></i>
-                                {!isAuth ? t("dangnhap") : "Log out"}
+                                {!isAuth ? t("dangnhap") : t("dangxuat")}
                             </button>
-
                         </div>
                     </nav>
                 </div>
