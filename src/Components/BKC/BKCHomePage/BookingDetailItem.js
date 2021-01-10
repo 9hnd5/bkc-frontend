@@ -6,12 +6,15 @@ import { useDispatch } from "react-redux";
 import { deleteBookingDetail, toggleBkDetailValid, updateBookingDetail } from "../../../ActionCreators/bkcActionCreators";
 import { NOT_EMPTY, ONLY_NUMBER, validation } from "../../../Helpers/validation";
 import Tooltip from '../../Commos/Tooltip';
+import { MultipleSelect } from '../../Commos/MultipleSelect';
+import { callApi } from '../../../Helpers/callApi';
 
 export const BookingDetailItem = (props) => {
     const [bookingDetail, setBookingDetail] = useState(props.bookingDetail);
     const [prevBookingDetail, setPrevBookingDetail] = useState({ ...bookingDetail });
     const [isUpdate, setIsUpdate] = useState(false);
     const [error, setError] = useState({});
+    const [suggestionsEmployee, setSuggestionsEmployee] = useState([]);
     const dispatch = useDispatch();
     useEffect(() => {
         setBookingDetail(props.bookingDetail);
@@ -40,7 +43,7 @@ export const BookingDetailItem = (props) => {
                 break;
         }
     }
-    function handleChange(e) {
+    async function handleChange(e) {
         let validateResult = null;
         switch (e.target.name) {
             case "pickupLocation": {
@@ -48,8 +51,23 @@ export const BookingDetailItem = (props) => {
                 break;
             }
             case "employeeName": {
-                validateResult = validation(e.target.value, [NOT_EMPTY]);
-                break;
+                // validateResult = validation(e.target.value, [NOT_EMPTY]);
+                // break;
+                const employeeName = e.target.value;
+                if (employeeName.length >= 3) {
+                    const res = await callApi(`https://localhost:5001/api/bkc/search-by-employee-name/${employeeName}`);
+                    const employees = res.data
+                    const suggestionsEmployee = [];
+                    for (let i = 0; i < employees.length; i++) {
+                        suggestionsEmployee.push({
+                            id: employees[i].id,
+                            label: employees[i].name + " " + employees[i].buName,
+                            content: employees[i].name
+                        });
+                    }
+                    setSuggestionsEmployee(suggestionsEmployee);
+                }
+                return;
             }
             case "phone": {
                 validateResult = validation(e.target.value, [NOT_EMPTY, ONLY_NUMBER]);
@@ -99,6 +117,20 @@ export const BookingDetailItem = (props) => {
             })
         }
     }
+    function handleSelectedEmployee(item){
+        const employee = {
+            id: item.id,
+            name: item.content
+        }
+        const newEmployees = [...bookingDetail.employees, employee];
+        setBookingDetail({
+            ...bookingDetail,
+            employees: newEmployees
+        })
+        const { employees: emp, ...rest } = error;
+        setError(rest);
+        // setIsDisabledGuestNameInput(true);
+    }
     return (
         <tr>
             <td className="w_4">
@@ -127,8 +159,22 @@ export const BookingDetailItem = (props) => {
 
             </td>
             <td className="w_12">
-                <Tooltip active={error.employeeName ? true : false} content={error.employeeName} direction="top">
-                    {isUpdate ? <input onChange={handleChange} value={bookingDetail.employeeName} className="form-control" name="employeeName" /> : bookingDetail.employeeName}
+                <Tooltip active={error.employees ? true : false} content={error.employees} direction="top">
+                    {
+                        isUpdate ?
+                            <MultipleSelect
+                                suggestions={suggestionsEmployee}
+                                onChange={handleChange}
+                                className="form-control"
+                                name="employeeName"
+                                onSelectedItem={handleSelectedEmployee}
+                                // onDeleteItem={handleDeleteEmployee}
+                                // isDisabled={isDisabledEmployeeNameInput}
+                            />
+                            // <MultipleSelect /> 
+                            :
+                            bookingDetail.employees.map(employee => { return employee.name }).join(", ")
+                    }
                 </Tooltip>
 
             </td>

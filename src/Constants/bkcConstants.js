@@ -31,6 +31,14 @@ export const BOOKING_DETAIL_DEFAULT = {
     phone: "",
     noteByBooker: ""
 }
+export const BOOKING_DETAIL_DEFAULT1 = {
+    pickupLocation: "",
+    pickupTime: "",
+    employees: "",
+    guestName: "",
+    phone: "",
+    noteByBooker: ""
+}
 export const BOOKING_INFOR_DEFAULT = {
     moveDate: "",
     returnDate: "",
