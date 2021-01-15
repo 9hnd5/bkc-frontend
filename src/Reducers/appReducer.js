@@ -1,19 +1,19 @@
 import {
     SAVE_ACCESSTOKEN,
     SAVE_AUTHENTICATE,
-    SAVE_BOOKER_BOOKING_DETAILS,
     SAVE_EMPLOYEE,
     UPDATE_STATUS_BOOKER_DECLINE,
     SAVE_ERROR_MESSAGE,
-    SAVE_PAGE_NAME
+    SAVE_PAGE_NAME,
+    SAVE_BOOKERID
 } from "../Constants/appConstants";
 const initialState = {
     accessToken: "",
     employee: {},
     isAuth: false,
-    bookerBkInforBkDetails: [],
     errorMessage: "",
-    pageName: "Home"
+    pageName: "Home",
+    bookerId: "",
 }
 export const appReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -21,6 +21,12 @@ export const appReducer = (state = initialState, action) => {
             return {
                 ...state, 
                 pageName: action.pageName
+            }
+        }
+        case SAVE_BOOKERID: {
+            return {
+                ...state,
+                bookerId: action.bookerId
             }
         }
         case SAVE_ERROR_MESSAGE: {
@@ -58,12 +64,6 @@ export const appReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isAuth: action.isAuth
-            }
-        }
-        case SAVE_BOOKER_BOOKING_DETAILS: {
-            return {
-                ...state,
-                bookerBkInforBkDetails: action.bookerBkInforBkDetails
             }
         }
         default: {

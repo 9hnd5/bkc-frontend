@@ -1,113 +1,64 @@
+import { HTTP_METHOD, URL } from "../Constants/appConstants"
 import {
-    INSERT_BOOKING_DETAIL,
-    UPDATE_BOOKING_DETAIL,
-    DELETE_BOOKING_DETAIL,
+    SET_BOOKER,
+    SET_BOOKING_DETAIL,
+    SET_PICKUP_LOCATIONS,
     TOGGLE_BKC_DETAIL_INSERT,
-    INSERT_BOOKING_INFOR,
-    TOGGLE_BKINFOR_VALID,
-    TOGGLE_BKDETAIL_VALID,
-    EMPTY_BOOKING_INFOR,
-    EMPTY_BOOKING_DETAILS,
-    SET_LOADING,
-    SAVE_LIST_FILTER_EMPLOYEE,
-    BOOKING_INFOR_DEFAULT
 } from "../Constants/bkcConstants"
 import { callApi } from "../Helpers/callApi"
 import { notification, NOTIFICATION_TYPE } from "../Helpers/notification"
 
-export const toggleBkInforValid = (isBkcInforValid) => {
-    return {
-        type: TOGGLE_BKINFOR_VALID,
-        isBkcInforValid
-    }
-}
-export const toggleBkDetailValid = (isBkcDetailValid) => {
-    return {
-        type: TOGGLE_BKDETAIL_VALID,
-        isBkcDetailValid
-    }
-}
-export const insertBookingInfor = (name, value) => {
-    return {
-        type: INSERT_BOOKING_INFOR,
-        name,
-        value
-    }
-}
-export const emptyBookingInfor = (bookingInfor) => {
-    return {
-        type: EMPTY_BOOKING_INFOR,
-        bookingInfor
-    }
-}
-export const emptyBookingDetails = (bookingDetails) => {
-    return {
-        type: EMPTY_BOOKING_DETAILS,
-        bookingDetails
-    }
-}
-export const insertBookingDetail = (bookingDetail) => {
-    return {
-        type: INSERT_BOOKING_DETAIL,
-        bookingDetail
-    }
-}
-export const updateBookingDetail = (bookingDetail) => {
-    return {
-        type: UPDATE_BOOKING_DETAIL,
-        bookingDetail
-    }
-}
-export const deleteBookingDetail = (bookingDetail) => {
-    return {
-        type: DELETE_BOOKING_DETAIL,
-        bookingDetail
-    }
-}
 export const toggleBkcDetailModalInsert = () => {
     return {
         type: TOGGLE_BKC_DETAIL_INSERT
     }
 }
-export const setLoading = (isLoading) => {
+export const setBooker = (booker) => {
     return {
-        type: SET_LOADING,
-        isLoading
+        type: SET_BOOKER,
+        booker
     }
 }
-export const saveFilterListEmployee = (listFilterEmployee) => {
+export const setBookingDetail = (bookingDetail) => {
     return {
-        type: SAVE_LIST_FILTER_EMPLOYEE,
-        listFilterEmployee
+        type: SET_BOOKING_DETAIL,
+        bookingDetail
     }
 }
+export const setPickupLocations = (pickupLocations) =>{
+    return{
+        type: SET_PICKUP_LOCATIONS,
+        pickupLocations
+    }
+} 
 
 
 
-export const requestSaveBookingCar = (data) => {
+
+
+
+
+
+
+
+
+
+
+export const requestBooking = (data) => {
     return async dispatch => {
-        dispatch(setLoading(true));
-        const res = await callApi("https://localhost:5001/api/bkc/bookers", "POST", data)
-        if (!(res.status === 200)) {
-            notification(NOTIFICATION_TYPE.ERROR, res.data);
-            dispatch(setLoading(false))
-            return;
+        const res = await callApi(`${URL}/request-booking`, HTTP_METHOD.POST, data);
+        if(res.status !== 200){
+            return notification(NOTIFICATION_TYPE.ERROR, res.data);
         }
-        notification(NOTIFICATION_TYPE.SUCCESS, "Đã Gửi Yêu Cầu Đặt Xe Thành Công");
-        dispatch(emptyBookingInfor({...BOOKING_INFOR_DEFAULT}));
-        dispatch(emptyBookingDetails([]));
-        dispatch(toggleBkDetailValid(false));
-        dispatch(toggleBkInforValid(false));
-        dispatch(setLoading(false))
+        notification(NOTIFICATION_TYPE.SUCCESS, "Lưu Thành Công");
     }
 }
-export const requestFilterEmployeeByEmail = (email) => {
+export const requestUpdateBooking = (data) => {
     return async dispatch => {
-        const res = await callApi(`https://localhost:5001/api/bkc/search/${email}`, "GET", null);
-        if (res.status !== 200) {
-            // notification(NOTIFICATION_TYPE.ERROR, res.data);
-            return dispatch(saveFilterListEmployee([]));
+        const res = await callApi(`${URL}/request-update-booking`, HTTP_METHOD.POST, data);
+        if(res.status !== 200){
+            return notification(NOTIFICATION_TYPE.ERROR, res.data);
         }
-        dispatch(saveFilterListEmployee(res.data));
+        notification(NOTIFICATION_TYPE.SUCCESS, "Lưu Thành Công");
     }
 }

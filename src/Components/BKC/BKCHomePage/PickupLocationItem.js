@@ -3,41 +3,51 @@ import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteBookingDetail, toggleBkDetailValid, updateBookingDetail } from "../../../ActionCreators/bkcActionCreators";
 import { NOT_EMPTY, ONLY_NUMBER, validation } from "../../../Helpers/validation";
 import Tooltip from '../../Commos/Tooltip';
 import { MultipleSelect } from '../../Commos/MultipleSelect';
 import { callApi } from '../../../Helpers/callApi';
+import remove from 'lodash/remove';
 
-export const BookingDetailItem = (props) => {
-    const [bookingDetail, setBookingDetail] = useState(props.bookingDetail);
-    const [prevBookingDetail, setPrevBookingDetail] = useState({ ...bookingDetail });
+export const PickupLocationItem = (props) => {
+    const [pickupLocation, setPickupLocation] = useState(props.pickupLocation);
+    const [prevPickupLocation, setPrevPickupLocation] = useState({ ...pickupLocation });
     const [isUpdate, setIsUpdate] = useState(false);
     const [error, setError] = useState({});
+    const [prevError, setPrevError] = useState({ ...error });
     const [suggestionsEmployee, setSuggestionsEmployee] = useState([]);
+    const [isDisabledGuestNameInput, setIsDisabledGuestNameInput] = useState(false);
+    const [isDisabledEmployeeNameInput, setIsDisabledEmployeeNameInput] = useState(false);
     const dispatch = useDispatch();
-    useEffect(() => {
-        setBookingDetail(props.bookingDetail);
-    }, [props]);
     function handleClick(event) {
         switch (event) {
-            case "update":
+            case "update": {
                 setIsUpdate(true);
+                if (pickupLocation.employees.length > 0) {
+                    setIsDisabledEmployeeNameInput(false);
+                    setIsDisabledGuestNameInput(true);
+                }
+                else if (pickupLocation.guestName != undefined && pickupLocation.guestName.length != 0) {
+                    setIsDisabledEmployeeNameInput(true);
+                    setIsDisabledGuestNameInput(false);
+                } else {
+                    setIsDisabledEmployeeNameInput(false);
+                    setIsDisabledGuestNameInput(false);
+                }
                 break;
+            }
             case "cancel":
                 setIsUpdate(false);
-                setBookingDetail({ ...prevBookingDetail });
+                setPickupLocation({ ...prevPickupLocation });
+                setError({ ...prevError });
                 break;
             case "save":
-                // dispatch(updateBookingDetail(bookingDetail));
-                props.onSaveUpdate(bookingDetail);
+                props.onSaveUpdate(pickupLocation);
                 setIsUpdate(false);
-                setPrevBookingDetail({ ...bookingDetail });
+                setPrevPickupLocation({ ...pickupLocation });
                 break;
             case "delete":
-                props.onDelete(bookingDetail);
-                // dispatch(deleteBookingDetail(bookingDetail));
-                dispatch(toggleBkDetailValid(false));
+                props.onDelete(pickupLocation);
                 break;
             default:
                 break;
@@ -51,8 +61,6 @@ export const BookingDetailItem = (props) => {
                 break;
             }
             case "employeeName": {
-                // validateResult = validation(e.target.value, [NOT_EMPTY]);
-                // break;
                 const employeeName = e.target.value;
                 if (employeeName.length >= 3) {
                     const res = await callApi(`https://localhost:5001/api/bkc/search-by-employee-name/${employeeName}`);
@@ -67,6 +75,28 @@ export const BookingDetailItem = (props) => {
                     }
                     setSuggestionsEmployee(suggestionsEmployee);
                 }
+                return;
+            }
+            case "guestName": {
+                if (isDisabledGuestNameInput) return;
+                const guestName = e.target.value;
+                if (guestName.length <= 0) {
+                    setIsDisabledEmployeeNameInput(false);
+                    setError({
+                        ...error,
+                        employees: "Employee or guest need to be fill",
+                        guestName: "Employee or guest need to be fill"
+                    });
+                } else {
+                    const cloneError = { ...error };
+                    const { guestName: gn, employees: emps, ...rest } = cloneError;
+                    setError(rest);
+                    setIsDisabledEmployeeNameInput(true);
+                }
+                setPickupLocation({
+                    ...pickupLocation,
+                    [e.target.name]: e.target.value
+                })
                 return;
             }
             case "phone": {
@@ -85,8 +115,8 @@ export const BookingDetailItem = (props) => {
                 [e.target.name]: validateResult
             })
         }
-        setBookingDetail({
-            ...bookingDetail,
+        setPickupLocation({
+            ...pickupLocation,
             [e.target.name]: e.target.value
         })
     }
@@ -103,42 +133,66 @@ export const BookingDetailItem = (props) => {
                     pickupTime: "This field is not valid"
                 })
             }
-            setBookingDetail({
-                ...bookingDetail,
+            setPickupLocation({
+                ...pickupLocation,
                 pickupTime: pickupTime
             })
         } else {
             pickupTime = moment(momentObject, ["H:m", "H:mm"], true);
             let { pickupTime: x, ...rest } = error;
             setError(rest);
-            setBookingDetail({
-                ...bookingDetail,
+            setPickupLocation({
+                ...pickupLocation,
                 pickupTime: pickupTime.format("H:mm")
             })
         }
     }
-    function handleSelectedEmployee(item){
+    function handleSelectedEmployee(item) {
         const employee = {
             id: item.id,
             name: item.content
         }
-        const newEmployees = [...bookingDetail.employees, employee];
-        setBookingDetail({
-            ...bookingDetail,
+        const newEmployees = [...pickupLocation.employees, employee];
+        setPickupLocation({
+            ...pickupLocation,
             employees: newEmployees
         })
-        const { employees: emp, ...rest } = error;
+        const { employees: emp, guestName: gn, ...rest } = error;
         setError(rest);
-        // setIsDisabledGuestNameInput(true);
+        setIsDisabledGuestNameInput(true);
     }
+    function handleDeleteEmployee(employeeId) {
+        const cloneEmployees = [...pickupLocation.employees];
+        if (cloneEmployees.length === 1) {
+            setIsDisabledGuestNameInput(false);
+        }
+        if (cloneEmployees.length === 1 && pickupLocation.guestName.length === 0) {
+            setError({
+                ...error,
+                employees: "Employee or guest need to be fill",
+                guestName: "Employee or guest need to be fill"
+            })
+        }
+        remove(cloneEmployees, (item) => {
+            return item.id === employeeId;
+        });
+        setPickupLocation({
+            ...pickupLocation,
+            employees: cloneEmployees
+        })
+    }
+    useEffect(() => {
+        setPickupLocation(props.pickupLocation);
+
+    }, [props.pickupLocation]);
     return (
         <tr>
             <td className="w_4">
-                {bookingDetail.stt}
+                {pickupLocation.stt}
             </td>
             <td className="w_12">
                 <Tooltip active={error.pickupLocation ? true : false} content={error.pickupLocation} direction="top">
-                    {isUpdate ? <input onChange={handleChange} value={bookingDetail.pickupLocation} className="form-control" name="pickupLocation" /> : bookingDetail.pickupLocation}
+                    {isUpdate ? <input onChange={handleChange} value={pickupLocation.pickupLocation} className="form-control" name="pickupLocation" /> : pickupLocation.pickupLocation}
 
                 </Tooltip>
             </td>
@@ -150,13 +204,11 @@ export const BookingDetailItem = (props) => {
                                 dateFormat={false}
                                 timeFormat="H:mm"
                                 onChange={handleChangePickupTime}
-                                initialValue={bookingDetail.pickupTime}
+                                initialValue={pickupLocation.pickupTime}
                             />
-                            : bookingDetail.pickupTime
+                            : pickupLocation.pickupTime
                     }
                 </Tooltip>
-
-
             </td>
             <td className="w_12">
                 <Tooltip active={error.employees ? true : false} content={error.employees} direction="top">
@@ -168,28 +220,38 @@ export const BookingDetailItem = (props) => {
                                 className="form-control"
                                 name="employeeName"
                                 onSelectedItem={handleSelectedEmployee}
-                                // onDeleteItem={handleDeleteEmployee}
-                                // isDisabled={isDisabledEmployeeNameInput}
+                                onDeleteItem={handleDeleteEmployee}
+                                initialValue={pickupLocation.employees.map(employee => { return { id: employee.id, content: employee.name } })}
+                                isDisabled={isDisabledEmployeeNameInput}
                             />
-                            // <MultipleSelect /> 
                             :
-                            bookingDetail.employees.map(employee => { return employee.name }).join(", ")
+                            pickupLocation.employees.map(employee => { return employee.name }).join(", ")
                     }
                 </Tooltip>
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bookingDetail.guestName} className="form-control" name="guestName" /> : bookingDetail.guestName}
-
-            </td>
-            <td className="w_12">
-                <Tooltip active={error.phone ? true : false} content={error.phone} direction="top">
-                    {isUpdate ? <input onChange={handleChange} value={bookingDetail.phone} className="form-control" name="phone" /> : bookingDetail.phone}
+                <Tooltip active={error.guestName ? true : false} content={error.guestName} direction="top">
+                    {
+                        isUpdate ?
+                            <input disabled={isDisabledGuestNameInput}
+                                onChange={handleChange}
+                                value={pickupLocation.guestName}
+                                className="form-control" name="guestName"
+                            />
+                            : pickupLocation.guestName
+                    }
                 </Tooltip>
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={bookingDetail.noteByBooker} className="form-control" name="noteByBooker" /> : bookingDetail.noteByBooker}
+                <Tooltip active={error.phone ? true : false} content={error.phone} direction="top">
+                    {isUpdate ? <input onChange={handleChange} value={pickupLocation.phone} className="form-control" name="phone" /> : pickupLocation.phone}
+                </Tooltip>
+
+            </td>
+            <td className="w_12">
+                {isUpdate ? <input onChange={handleChange} value={pickupLocation.noteByBooker} className="form-control" name="noteByBooker" /> : pickupLocation.noteByBooker}
 
             </td>
             <td className="w-10">

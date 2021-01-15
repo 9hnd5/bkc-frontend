@@ -10,6 +10,8 @@
   .Tooltip-Wrapper {
     display: inline-block;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
   
   /* Absolute positioning */

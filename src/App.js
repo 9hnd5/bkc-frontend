@@ -6,15 +6,15 @@ import { HRHome } from "./Pages/HRPage/HRHome";
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { NavBar } from "./Components/Commos/NavBar";
 import HRApprovalPage from "./Pages/HRPage/HRApprovalPage";
-import { BKCHome } from "./Pages/BKCPage/BKCHome";
 import { Home } from "./Pages/Home/Home";
 import { useSelector } from "react-redux";
-import { HistoryBooking } from "./Pages/HistoryBooking/HistoryBooking";
 import { NotificationContainer } from 'react-notifications';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-notifications/lib/notifications.css';
 import { ROLE } from "./Constants/appConstants";
+import { BookingHistoryHome } from "./Pages/HistoryBooking/BookingHistoryHome";
+import { BookingCarHome } from "./Pages/BookingCar/BookingCarHome";
 function App() {
   return (
     <div className="App">
@@ -38,15 +38,15 @@ function App() {
           <Switch>
             <Route path="/" exact component={Home} />
             <PrivateRoute path="/history-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
-              <HistoryBooking />
+              <BookingHistoryHome />
             </PrivateRoute>
-            <PrivateRoute path="/request-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
-              <BKCHome />
+            <PrivateRoute path="/request-booking/:action?" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
+              <BookingCarHome />
             </PrivateRoute>
             <PrivateRoute path="/admin" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
               <HRHome />
             </PrivateRoute>
-            <PrivateRoute path="/process/:inforId" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
+            <PrivateRoute path="/:action/:bookerId" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
               <HRApprovalPage />
             </PrivateRoute>
           </Switch>

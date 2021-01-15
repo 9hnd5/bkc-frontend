@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBookerBkInforBkDetail, savePageName } from "../../ActionCreators/appActionCreators";
-import { toggleIsApproveSuccess, toggleIsDataApproveValid } from "../../ActionCreators/hrActionCreators";
+import { savePageName } from "../../ActionCreators/appActionCreators";
+import { fetchBookingHistoryByBuId } from "../../ActionCreators/hrActionCreators";
 import { HRRequestList } from "../../Components/HR/HRHomePage/HRRequestList";
 import "./HRHomePage.scss";
 export const HRHome = () => {
@@ -9,10 +9,10 @@ export const HRHome = () => {
     const dispatch = useDispatch();
     const employee = useSelector(state => state.app.employee);
     useEffect(() => {
-        dispatch(fetchBookerBkInforBkDetail(employee.buId));
+        dispatch(fetchBookingHistoryByBuId(employee.buId));
         dispatch(savePageName("Admin"));
-        dispatch(toggleIsApproveSuccess(false));
-        dispatch(toggleIsDataApproveValid(false));
+        // dispatch(toggleIsApproveSuccess(false));
+        // dispatch(toggleIsDataApproveValid(false));
     });
     return (
         <div className="container-fluid">

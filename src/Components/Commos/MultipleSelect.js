@@ -1,10 +1,10 @@
 import { Fragment, useState } from "react";
 import remove from "lodash/remove"
 import './MultipleSelect.scss';
+import { useEffect } from "react/cjs/react.development";
 
 export const MultipleSelect = (props) => {
-    const { suggestions, onChange, className, name, onSelectedItem, onDeleteItem, isDisabled, onCloseWhenClickOut } = props;
-    console.log("isd", isDisabled);
+    const { suggestions, onChange, className, name, onSelectedItem, onDeleteItem, isDisabled, onCloseWhenClickOut, initialValue, icon } = props;
     const [isShowSuggestions, setIsShowSuggestions] = useState(false);
     const [isShowSearch, setIsShowSearch] = useState(false);
     const [items, setItems] = useState([]);
@@ -31,7 +31,7 @@ export const MultipleSelect = (props) => {
                             style={{ cursor: "pointer" }}
                             key={index}
                             className={isActive ? "active-item" : ""}
-                            onClick={() => handleClickItemSuggestions(suggestion.id, suggestion.content)}
+                            onClick={() => handleSelectedItem(suggestion.id, suggestion.content)}
                         >
                             {suggestion.label}
                         </div>
@@ -45,7 +45,7 @@ export const MultipleSelect = (props) => {
             setIsShowSuggestions(true);
         }
     }
-    function handleClickItemSuggestions(suggestionId, suggestionContent) {
+    function handleSelectedItem(suggestionId, suggestionContent) {
         const index = activeIdItems.findIndex(activeIdItem => {
             return activeIdItem === suggestionId
         });
@@ -70,16 +70,16 @@ export const MultipleSelect = (props) => {
         setIsShowSearch(true);
         setIsShowSuggestions(true);
     }
-    function handleDeleteItem(id) {
-        onDeleteItem(id);
+    function handleDeleteItem(itemId) {
+        onDeleteItem(itemId);
         const cloneItems = [...items];
         remove(cloneItems, (item) => {
-            return item.id === id;
+            return item.id === itemId;
         });
         setItems(cloneItems);
         const cloneActiveIdItems = [...activeIdItems];
         remove(cloneActiveIdItems, (activeIdItem) => {
-            return activeIdItem === id;
+            return activeIdItem === itemId;
         });
         setActiveIdItems(cloneActiveIdItems);
     }
@@ -87,27 +87,46 @@ export const MultipleSelect = (props) => {
         setIsShowSuggestions(false);
         setIsShowSearch(false);
     }
-    function handleBlur(e) {
-        console.log("e", e);
-        if (e.target.tagName === "INPUT") return;
+    useEffect(() => {
         setIsShowSuggestions(false);
         setIsShowSearch(false);
-    }
+    }, [props.isDisabled]);
+    useEffect(() => {
+        if (props.initialValue !== undefined && props.initialValue.length !== 0) {
+            setItems([...props.initialValue]);
+            setActiveIdItems(props.initialValue.map(item => {
+                return item.id;
+            }))
+        }
+    }, [props.initialValue])
     return (
         <div
-            // tabIndex="0"
-            // onBlur={handleBlur}
-            //multiple-selected-and-search-bar
             className="wraper-all"
         >
-            <div
-                className={isDisabled ? "form-control multiple-items-container disabled" : "form-control multiple-items-container"}
-                onKeyDown={handleKeyDown}
-                onClick={handleClickSearch}
-            >
-                {displayItems}
+            {
+                icon ?
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                            <img className="input-group-text" src={icon} />
+                        </div>
+                        <div
+                            className={isDisabled ? "form-control multiple-items-container disabled" : "form-control multiple-items-container"}
+                            onKeyDown={handleKeyDown}
+                            onClick={handleClickSearch}
+                        >
+                            {displayItems}
 
-            </div>
+                        </div>
+                    </div> :
+                    <div
+                        className={isDisabled ? "form-control multiple-items-container disabled" : "form-control multiple-items-container"}
+                        onKeyDown={handleKeyDown}
+                        onClick={handleClickSearch}
+                    >
+                        {displayItems}
+
+                    </div>
+            }
 
             {
                 isShowSearch ?

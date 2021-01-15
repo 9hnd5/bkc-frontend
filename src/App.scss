@@ -5,3 +5,40 @@
 button:disabled{
     cursor: not-allowed;
 }
+.label-custom{
+    position: relative;
+    color: #fff;
+    z-index: 2;
+    text-align: center;
+
+    &::before{
+        position: absolute;
+        content: "";
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        border-radius: 4px;
+    }
+}
+.label-custom.label-success{
+    &::before{
+        background:#28a745;
+    }
+}
+.label-custom.label-danger{
+    &::before{
+        background:red;
+    }
+}
+.label-custom.label-info{
+    &::before{
+        background:#007bff;
+    }
+}
+.label-custom.label-warning{
+    &::before{
+        background:#ffc107;
+    }
+}

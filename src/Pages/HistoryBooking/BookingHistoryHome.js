@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { fetchBookerBkInforBkDetail, savePageName } from "../../ActionCreators/appActionCreators";
-import { HistoryBookingContainer } from "../../Components/HistoryComponent/HistoryBookingContainer"
+import {  savePageName } from "../../ActionCreators/appActionCreators";
+import { fetchBookingHistoryByEmployeeId } from "../../ActionCreators/bookingHistoryActionCreators.js";
+import { BookingHistoryContainer } from "../../Components/HistoryComponent/BookingHistoryContainer"
+import './BookingHistory.scss'
 
-export const HistoryBooking = () => {
+export const BookingHistoryHome = () => {
     const dispatch = useDispatch();
     const employee = useSelector(state => state.app.employee);
+    console.log("employee", employee);
     useEffect(() => {
-        dispatch(fetchBookerBkInforBkDetail(employee.buId));
+        dispatch(fetchBookingHistoryByEmployeeId(employee.id));
         dispatch(savePageName("HistoryBooking"));
     })
     return (
@@ -16,7 +19,7 @@ export const HistoryBooking = () => {
                 <div className="col-12 col-xl-12 ">
                     <div className="card">
                         <div className="card-body">
-                            <HistoryBookingContainer />
+                            <BookingHistoryContainer />
                         </div>
                     </div>
                 </div>

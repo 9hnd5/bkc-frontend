@@ -1,3 +1,21 @@
 .hra-table-detail{
-    height: 200px;
+    // height: 200px;
+    tbody{
+        tr{
+            
+            td{
+                width: 14%;
+            }
+        }
+    }
+}
+.hra-table-car{
+    tbody{
+        tr{
+            
+            td{
+                width: 12.5%;
+            }
+        }
+    }
 }

@@ -1,48 +1,33 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { requestApproveBkc, toggleIsApproveSuccess, toggleIsDataApproveValid } from "../../../ActionCreators/hrActionCreators";
 
-export const HRAButtons = () => {
-    const isDataApproveValid = useSelector(state => state.hr.isDataApproveValid);
-    const isApproveSuccess = useSelector(state => state.hr.isApproveSuccess);
-    const history = useHistory();
-    const dispatch = useDispatch();
-    const dataApproveBkc = useSelector(state => state.hr.dataApproveBkc);
-    function handleClick(e) {
-        if (e === "save") {
-            dispatch(requestApproveBkc(dataApproveBkc));
-        }
-        if (e === "back") {
-            dispatch(toggleIsDataApproveValid(false));
-            history.push("/admin");
-        }
+export const HRAButtons = (props) => {
+    function handleClickAccept(){
+        props.onClickAccept();
     }
-    useEffect(() => {
-        if(isApproveSuccess){
-            history.push("/admin");
-            return;
-        }
-        dispatch(toggleIsApproveSuccess(false));
-    });
     return (
         <div className="row">
             <div className="col-6">
+                <div className="button-group" role="group">
                 <button
-                    disabled={!isDataApproveValid}
-                    onClick={() => handleClick("save")}
+                    onClick={handleClickAccept}
                     className="btn btn-outline-primary btn-sm mr-2"
                 >
                     <i className="fas fa-check-circle mr-1"></i>
                     XÁC NHẬN
                 </button>
                 <button
-                    onClick={() => handleClick("back")}
-                    className="btn btn-outline-danger btn-sm"
+                    className="btn btn-outline-danger btn-sm mr-2"
+                >
+                    <i className="fas fa-check-circle mr-1"></i>
+                    TỪ CHỐI
+                </button>
+                <button
+
+                    className="btn btn-outline-info btn-sm"
                 >
                     <i className="fas fa-backspace mr-1"></i>
                     QUAY LẠI
-                    </button>
+                </button>
+                </div>
             </div>
         </div>
     );

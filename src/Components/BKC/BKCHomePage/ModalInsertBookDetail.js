@@ -5,7 +5,7 @@ import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { insertBookingDetail, toggleBkcDetailModalInsert, toggleBkDetailValid } from '../../../ActionCreators/bkcActionCreators';
+import { toggleBkcDetailModalInsert } from '../../../ActionCreators/bkcActionCreators';
 import { BOOKING_DETAIL_DEFAULT1 } from '../../../Constants/bkcConstants';
 import Tooltip from '../../Commos/Tooltip';
 import { NOT_EMPTY, ONLY_NUMBER, validation } from '../../../Helpers/validation';
@@ -15,51 +15,50 @@ import remove from 'lodash/remove';
 export const ModalInsertBookDetail = (props) => {
     const dispatch = useDispatch();
     const isOpenBkcDetailModalInsert = useSelector(state => state.bkc.isOpenBkcDetailModalInsert)
-    const bookingDetails = useSelector(state => state.bkc.bookingDetails);
-    const bookingInfor = useSelector(state => state.bkc.bookingInfor);
     const [suggestionsEmployee, setSuggestionsEmployee] = useState([]);
     const [bookingDetail, setBookingDetail] = useState({ ...BOOKING_DETAIL_DEFAULT1 })
     const [error, setError] = useState({
         pickupLocation: "",
         pickupTime: "",
         employees: "",
-        phone: "",
+        guestName: "",
+        phone: ""
     });
-
-    // const [isDisable, setIsDisable] = useState(false);
-    const isDisable = Object.keys(error).length > 0 ? true : false;
+    const [isDisabledBtnSave, setIsDisabledBtnSave] = useState(true);
     const [isDisabledGuestNameInput, setIsDisabledGuestNameInput] = useState(false);
     const [isDisabledEmployeeNameInput, setIsDisabledEmployeeNameInput] = useState(false);
-    console.log("bookingDetail", bookingDetail);
-    console.log("isDisable", isDisable);
-    console.log("error", error);
     function handleClickSave() {
         let arrayValue = Object.values(error);
         if (arrayValue.length === 0) {
-            // dispatch(insertBookingDetail(bookingDetail))
             props.onSave(bookingDetail);
-            dispatch(toggleBkcDetailModalInsert());
+            dispatch(toggleBkcDetailModalInsert(false))
             setBookingDetail({ ...BOOKING_DETAIL_DEFAULT1 })
             setError({
                 pickupLocation: "",
                 pickupTime: "",
-                employees: [],
-                phone: "",
+                employees: "",
+                guestName: "",
+                phone: ""
             })
-            // setIsDisable(true);
+            setIsDisabledBtnSave(true);
+            setIsDisabledEmployeeNameInput(false);
+            setIsDisabledGuestNameInput(false);
         }
     }
 
     function handleClickCancel() {
-        dispatch(toggleBkcDetailModalInsert());
         setBookingDetail({ ...BOOKING_DETAIL_DEFAULT1 })
+        dispatch(toggleBkcDetailModalInsert(false))
         setError({
             pickupLocation: "",
             pickupTime: "",
-            employeeName: "",
-            phone: "",
+            employees: "",
+            guestName: "",
+            phone: ""
         })
-        // setIsDisable(true);
+        setIsDisabledBtnSave(true);
+        setIsDisabledEmployeeNameInput(false);
+        setIsDisabledGuestNameInput(false);
     }
 
     async function handleChange(e) {
@@ -74,7 +73,6 @@ export const ModalInsertBookDetail = (props) => {
                 break;
             }
             case "employeeName": {
-                // validateResult = validation(e.target.value, [NOT_EMPTY]);\
                 const employeeName = e.target.value;
                 if (employeeName.length >= 3) {
                     const res = await callApi(`https://localhost:5001/api/bkc/search-by-employee-name/${employeeName}`);
@@ -92,23 +90,32 @@ export const ModalInsertBookDetail = (props) => {
                 return;
             }
             case "guestName": {
-                // validateResult = validation(e.target.value, [NOT_EMPTY]);
                 if (isDisabledGuestNameInput) return;
                 const guestName = e.target.value;
                 if (guestName.length <= 0) {
                     setIsDisabledEmployeeNameInput(false);
+                    setError({
+                        ...error,
+                        employees: "Employee or guest need to be fill",
+                        guestName: "Employee or guest need to be fill"
+                    });
                 } else {
-
+                    const cloneError = { ...error };
+                    const { guestName: gn, employees: emps, ...rest } = cloneError;
+                    setError(rest);
                     setIsDisabledEmployeeNameInput(true);
                 }
-                break;
+                setBookingDetail({
+                    ...bookingDetail,
+                    [e.target.name]: e.target.value
+                })
+                return;
             }
             case "phone": {
                 validateResult = validation(e.target.value, [NOT_EMPTY, ONLY_NUMBER]);
                 break;
             }
             case "note": {
-                // validateResult = validation(e.target.value, [NOT_EMPTY, ONLY_NUMBER]);
                 break;
             }
             default:
@@ -132,17 +139,6 @@ export const ModalInsertBookDetail = (props) => {
     function onCloseModal() {
         dispatch(toggleBkcDetailModalInsert());
     }
-    // useEffect(() => {
-    //     let arrayValue = Object.keys(error);
-    //     if (arrayValue.length === 0) setIsDisable(false);
-    //     else setIsDisable(true);
-    // }, [bookingDetail, error]);
-    // useEffect(() => {
-    //     if (bookingDetails.length === parseInt(bookingInfor.totalPerson)) {
-    //         return dispatch(toggleBkDetailValid(true));
-    //     }
-    //     dispatch(toggleBkDetailValid(false));
-    // }, [bookingDetails, bookingInfor, dispatch]);
     function handleChangePickupTime(momentObject) {
         let pickupTime = null;
         if (typeof momentObject === "string" || momentObject instanceof String) {
@@ -181,17 +177,22 @@ export const ModalInsertBookDetail = (props) => {
             ...bookingDetail,
             employees: newEmployees
         })
-        const { employees: emp, ...rest } = error;
+        const { employees: emp, guestName: gn, ...rest } = error;
         setError(rest);
         setIsDisabledGuestNameInput(true);
     }
-    function handleDeleteEmployee(employeeId) {
+    function handleDeleteEmployee(contentItem) {
         const cloneEmployees = [...bookingDetail.employees];
         if (cloneEmployees.length === 1) {
             setIsDisabledGuestNameInput(false);
+            setError({
+                ...error,
+                employees: "Employee or guest need to be fill",
+                guestName: "Employee or guest need to be fill"
+            })
         }
         remove(cloneEmployees, (item) => {
-            return item.id === employeeId;
+            return item.id === contentItem;
         });
         setBookingDetail({
             ...bookingDetail,
@@ -199,6 +200,14 @@ export const ModalInsertBookDetail = (props) => {
         })
 
     }
+    useEffect(() => {
+        if (Object.keys(error).length === 0) {
+            setIsDisabledBtnSave(false);
+        }
+        else {
+            setIsDisabledBtnSave(true);
+        }
+    });
     return (
         <Modal
             open={isOpenBkcDetailModalInsert}
@@ -253,36 +262,17 @@ export const ModalInsertBookDetail = (props) => {
                 </div>
                 <div className="w-100" />
                 <div className="col-6">
-
-                    {/* <Tooltip active={error.employeeName ? true : false} content={error.employeeName} direction="top">
-                        <input
-                            value={bookingDetail.employeeName}
+                    <Tooltip active={error.employees ? true : false} content={error.employees} direction="top">
+                        <MultipleSelect
+                            suggestions={suggestionsEmployee}
                             onChange={handleChange}
-                            name="employeeName"
                             className="form-control"
-                            autoComplete="nope"
+                            name="employeeName"
+                            onSelectedItem={handleSelectedEmployee}
+                            onDeleteItem={handleDeleteEmployee}
+                            isDisabled={isDisabledEmployeeNameInput}
                         />
-
-                    </Tooltip> */}
-                    {/* <Select 
-                        defaultValue={bookingDetail.employeeName}
-                        onChange={setSelectedOption}
-                        options={options}
-                        isMulti
-                    /> */}
-                    <MultipleSelect
-                        suggestions={suggestionsEmployee}
-                        onChange={handleChange}
-                        className="form-control"
-                        name="employeeName"
-                        onSelectedItem={handleSelectedEmployee}
-                        onDeleteItem={handleDeleteEmployee}
-                        isDisabled={isDisabledEmployeeNameInput}
-                    />
-                    {/* <select className="custom-select" multiple={true}>
-                        <option value="a">a</option>
-                        <option value="b">b</option>
-                    </select> */}
+                    </Tooltip>
                 </div>
                 <div className="col-6">
 
@@ -336,7 +326,7 @@ export const ModalInsertBookDetail = (props) => {
                 <div className="col-6 mt-2">
                     <div className="btn-group" role="group">
                         <button
-                            disabled={isDisable}
+                            disabled={isDisabledBtnSave}
                             onClick={handleClickSave}
                             className="btn btn-outline-primary btn-sm mr-2"
                         >

@@ -37,18 +37,10 @@ export const NavBar = () => {
             //     console.log("Login fail, please try again");
             // }
 
-            // huy.ndinh@greenfeed.com.vn Head Office admin
-            // chi.tn@greenfeed.com.vn Head Office employee
-            // lieu.pt@greenfeed.com.vn Head Office employee
-            // truyen.nv@greenfeed.com.vn Projects admin
-            // lecongtru.gf@gmail.com Projects employee
-
-            dispatch(requestAuthenticate("huy.ndinh@greenfeed.com.vn"));
-            // dispatch(requestAuthenticate("chi.tn@greenfeed.com.vn"));
-            // dispatch(requestAuthenticate("lieu.pt@greenfeed.com.vn"));
-            // dispatch(requestAuthenticate("truyen.nv@greenfeed.com.vn"));
-            // dispatch(requestAuthenticate("lecongtru.gf@gmail.com"));
+            dispatch(requestAuthenticate("hoe.ph@greenfeed.com.vn"));
             // dispatch(requestAuthenticate("khiem.nt@greenfeed.com.vn"));
+            // dispatch(requestAuthenticate("huy.ndinh@greenfeed.com.vn"));
+            
         }
     }
     function handleChangeLanguage(lang) {
@@ -68,19 +60,19 @@ export const NavBar = () => {
                                 <li className={pageName === "Home" ? "nav-item active" : "nav-item"}>
                                     <Link className="nav-link" to="/">
                                         <i className="fas fa-home mr-1"></i>
-                                        Trang Chủ
-                                    </Link>
-                                </li>
-                                <li className={pageName === "HistoryBooking" ? "nav-item active" : "nav-item"}>
-                                    <Link className="nav-link" to="/history-booking">
-                                        <i className="fas fa-history mr-1"></i>
-                                        Lịch Sử Đặt Xe
+                                        {t("trangchu")}
                                     </Link>
                                 </li>
                                 <li className={pageName === "BookingCar" ? "nav-item active" : "nav-item"}>
                                     <Link className="nav-link" to="/request-booking">
                                         <i className="fas fa-car mr-1"></i>
-                                        Yêu Cầu Đặt Xe
+                                        {t("yeucaudatxe")}
+                                    </Link>
+                                </li>
+                                <li className={pageName === "HistoryBooking" ? "nav-item active" : "nav-item"}>
+                                    <Link className="nav-link" to="/history-booking">
+                                        <i className="fas fa-history mr-1"></i>
+                                        {t("lichsudatxe")}
                                     </Link>
                                 </li>
                                 <li
@@ -89,7 +81,7 @@ export const NavBar = () => {
                                 >
                                     <Link className="nav-link" to="/admin">
                                         <i className="fas fa-user-cog mr-1"></i>
-                                        Admin
+                                        {t("admin")}
                                     </Link>
                                 </li>
                                 {/* <li className="nav-item dropdown">

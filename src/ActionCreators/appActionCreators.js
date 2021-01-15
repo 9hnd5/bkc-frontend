@@ -1,6 +1,7 @@
 import {
     SAVE_ACCESSTOKEN,
     SAVE_AUTHENTICATE,
+    SAVE_BOOKERID,
     SAVE_BOOKER_BOOKING_DETAILS,
     SAVE_EMPLOYEE,
     SAVE_ERROR_MESSAGE,
@@ -16,6 +17,12 @@ export const saveAccessToken = (accessToken) => {
         accessToken
     }
 }
+export const saveBookerId = (bookerId) => {
+    return {
+        type: SAVE_BOOKERID,
+        bookerId
+    }
+}
 export const saveEmployee = (employee) => {
     return {
         type: SAVE_EMPLOYEE,
@@ -28,7 +35,7 @@ export const saveAuthenticate = (isAuth) => {
         isAuth
     }
 }
-export const saveBookerBkInforBkDetail = (bookerBkInforBkDetails) => {
+export const saveRequestBooking = (bookerBkInforBkDetails) => {
     return {
         type: SAVE_BOOKER_BOOKING_DETAILS,
         bookerBkInforBkDetails
@@ -58,14 +65,14 @@ export const savePageName = (pageName) => {
 export const requestAuthenticate = (email) => {
     return async dispatch => {
         const res = await callApi("https://localhost:5001/api/authenticate", "POST", { email: email });
-        const employee = res.data.employee
+        const user = res.data.user
         const token = res.data.token;
         dispatch(saveAccessToken(token));
-        dispatch(saveEmployee(employee));
+        dispatch(saveEmployee(user));
         dispatch(saveAuthenticate(true));
     }
 }
-export const fetchBookerBkInforBkDetail = (buId) => {
+export const fetchRequestBooking = (buId) => {
     return async dispatch => {
         const res = await callApi(`https://localhost:5001/api/bkc/` + buId, "POST", null);
         const bookerBkInforBkDetails = []
@@ -77,7 +84,7 @@ export const fetchBookerBkInforBkDetail = (buId) => {
             }
             bookerBkInforBkDetails.push(data);
         });
-        dispatch(saveBookerBkInforBkDetail(bookerBkInforBkDetails))
+        dispatch(saveRequestBooking(bookerBkInforBkDetails))
     }
 }
 export const requestRejectBkc = (data) => {

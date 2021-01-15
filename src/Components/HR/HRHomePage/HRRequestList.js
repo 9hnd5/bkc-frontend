@@ -3,15 +3,14 @@ import { HRRequestItem } from "./HRRequestItem"
 import Modal from 'react-responsive-modal';
 import { useState } from "react";
 import { requestRejectBkc } from "../../../ActionCreators/appActionCreators";
-import { useHistory } from "react-router-dom";
 export const HRRequestList = () => {
     const dispatch = useDispatch();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [reasonReject, setReasonReject] = useState("");
     const [bookerId, setBookerId] = useState(null);
-    const bookerBkInforBkDetails = useSelector(state => state.app.bookerBkInforBkDetails);
-    const displaybkcInfors = bookerBkInforBkDetails.map((bookerBkInforBkDetail, index) => {
-        return <HRRequestItem onOpenModal={handleOpenModal} index={index} key={index} bookerBkInforBkDetail={bookerBkInforBkDetail} />
+    const bookingHistoryList = useSelector(state => state.hr.bookingHistoryList);
+    const displayHrRequestItem = bookingHistoryList.map((bookingHistory, index) => {
+        return <HRRequestItem onOpenModal={handleOpenModal} index={index} key={index} bookingHistory={bookingHistory} />
     });
     function handleCancelModal() {
         setIsOpenModal(false);
@@ -43,15 +42,16 @@ export const HRRequestList = () => {
                         <thead>
                             <tr>
                                 <th>STT</th>
-                                <th>Status</th>
-                                <th>Tên</th>
-                                <th>Tuyến Đường</th>
-                                <th>Ngày Xuất Phát</th>
+                                <th>Người Đặt</th>
+                                <th>Ngày Đi</th>
+                                <th>Ngày Về</th>
+                                <th>Số Người Đi</th>
+                                <th>Trạng Thái</th>
                                 <th>Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {displaybkcInfors}
+                            {displayHrRequestItem}
                         </tbody>
                     </table>
                 </div>
