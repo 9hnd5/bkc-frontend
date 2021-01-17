@@ -1,7 +1,8 @@
-import { HTTP_METHOD, URL } from "../Constants/appConstants"
+import { HTTP_METHOD, SET_LOADING, URL } from "../Constants/appConstants"
 import {
     SET_BOOKER,
     SET_BOOKING_DETAIL,
+    SET_IS_REQUEST_SUCCESS,
     SET_PICKUP_LOCATIONS,
     TOGGLE_BKC_DETAIL_INSERT,
 } from "../Constants/bkcConstants"
@@ -30,7 +31,19 @@ export const setPickupLocations = (pickupLocations) =>{
         type: SET_PICKUP_LOCATIONS,
         pickupLocations
     }
-} 
+}
+export const setLoading = (isLoading) => {
+    return {
+        type: SET_LOADING,
+        isLoading
+    }
+}
+export const setIsRequestSuccess = (isRequestSuccess) => {
+    return {
+        type: SET_IS_REQUEST_SUCCESS,
+        isRequestSuccess
+    }
+}
 
 
 
@@ -44,21 +57,32 @@ export const setPickupLocations = (pickupLocations) =>{
 
 
 
-export const requestBooking = (data) => {
+export const requestInsertBookingInfor = (data) => {
     return async dispatch => {
-        const res = await callApi(`${URL}/request-booking`, HTTP_METHOD.POST, data);
+        dispatch(setLoading(true));
+        const res = await callApi(`${URL}/bookingInfors`, HTTP_METHOD.POST, data);
         if(res.status !== 200){
+            dispatch(setLoading(false));
             return notification(NOTIFICATION_TYPE.ERROR, res.data);
         }
         notification(NOTIFICATION_TYPE.SUCCESS, "Lưu Thành Công");
+        dispatch(setLoading(false));
+        dispatch(setBookingDetail({}));
+        dispatch(setPickupLocations([]));
     }
 }
-export const requestUpdateBooking = (data) => {
+export const requestUpdateBookingInfor = (data) => {
     return async dispatch => {
-        const res = await callApi(`${URL}/request-update-booking`, HTTP_METHOD.POST, data);
+        dispatch(setLoading(true));
+        dispatch(setIsRequestSuccess(false));
+        const res = await callApi(`${URL}/booking-infors`, HTTP_METHOD.PUT, data);
         if(res.status !== 200){
+            dispatch(setLoading(false));
+            dispatch(setIsRequestSuccess(false));
             return notification(NOTIFICATION_TYPE.ERROR, res.data);
         }
+        dispatch(setLoading(false));
+        dispatch(setIsRequestSuccess(true));
         notification(NOTIFICATION_TYPE.SUCCESS, "Lưu Thành Công");
     }
 }

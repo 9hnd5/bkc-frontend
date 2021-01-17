@@ -1,32 +1,33 @@
 import { HTTP_METHOD, URL } from "../Constants/appConstants"
-import { DELETE_BOOKING_HISTORY_ITEM, SAVE_BOOKING_HISTORY } from "../Constants/bookingHistoryConstants"
+import { DELETE_BOOKING_HISTORY, SET_BOOKING_HISTORY } from "../Constants/bookingHistoryConstants"
 import { callApi } from "../Helpers/callApi"
 import { notification, NOTIFICATION_TYPE } from "../Helpers/notification"
 
-export const saveBookingHistoryList = (bookingHistoryList) => {
+export const setBookingHistoryList = (bookingInfors) => {
     return {
-        type: SAVE_BOOKING_HISTORY,
-        bookingHistoryList
+        type: SET_BOOKING_HISTORY,
+        bookingInfors
     }
 }
 export const deleteBookingHistoryItem = (bookerId) => {
     return {
-        type: DELETE_BOOKING_HISTORY_ITEM,
+        type: DELETE_BOOKING_HISTORY,
         bookerId
     }
 }
 
-export const fetchBookingHistoryByEmployeeId = (employeeId) => {
+
+
+
+export const fetchBookingInforByEmployeeId = (employeeId) => {
     return async dispatch => {
-        const res = await callApi(`${URL}/booking-history/employees/${employeeId}`, HTTP_METHOD.GET, null);
+        const res = await callApi(`${URL}/booking-infors/${employeeId}`, HTTP_METHOD.GET, null);
         if(res.status !== 200){
-            // dispatch(saveBookingHistoryList([]))
             notification(NOTIFICATION_TYPE.ERROR, res.data);
             return;
         }
-        const bookingHistoryList = res.data;
-        console.log("bookingHistoryList", bookingHistoryList);
-        dispatch(saveBookingHistoryList(bookingHistoryList))
+        const bookingInfors = res.data;
+        dispatch(setBookingHistoryList(bookingInfors))
     }
 }
 export const requestDeleteBooking = (bookerId) =>{

@@ -11,7 +11,6 @@ import locationIcon from './../../../Assets/Bootstrap-icon/geo-alt.svg'
 import destinationIcon from './../../../Assets/Bootstrap-icon/geo-alt-fill.svg'
 import totalPersonIcon from './../../../Assets/Bootstrap-icon/people.svg'
 import React from 'react';
-import { AutoComplete1 } from "../../Commos/AutoComplete1";
 import { BOOKING_DETAIL_DEFAULT } from "../../../Constants/bkcConstants";
 import omit from "lodash/omit";
 import { callApi } from "../../../Helpers/callApi";
@@ -19,8 +18,8 @@ import remove from 'lodash/remove';
 import { MultipleSelect } from "../../Commos/MultipleSelect";
 import emailIcon from './../../../Assets/Bootstrap-icon/email.svg'
 import { HTTP_METHOD, URL } from "../../../Constants/appConstants";
-import { fetchRequestBooking } from "../../../ActionCreators/appActionCreators";
 import { useTranslation } from "react-i18next";
+import isEmpty from 'lodash/isEmpty';
 function inputDtp(props) {
     return (
         <div className="input-group">
@@ -36,12 +35,14 @@ function inputDtp(props) {
     );
 }
 export const BookingDetail = (props) => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const dispatch = useDispatch();
+    const isLoading = useSelector(state => state.bkc.isLoading);
     const [bookingDetailLocal, setBookingDetailLocal] = useState({ ...BOOKING_DETAIL_DEFAULT });
     const [suggestionsEmail, setSuggestionsEmail] = useState([]);
+    console.log("bookingDetail", bookingDetailLocal);
     const [error, setError] = useState({
-        moveDate: "",
+        movingDate: "",
         location: "",
         destination: "",
         totalPerson: ""
@@ -54,6 +55,7 @@ export const BookingDetail = (props) => {
                 const employeeName = e.target.value;
                 if (employeeName.length >= 3) {
                     const res = await callApi(`https://localhost:5001/api/bkc/employees/${employeeName}`);
+                    if (res.status !== 200) return;
                     const employees = res.data
                     const suggestionsEmail = [];
                     for (let i = 0; i < employees.length; i++) {
@@ -67,7 +69,7 @@ export const BookingDetail = (props) => {
                 }
                 return;
             }
-            case "moveDate": {
+            case "movingDate": {
                 validateResult = validation(e.target.value, [NOT_EMPTY]);
                 break;
             }
@@ -105,81 +107,81 @@ export const BookingDetail = (props) => {
         })
     }
     function handleChangePickup(momentObject) {
-        let moveDate = null;
+        let movingDate = null;
         if (typeof momentObject === "string" || momentObject instanceof String) {
-            moveDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
-            if (moveDate.isValid()) {
-                let { moveDate: x, ...rest } = error;
+            movingDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
+            if (movingDate.isValid()) {
+                let { movingDate: x, ...rest } = error;
                 setError(rest);
                 setBookingDetailLocal({
                     ...bookingDetailLocal,
-                    moveDate: moveDate.format("DD/MM/YYYY")
+                    movingDate: movingDate.format("DD/MM/YYYY")
                 });
             } else {
                 setError({
                     ...error,
-                    moveDate: "This field is not valid"
+                    movingDate: "This field is not valid"
                 })
                 setBookingDetailLocal({
                     ...bookingDetailLocal,
-                    moveDate: moveDate.format("DD/MM/YYYY")
+                    movingDate: movingDate.format("DD/MM/YYYY")
                 });
             }
 
         } else {
-            moveDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY"], true);
-            let { moveDate: x, ...rest } = error;
+            movingDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY"], true);
+            let { movingDate: x, ...rest } = error;
             setError(rest);
             setBookingDetailLocal({
                 ...bookingDetailLocal,
-                moveDate: moveDate.format("DD/MM/YYYY")
+                movingDate: movingDate.format("DD/MM/YYYY")
             });
         }
 
     }
     function handleChangeReturnTime(momentObject) {
-        let returnDate = null;
+        let returningDate = null;
         if (typeof momentObject === "string" || momentObject instanceof String) {
             if (momentObject.length === 0) {
-                setError(omit(error, "returnDate"));
+                setError(omit(error, "returningDate"));
                 setBookingDetailLocal({
                     ...bookingDetailLocal,
-                    returnDate: ""
+                    returningDate: ""
                 })
                 return;
             }
-            returnDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
-            if (returnDate.isValid()) {
-                let { returnDate: x, ...rest } = error;
+            returningDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
+            if (returningDate.isValid()) {
+                let { returningDate: x, ...rest } = error;
                 setError(rest);
                 setBookingDetailLocal({
                     ...bookingDetailLocal,
-                    returnDate: returnDate.format("DD/MM/YYYY")
+                    returningDate: returningDate.format("DD/MM/YYYY")
                 });
             } else {
                 setError({
                     ...error,
-                    returnDate: "This field is not valid"
+                    returningDate: "This field is not valid"
                 })
                 setBookingDetailLocal({
                     ...bookingDetailLocal,
-                    returnDate: momentObject
+                    returningDate: momentObject
                 });
             }
         } else {
-            returnDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
-            let { returnDate: x, ...rest } = error;
+            returningDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
+            let { returningDate: x, ...rest } = error;
             setError(rest);
             setBookingDetailLocal({
                 ...bookingDetailLocal,
-                returnDate: returnDate.format("DD/MM/YYYY")
+                returningDate: returningDate.format("DD/MM/YYYY")
             });
         }
     }
     function handleSelectedEmployee(item) {
         const objEmail = {
-            id: item.id,
-            email: item.content
+            employeeId: item.id,
+            employeeEmail: item.content
         }
         const newRelatePersons = [...bookingDetailLocal.relatePersons, objEmail];
         setBookingDetailLocal({
@@ -190,10 +192,10 @@ export const BookingDetail = (props) => {
     function handleDeleteEmployee(itemId) {
         const cloneRelatePersons = [...bookingDetailLocal.relatePersons];
         if (cloneRelatePersons.length === 1) {
-            
+
         }
         remove(cloneRelatePersons, (item) => {
-            return item.id === itemId;
+            return item.employeeId === itemId;
         });
         setBookingDetailLocal({
             ...bookingDetailLocal,
@@ -209,24 +211,15 @@ export const BookingDetail = (props) => {
         }
     }, [error, bookingDetailLocal]);
     useEffect(() => {
-        async function fetchBookingInforByBookerId(){
-            if(props.bookerId){
-                const res = await callApi(`${URL}/booking-infor/${props.bookerId}`, HTTP_METHOD.GET, null);
-                const bookingDetailLocal = res.data;
-                setBookingDetailLocal({
-                    moveDate: bookingDetailLocal.moveDate,
-                    returnDate: bookingDetailLocal.returnDate,
-                    location: bookingDetailLocal.location,
-                    destination: bookingDetailLocal.destination,
-                    totalPerson: bookingDetailLocal.totalPerson,
-                    relatePersons: bookingDetailLocal.relatePersons,
-                    reasonBooking: bookingDetailLocal.reasonBooking
-                })
-                setError({});
-            }
+        if(isLoading){
+            setBookingDetailLocal({...BOOKING_DETAIL_DEFAULT});
         }
-        fetchBookingInforByBookerId();
-    }, [props.bookerId]);
+    }, [isLoading])
+    useEffect(() => {
+        if(isEmpty(props.bookingDetail)) return;
+        setBookingDetailLocal({ ...props.bookingDetail });
+        setError({});
+    }, [props.bookingDetail])
     return (
         <div className="row bkc_form">
             <div className="col-12 col-xl-12">
@@ -237,7 +230,7 @@ export const BookingDetail = (props) => {
                                 <label className="d-flex align-items-center">
                                     <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
                                     {t("ngaydi")}
-                                    </label>
+                                </label>
                             </div>
                             <div className="col-6 col-xl-4">
                                 <label className="d-flex align-items-center">
@@ -247,26 +240,26 @@ export const BookingDetail = (props) => {
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
-                                <Tooltip active={error.moveDate ? true : false} content={error.moveDate} direction="top">
+                                <Tooltip active={error.movingDate ? true : false} content={error.movingDate} direction="top">
                                     <Datetime
                                         renderInput={inputDtp}
                                         dateFormat="DD/MM/YYYY"
                                         timeFormat={false}
                                         closeOnSelect={true}
-                                        inputProps={{ name: "moveDate", placeholder: "dd/mm/yyyy", value: bookingDetailLocal.moveDate }}
+                                        inputProps={{ name: "movingDate", placeholder: "dd/mm/yyyy", value: bookingDetailLocal.movingDate }}
                                         onChange={handleChangePickup}
                                     />
 
                                 </Tooltip>
                             </div>
                             <div className="col-6 col-xl-4">
-                                <Tooltip active={error.returnDate ? true : false} content={error.returnDate} direction="top">
+                                <Tooltip active={error.returningDate ? true : false} content={error.returningDate} direction="top">
                                     <Datetime
                                         renderInput={inputDtp}
                                         dateFormat="DD/MM/YYYY"
                                         timeFormat={false}
                                         closeOnSelect={true}
-                                        inputProps={{ name: "returnDate", placeholder: "dd/mm/yyyy", value: bookingDetailLocal.returnDate }}
+                                        inputProps={{ name: "returningDate", placeholder: "dd/mm/yyyy", value: bookingDetailLocal.returningDate }}
                                         onChange={handleChangeReturnTime}
                                     />
                                 </Tooltip>
@@ -354,7 +347,14 @@ export const BookingDetail = (props) => {
                                     onSelectedItem={handleSelectedEmployee}
                                     onDeleteItem={handleDeleteEmployee}
                                     icon={emailIcon}
-                                    initialValue={bookingDetailLocal.relatePersons.map((item) => { return { id: item.id, content: item.email } })}
+                                    initialValue={
+                                        bookingDetailLocal.relatePersons.map((item) => {
+                                            return {
+                                                id: item.employeeId,
+                                                content: item.employeeEmail
+                                            }
+                                        })
+                                    }
                                 />
                             </div>
 

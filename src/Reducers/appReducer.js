@@ -5,7 +5,8 @@ import {
     UPDATE_STATUS_BOOKER_DECLINE,
     SAVE_ERROR_MESSAGE,
     SAVE_PAGE_NAME,
-    SAVE_BOOKERID
+    SET_BOOKING_ID,
+    SET_LOADING
 } from "../Constants/appConstants";
 const initialState = {
     accessToken: "",
@@ -14,19 +15,27 @@ const initialState = {
     errorMessage: "",
     pageName: "Home",
     bookerId: "",
+    isLoading: false,
+    bookingInforId: ""
 }
 export const appReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_LOADING: {
+            return {
+                ...state,
+                isLoading: action.isLoading
+            }
+        }
         case SAVE_PAGE_NAME: {
             return {
                 ...state, 
                 pageName: action.pageName
             }
         }
-        case SAVE_BOOKERID: {
+        case SET_BOOKING_ID: {
             return {
                 ...state,
-                bookerId: action.bookerId
+                bookingInforId: action.bookingInforId
             }
         }
         case SAVE_ERROR_MESSAGE: {

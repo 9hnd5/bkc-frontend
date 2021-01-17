@@ -4,11 +4,12 @@ import './MultipleSelect.scss';
 import { useEffect } from "react/cjs/react.development";
 
 export const MultipleSelect = (props) => {
-    const { suggestions, onChange, className, name, onSelectedItem, onDeleteItem, isDisabled, onCloseWhenClickOut, initialValue, icon } = props;
+    const { onChange, className, name, onSelectedItem, onDeleteItem, isDisabled, icon } = props;
     const [isShowSuggestions, setIsShowSuggestions] = useState(false);
     const [isShowSearch, setIsShowSearch] = useState(false);
     const [items, setItems] = useState([]);
     const [activeIdItems, setActiveIdItems] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
     const displayItems = items.map((item, index) => {
         return (
             <div key={index} className="item-container">
@@ -19,24 +20,26 @@ export const MultipleSelect = (props) => {
             </div>
         )
     })
+    
     const displaySuggestions =
         <div className="suggestions-wrapper">
             <div className="multiple-selected">
-                {suggestions.map((suggestion, index) => {
-                    const isActive = activeIdItems.findIndex(activeIdItem => {
-                        return activeIdItem === suggestion.id;
-                    }) > -1 ? true : false;
-                    return (
-                        <div
-                            style={{ cursor: "pointer" }}
-                            key={index}
-                            className={isActive ? "active-item" : ""}
-                            onClick={() => handleSelectedItem(suggestion.id, suggestion.content)}
-                        >
-                            {suggestion.label}
-                        </div>
-                    )
-                })}
+                {suggestions.length !== 0 ?
+                    suggestions.map((suggestion, index) => {
+                        const isActive = activeIdItems.findIndex(activeIdItem => {
+                            return activeIdItem === suggestion.id;
+                        }) > -1 ? true : false;
+                        return (
+                            <div
+                                style={{ cursor: "pointer" }}
+                                key={index}
+                                className={isActive ? "active-item" : ""}
+                                onClick={() => handleSelectedItem(suggestion.id, suggestion.content)}
+                            >
+                                {suggestion.label}
+                            </div>
+                        )
+                    }) : <p>Not Found</p>}
             </div>
         </div>
     function handleChangeSearch(e) {
@@ -86,6 +89,8 @@ export const MultipleSelect = (props) => {
     function handleExit() {
         setIsShowSuggestions(false);
         setIsShowSearch(false);
+        // setItems([]);
+        setSuggestions([]);
     }
     useEffect(() => {
         setIsShowSuggestions(false);
@@ -99,6 +104,9 @@ export const MultipleSelect = (props) => {
             }))
         }
     }, [props.initialValue])
+    useEffect(() => {
+        setSuggestions(props.suggestions);
+    }, [props.suggestions])
     return (
         <div
             className="wraper-all"

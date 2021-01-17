@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import {  savePageName } from "../../ActionCreators/appActionCreators";
-import { fetchBookingHistoryByEmployeeId } from "../../ActionCreators/bookingHistoryActionCreators.js";
+import { fetchBookingInforByEmployeeId } from "../../ActionCreators/bookingHistoryActionCreators.js";
 import { BookingHistoryContainer } from "../../Components/HistoryComponent/BookingHistoryContainer"
 import './BookingHistory.scss'
 
 export const BookingHistoryHome = () => {
     const dispatch = useDispatch();
     const employee = useSelector(state => state.app.employee);
-    console.log("employee", employee);
+    // console.log("employee", employee);
     useEffect(() => {
-        dispatch(fetchBookingHistoryByEmployeeId(employee.id));
+        dispatch(fetchBookingInforByEmployeeId(employee.id));
         dispatch(savePageName("HistoryBooking"));
     })
     return (

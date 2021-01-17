@@ -8,9 +8,11 @@ import Tooltip from '../../Commos/Tooltip';
 import { MultipleSelect } from '../../Commos/MultipleSelect';
 import { callApi } from '../../../Helpers/callApi';
 import remove from 'lodash/remove';
+import { HTTP_METHOD } from '../../../Constants/appConstants';
+import { PICKUP_LOCATION_DEFAULT } from '../../../Constants/bkcConstants';
 
 export const PickupLocationItem = (props) => {
-    const [pickupLocation, setPickupLocation] = useState(props.pickupLocation);
+    const [pickupLocation, setPickupLocation] = useState({...PICKUP_LOCATION_DEFAULT});
     const [prevPickupLocation, setPrevPickupLocation] = useState({ ...pickupLocation });
     const [isUpdate, setIsUpdate] = useState(false);
     const [error, setError] = useState({});
@@ -23,11 +25,11 @@ export const PickupLocationItem = (props) => {
         switch (event) {
             case "update": {
                 setIsUpdate(true);
-                if (pickupLocation.employees.length > 0) {
+                if (pickupLocation.participants.length > 0) {
                     setIsDisabledEmployeeNameInput(false);
                     setIsDisabledGuestNameInput(true);
                 }
-                else if (pickupLocation.guestName != undefined && pickupLocation.guestName.length != 0) {
+                else if (pickupLocation.guest != undefined && pickupLocation.guest.length != 0) {
                     setIsDisabledEmployeeNameInput(true);
                     setIsDisabledGuestNameInput(false);
                 } else {
@@ -56,14 +58,15 @@ export const PickupLocationItem = (props) => {
     async function handleChange(e) {
         let validateResult = null;
         switch (e.target.name) {
-            case "pickupLocation": {
+            case "location": {
                 validateResult = validation(e.target.value, [NOT_EMPTY]);
                 break;
             }
             case "employeeName": {
                 const employeeName = e.target.value;
                 if (employeeName.length >= 3) {
-                    const res = await callApi(`https://localhost:5001/api/bkc/search-by-employee-name/${employeeName}`);
+                    const res = await callApi(`https://localhost:5001/api/bkc/employees/${employeeName}`, HTTP_METHOD.GET);
+                    if(res.status !== 200) return;
                     const employees = res.data
                     const suggestionsEmployee = [];
                     for (let i = 0; i < employees.length; i++) {
@@ -77,19 +80,19 @@ export const PickupLocationItem = (props) => {
                 }
                 return;
             }
-            case "guestName": {
+            case "guest": {
                 if (isDisabledGuestNameInput) return;
-                const guestName = e.target.value;
-                if (guestName.length <= 0) {
+                const guest = e.target.value;
+                if (guest.length <= 0) {
                     setIsDisabledEmployeeNameInput(false);
                     setError({
                         ...error,
-                        employees: "Employee or guest need to be fill",
-                        guestName: "Employee or guest need to be fill"
+                        participants: "participant or guest need to be fill",
+                        guest: "participant or guest need to be fill"
                     });
                 } else {
                     const cloneError = { ...error };
-                    const { guestName: gn, employees: emps, ...rest } = cloneError;
+                    const { guest: gn, participants: emps, ...rest } = cloneError;
                     setError(rest);
                     setIsDisabledEmployeeNameInput(true);
                 }
@@ -120,98 +123,98 @@ export const PickupLocationItem = (props) => {
             [e.target.name]: e.target.value
         })
     }
-    function handleChangePickupTime(momentObject) {
-        let pickupTime = null;
+    function handleChangeTime(momentObject) {
+        let time = null;
         if (typeof momentObject === "string" || momentObject instanceof String) {
-            pickupTime = moment(momentObject, ["H:m", "H:mm"], true);
-            if (pickupTime.isValid()) {
-                let { pickupTime: x, ...rest } = error;
+            time = moment(momentObject, ["H:m", "H:mm"], true);
+            if (time.isValid()) {
+                let { time: x, ...rest } = error;
                 setError(rest);
             } else {
                 setError({
                     ...error,
-                    pickupTime: "This field is not valid"
+                    time: "This field is not valid"
                 })
             }
             setPickupLocation({
                 ...pickupLocation,
-                pickupTime: pickupTime
+                time: time
             })
         } else {
-            pickupTime = moment(momentObject, ["H:m", "H:mm"], true);
-            let { pickupTime: x, ...rest } = error;
+            time = moment(momentObject, ["H:m", "H:mm"], true);
+            let { time: x, ...rest } = error;
             setError(rest);
             setPickupLocation({
                 ...pickupLocation,
-                pickupTime: pickupTime.format("H:mm")
+                time: time.format("H:mm")
             })
         }
     }
     function handleSelectedEmployee(item) {
-        const employee = {
-            id: item.id,
-            name: item.content
+        const participant = {
+            employeeId: item.id,
+            employeeName: item.content
         }
-        const newEmployees = [...pickupLocation.employees, employee];
+        const newParticipants = [...pickupLocation.participants, participant];
         setPickupLocation({
             ...pickupLocation,
-            employees: newEmployees
+            participants: newParticipants
         })
-        const { employees: emp, guestName: gn, ...rest } = error;
+        const { participants: emp, guest: gn, ...rest } = error;
         setError(rest);
         setIsDisabledGuestNameInput(true);
     }
     function handleDeleteEmployee(employeeId) {
-        const cloneEmployees = [...pickupLocation.employees];
-        if (cloneEmployees.length === 1) {
+        const cloneParticipants = [...pickupLocation.participants];
+        if (cloneParticipants.length === 1) {
             setIsDisabledGuestNameInput(false);
         }
-        if (cloneEmployees.length === 1 && pickupLocation.guestName.length === 0) {
+        if (cloneParticipants.length === 1 && pickupLocation.guest.length === 0) {
             setError({
                 ...error,
-                employees: "Employee or guest need to be fill",
-                guestName: "Employee or guest need to be fill"
+                participants: "participant or guest need to be fill",
+                guest: "participant or guest need to be fill"
             })
         }
-        remove(cloneEmployees, (item) => {
-            return item.id === employeeId;
+        remove(cloneParticipants, (item) => {
+            return item.employeeId === employeeId;
         });
         setPickupLocation({
             ...pickupLocation,
-            employees: cloneEmployees
+            participants: cloneParticipants
         })
     }
     useEffect(() => {
         setPickupLocation(props.pickupLocation);
-
+        setPrevPickupLocation(props.pickupLocation);
     }, [props.pickupLocation]);
     return (
         <tr>
             <td className="w_4">
-                {pickupLocation.stt}
+                {props.index}
             </td>
             <td className="w_12">
-                <Tooltip active={error.pickupLocation ? true : false} content={error.pickupLocation} direction="top">
-                    {isUpdate ? <input onChange={handleChange} value={pickupLocation.pickupLocation} className="form-control" name="pickupLocation" /> : pickupLocation.pickupLocation}
+                <Tooltip active={error.location ? true : false} content={error.location} direction="top">
+                    {isUpdate ? <input onChange={handleChange} value={pickupLocation.location} className="form-control" name="location" /> : pickupLocation.location}
 
                 </Tooltip>
             </td>
             <td className="w_12">
-                <Tooltip active={error.pickupTime ? true : false} content={error.pickupTime} direction="top">
+                <Tooltip active={error.time ? true : false} content={error.time} direction="top">
                     {
                         isUpdate ?
                             <Datetime
                                 dateFormat={false}
                                 timeFormat="H:mm"
-                                onChange={handleChangePickupTime}
-                                initialValue={pickupLocation.pickupTime}
+                                onChange={handleChangeTime}
+                                initialValue={pickupLocation.time}
                             />
-                            : pickupLocation.pickupTime
+                            : pickupLocation.time
                     }
                 </Tooltip>
             </td>
             <td className="w_12">
-                <Tooltip active={error.employees ? true : false} content={error.employees} direction="top">
+                <Tooltip active={error.participants ? true : false} content={error.participants} direction="top">
                     {
                         isUpdate ?
                             <MultipleSelect
@@ -221,25 +224,25 @@ export const PickupLocationItem = (props) => {
                                 name="employeeName"
                                 onSelectedItem={handleSelectedEmployee}
                                 onDeleteItem={handleDeleteEmployee}
-                                initialValue={pickupLocation.employees.map(employee => { return { id: employee.id, content: employee.name } })}
+                                initialValue={pickupLocation.participants.map(participant => { return { id: participant.employeeId, content: participant.employeeName } })}
                                 isDisabled={isDisabledEmployeeNameInput}
                             />
                             :
-                            pickupLocation.employees.map(employee => { return employee.name }).join(", ")
+                            pickupLocation.participants.map(participant => { return participant.employeeName }).join(", ")
                     }
                 </Tooltip>
 
             </td>
             <td className="w_12">
-                <Tooltip active={error.guestName ? true : false} content={error.guestName} direction="top">
+                <Tooltip active={error.guest ? true : false} content={error.guest} direction="top">
                     {
                         isUpdate ?
                             <input disabled={isDisabledGuestNameInput}
                                 onChange={handleChange}
-                                value={pickupLocation.guestName}
-                                className="form-control" name="guestName"
+                                value={pickupLocation.guest}
+                                className="form-control" name="guest"
                             />
-                            : pickupLocation.guestName
+                            : pickupLocation.guest
                     }
                 </Tooltip>
 

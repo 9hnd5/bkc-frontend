@@ -4,9 +4,9 @@ import { BookingHistoryItem } from "./BookingHistoryItem";
 
 export const BookingHistoryTable = () => {
     const { t } = useTranslation();
-    const bookingHistoryList = useSelector(state => state.bh.bookingHistoryList);
-    const displayBookingHistory = bookingHistoryList.map((bookingHistoryItem, index) => {
-        return <BookingHistoryItem index={index + 1} key={index} bookingHistoryItem={bookingHistoryItem} />
+    const bookingInfors = useSelector(state => state.bh.bookingInfors);
+    const displayBookingInfors = bookingInfors.map((bookingInfor, index) => {
+        return <BookingHistoryItem index={index + 1} key={index} bookingInfor={bookingInfor} />
     });
     return (
         <div className="table-responsive booking-history-table" style={{ height: "500px" }}>
@@ -24,7 +24,7 @@ export const BookingHistoryTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {displayBookingHistory}
+                    {displayBookingInfors}
                 </tbody>
             </table>
         </div>

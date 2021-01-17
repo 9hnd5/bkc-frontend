@@ -2,32 +2,31 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react/cjs/react.development";
-import { saveBookerId } from "../../ActionCreators/appActionCreators";
 import { requestDeleteBooking } from "../../ActionCreators/bookingHistoryActionCreators";
+import { setBookingInforId } from './../../ActionCreators/appActionCreators';
 
 export const BookingHistoryItem = (props) => {
     const {t} = useTranslation();
-    const { bookingHistoryItem, index } = props;
-    console.log("bookinghistoryItem", bookingHistoryItem);
+    const { bookingInfor, index } = props;
     const dispatch = useDispatch();
     const history = useHistory();
-    const isDisabledBtnUpdate = (bookingHistoryItem.status === "Waiting" || bookingHistoryItem.status === "Success") ? true : false;
-    const isDisabledBtnDelete = (bookingHistoryItem.status === "Waiting" || bookingHistoryItem.status === "Success") ? true : false;
+    const isDisabledBtnUpdate = (bookingInfor.bookingResult.status === "Waiting" || bookingInfor.bookingResult.status === "Success") ? true : false;
+    const isDisabledBtnDelete = (bookingInfor.bookingResult.status === "Waiting" || bookingInfor.bookingResult.status === "Success") ? true : false;
     const [classNameForStatus, setClassNameForStatus] = useState("");
     const [status, setStatus] = useState("");
-    function handleEdit(bookerId) {
-        dispatch(saveBookerId(bookerId))
+    function handleEdit(bookingInforId) {
+        dispatch(setBookingInforId(bookingInforId));
         history.push(`request-booking/update`);
     }
-    function handleDelete(bookerId) {
-        dispatch(requestDeleteBooking(bookerId));
+    function handleDelete(bookingInforId) {
+        dispatch(requestDeleteBooking(bookingInforId));
     }
-    function handleDuplicate(bookerId){
-        dispatch(saveBookerId(bookerId))
+    function handleDuplicate(bookingInforId){
+        dispatch(setBookingInforId(bookingInforId));
         history.push(`request-booking/duplicate`);
     }
     useEffect(() => {
-        switch (bookingHistoryItem.status) {
+        switch (bookingInfor.bookingResult.status) {
             case "Success":{
                 setClassNameForStatus("label-custom label-success");
                 setStatus(t("duocduyet"));
@@ -51,35 +50,35 @@ export const BookingHistoryItem = (props) => {
             default:
                 break;
         }
-    }, [bookingHistoryItem, t])
+    }, [bookingInfor, t])
     return (
         <tr>
             <td>{index}</td>
-            <td>{bookingHistoryItem.moveDate}</td>
-            <td>{bookingHistoryItem.returnDate}</td>
-            <td>{bookingHistoryItem.location}</td>
-            <td>{bookingHistoryItem.destination}</td>
-            <td>{bookingHistoryItem.totalPerson}</td>
+            <td>{bookingInfor.movingDate}</td>
+            <td>{bookingInfor.returningDate}</td>
+            <td>{bookingInfor.location}</td>
+            <td>{bookingInfor.destination}</td>
+            <td>{bookingInfor.totalPerson}</td>
             <td><p className={classNameForStatus}>{status}</p></td>
             <td>
                 <div className="btn-group" role="group">
                     <button
                         className="btn btn-outline-primary btn-sm mr-2"
-                        onClick={() => handleEdit(bookingHistoryItem.bookerId)}
+                        onClick={() => handleEdit(bookingInfor.id)}
                         disabled={isDisabledBtnUpdate}
                     >
                         {t("suayeucau")}
                     </button>
                     <button
                         className="btn btn-outline-danger btn-sm mr-2"
-                        onClick={() => handleDelete(bookingHistoryItem.bookerId)}
+                        onClick={() => handleDelete(bookingInfor.id)}
                         disabled={isDisabledBtnDelete}
                     >
                         {t("xoayeucau")}
                     </button>
                     <button
                         className="btn btn-outline-info btn-sm"
-                        onClick={() => handleDuplicate(bookingHistoryItem.bookerId)}
+                        onClick={() => handleDuplicate(bookingInfor.id)}
                     >
                         {t("nhanban")}
                     </button>

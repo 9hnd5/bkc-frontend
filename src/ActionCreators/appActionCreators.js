@@ -1,11 +1,12 @@
 import {
     SAVE_ACCESSTOKEN,
     SAVE_AUTHENTICATE,
-    SAVE_BOOKERID,
+    SET_BOOKING_ID,
     SAVE_BOOKER_BOOKING_DETAILS,
     SAVE_EMPLOYEE,
     SAVE_ERROR_MESSAGE,
     SAVE_PAGE_NAME,
+    SET_LOADING,
     UPDATE_STATUS_BOOKER_DECLINE
 } from "../Constants/appConstants"
 import { callApi } from "../Helpers/callApi"
@@ -17,10 +18,10 @@ export const saveAccessToken = (accessToken) => {
         accessToken
     }
 }
-export const saveBookerId = (bookerId) => {
+export const setBookingInforId = (bookingInforId) => {
     return {
-        type: SAVE_BOOKERID,
-        bookerId
+        type: SET_BOOKING_ID,
+        bookingInforId
     }
 }
 export const saveEmployee = (employee) => {
@@ -59,6 +60,14 @@ export const savePageName = (pageName) => {
         pageName
     }
 }
+export const settLoading = (isLoading) => {
+    return {
+        type: SET_LOADING,
+        isLoading
+    }
+}
+
+
 
 
 

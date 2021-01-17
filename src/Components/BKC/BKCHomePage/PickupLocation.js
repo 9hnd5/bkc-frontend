@@ -12,6 +12,7 @@ export const PickupLocation = (props) => {
                         <PickupLocationTable
                             bookerId={props.bookerId}
                             totalPerson={props.totalPerson}
+                            pickupLocations = {props.pickupLocations}
                         />
                         <div className="w-100 mt-2 mb-2"></div>
                         <PickupLocationBtn

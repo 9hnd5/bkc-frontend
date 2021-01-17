@@ -7,20 +7,23 @@ import { callApi } from "../../../Helpers/callApi";
 import { PickupLocationItem } from "./PickupLocationItem";
 import { ModalInsertBookDetail } from "./ModalInsertBookDetail";
 import { setPickupLocations } from "../../../ActionCreators/bkcActionCreators";
+import isEmpty from "lodash/isEmpty";
 export const PickupLocationTable = (props) => {
     const dispatch = useDispatch();
-    const {t} = useTranslation();
+    const isLoading = useSelector(state => state.bkc.isLoading);
+    const { t } = useTranslation();
     const [pickupLocationsLocal, setPickupLocationsLocal] = useState([]);
     const displayPickupLocations = pickupLocationsLocal.map((pickupLocation, index) => {
         return <PickupLocationItem
             pickupLocation={pickupLocation}
             key={index}
+            index = {index + 1}
             onSaveUpdate={handleModalSaveUpdate}
-            onDelete={handleDeleteBookingDetail}
+            onDelete={handleDeletePickupLocation}
         />
     });
     function handleModalSave(pickupLocation) {
-        pickupLocation.stt = pickupLocationsLocal.length + 1;
+        pickupLocation.id = pickupLocationsLocal.length + 1;
         const temp = [...pickupLocationsLocal, pickupLocation];
         setPickupLocationsLocal(temp);
     }
@@ -29,22 +32,22 @@ export const PickupLocationTable = (props) => {
             return bkd.stt === pickupLocation.stt;
         });
         if (index > -1) {
-            const newBookingDetails = [...pickupLocationsLocal];
-            newBookingDetails[index] = pickupLocation;
-            setPickupLocationsLocal(newBookingDetails)
+            const newPickupLocationsLocal = [...pickupLocationsLocal];
+            newPickupLocationsLocal[index] = pickupLocation;
+            setPickupLocationsLocal(newPickupLocationsLocal)
         }
     }
-    function handleDeleteBookingDetail(pickupLocation) {
+    function handleDeletePickupLocation(pickupLocation) {
         const index = pickupLocationsLocal.findIndex((bkd) => {
             return bkd.stt === pickupLocation.stt;
         });
         if (index > -1) {
-            const newBookingDetails = [...pickupLocationsLocal];
-            newBookingDetails.splice(index, 1);
-            for (let i = 0; i < newBookingDetails.length; i++) {
-                newBookingDetails[i].stt = i + 1;
+            const newPickupLocationsLocal = [...pickupLocationsLocal];
+            newPickupLocationsLocal.splice(index, 1);
+            for (let i = 0; i < newPickupLocationsLocal.length; i++) {
+                newPickupLocationsLocal[i].stt = i + 1;
             }
-            setPickupLocationsLocal(newBookingDetails);
+            setPickupLocationsLocal(newPickupLocationsLocal);
         }
     }
     useEffect(() => {
@@ -53,7 +56,7 @@ export const PickupLocationTable = (props) => {
                 const res = await callApi(`${URL}/booking-pickup-location/${props.bookerId}`, HTTP_METHOD.GET, null);
                 const bookingDetailsFromServer = res.data;
                 const pickupLocationsLocal = bookingDetailsFromServer.map((item, index) => {
-                    const {bookingParticipants: x, ...rest} = item;
+                    const { bookingParticipants: x, ...rest } = item;
                     return {
                         ...rest,
                         employees: item.bookingParticipants.map(x => {
@@ -71,13 +74,20 @@ export const PickupLocationTable = (props) => {
         fetchBookingPickupLocationByBookerId();
     }, [props.bookerId]);
     useEffect(() => {
-        if((pickupLocationsLocal.length >=1 && pickupLocationsLocal.length <= 2)){
+        if ((pickupLocationsLocal.length >= 1 && pickupLocationsLocal.length <= 2)) {
             dispatch(setPickupLocations(pickupLocationsLocal))
         }
-        else{
+        else {
             dispatch(setPickupLocations([]))
         }
     }, [pickupLocationsLocal]);
+    useEffect(() => {
+        if (isLoading) setPickupLocationsLocal([])
+    }, [isLoading])
+    useEffect(() => {
+        if (isEmpty(props.pickupLocations)) return;
+        setPickupLocationsLocal(props.pickupLocations);
+    }, [props.pickupLocations])
     return (
         <div className="row">
             <div className="col-12">

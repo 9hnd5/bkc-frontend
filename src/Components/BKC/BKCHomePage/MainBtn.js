@@ -1,7 +1,9 @@
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 export const MainBtn = (props) => {
     const { disabledBtnSaveAndSend, disabledBtnTempSave } = props;
+    const isLoading = useSelector(state => state.bkc.isLoading);
     const history = useHistory();
     function handleBack() {
         history.push("/history-booking");
@@ -13,7 +15,7 @@ export const MainBtn = (props) => {
                     <button
                         onClick={props.onSaveAndSend}
                         className="btn btn-outline-primary btn-sm mr-2"
-                        disabled={disabledBtnSaveAndSend}
+                        disabled={disabledBtnSaveAndSend || isLoading}
                     >
                         <i className="fas fa-paper-plane mr-1"></i>
                         LƯU VÀ GỬI
@@ -22,7 +24,7 @@ export const MainBtn = (props) => {
                     <button
                         onClick={props.onTempSave}
                         className="btn btn-outline-primary btn-sm mr-2"
-                        disabled={disabledBtnTempSave}
+                        disabled={disabledBtnTempSave || isLoading}
 
                     >
                         <i className="fas fa-save mr-1"></i>

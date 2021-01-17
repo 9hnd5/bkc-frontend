@@ -15,7 +15,7 @@ export const NavBar = () => {
     const isAuth = useSelector(state => state.app.isAuth);
     const pageName = useSelector(state => state.app.pageName);
     const employee = useSelector(state => state.app.employee);
-    console.log("role", employee.role);
+    // console.log("role", employee.role);
     const isShowNavBar = Object.keys(employee).length !== 0? true: false;
     const isShowBtnAdmin = (employee.role === ROLE.SUPER_ADMIN || employee.role === ROLE.ADMIN)? true: false;
     async function handleClick(e) {

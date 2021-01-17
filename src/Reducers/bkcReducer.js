@@ -1,8 +1,10 @@
 import {
     SET_BOOKER,
     SET_BOOKING_DETAIL,
+    SET_LOADING,
     SET_PICKUP_LOCATIONS,
     TOGGLE_BKC_DETAIL_INSERT,
+    SET_IS_REQUEST_SUCCESS
  
 } from "../Constants/bkcConstants";
 
@@ -11,12 +13,25 @@ let initialState = {
     isLoading: false,
     booker: {},
     bookingDetail: {},
-    pickupLocations: []
+    pickupLocations: [],
+    isRequestSuccess: null
 
     
 };
 export const bkcReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_IS_REQUEST_SUCCESS:{
+            return{
+                ...state,
+                isRequestSuccess: action.isRequestSuccess
+            }
+        }
+        case SET_LOADING: {
+            return {
+                ...state,
+                isLoading: action.isLoading
+            }
+        }
         case TOGGLE_BKC_DETAIL_INSERT:
             return {
                 ...state,
