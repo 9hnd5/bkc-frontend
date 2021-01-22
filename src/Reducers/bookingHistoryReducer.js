@@ -1,33 +1,29 @@
-import {
-    DELETE_BOOKING_HISTORY,
-    SET_BOOKING_HISTORY
-}from "../Constants/bookingHistoryConstants"
-import remove from 'lodash/remove'
+import { DELETE_TICKET_BY_ID, SET_TICKETS } from "../Constants/bookingHistoryConstants";
+
 const initialState = {
-    bookingInfors: []
+    tickets: []
 }
 export const bookingHistoryReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_BOOKING_HISTORY: {
+        case SET_TICKETS: {
             return {
                 ...state,
-                bookingInfors: action.bookingInfors
+                tickets: action.tickets
             }
         }
-        case DELETE_BOOKING_HISTORY: {
-            const cloneBookingInfors = [...state.bookingInfors];
-            remove(cloneBookingInfors, (item) => {
-                return item.bookerId === action.bookerId
-            })
-
+        case DELETE_TICKET_BY_ID: {
             return {
                 ...state,
-                bookingInfors: cloneBookingInfors
+                tickets: [...state.tickets].filter(ticket => {
+                    return +ticket.id !== +action.ticketId;
+                })
             }
         }
-        default:
+        default: {
             return {
                 ...state
             }
+        }
+
     }
 }

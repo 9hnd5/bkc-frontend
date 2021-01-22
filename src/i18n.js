@@ -93,7 +93,7 @@ const resources = {
 
       //Request booking page
       "thongtinnguoidat": "Thông Tin Người Đặt",
-      "hovaten": "họ Và Tên",
+      "hovaten": "Họ Và Tên",
       "tenbu": "Tên BU",
       "nguoiquanli": "Quản lí",
       "sodienthoai": "Điện Thoại",

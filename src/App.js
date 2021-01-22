@@ -1,21 +1,27 @@
-import ErrorBoundary from "./Components/Commos/ErrorBoundary";
+import ErrorBoundary from "./Components/Commons/ErrorBoundary";
 import './App.scss'
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { HRHome } from "./Pages/HRPage/HRHome";
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import { NavBar } from "./Components/Commos/NavBar";
-import HRApprovalPage from "./Pages/HRPage/HRApprovalPage";
-import { Home } from "./Pages/Home/Home";
-import { useSelector } from "react-redux";
+// import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import { Router, Switch, Route, Redirect } from 'react-router-dom'
+import { NavBar } from "./Components/Commons/NavBar";
+import { useDispatch, useSelector } from "react-redux";
 import { NotificationContainer } from 'react-notifications';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-notifications/lib/notifications.css';
-import { ROLE } from "./Constants/appConstants";
-import { BookingHistoryHome } from "./Pages/HistoryBooking/BookingHistoryHome";
-import { BookingCarHome } from "./Pages/BookingCar/BookingCarHome";
+import { BookingRequest } from "./Pages/BookingRequest";
+import { useEffect } from "react";
+import { requestAuthenticated } from "./ActionCreators/appActionCreator";
+import { BookingHistory } from "./Pages/BookingHistory";
+import { Admin } from "./Pages/Admin";
+import { BookingApproval } from "./Pages/BookingApproval";
+export const history = require("history").createBrowserHistory();
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(requestAuthenticated("hoe.ph@greenfeed.com.vn"));
+  });
   return (
     <div className="App">
       <ErrorBoundary>
@@ -31,24 +37,27 @@ function App() {
           draggable
           pauseOnHover
         />
-        <Router>
+        <Router history={history}>
           {/* <div className="mt-5"></div> */}
           <NavBar />
           <div className="mt-1 mb-1"></div>
           <Switch>
-            <Route path="/" exact component={Home} />
-            <PrivateRoute path="/history-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
-              <BookingHistoryHome />
+            <Route path="/booking-request/:action?/:ticketId?" exact component={BookingRequest} />
+            <Route path="/booking-history" component={BookingHistory} />
+            <Route path="/admin" component={Admin} />
+            <Route path="/booking-approval/:ticketId" component={BookingApproval} />
+            {/* <PrivateRoute path="/history-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
+
             </PrivateRoute>
             <PrivateRoute path="/request-booking/:action?" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
-              <BookingCarHome />
+
             </PrivateRoute>
             <PrivateRoute path="/admin" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
-              <HRHome />
+
             </PrivateRoute>
-            <PrivateRoute path="/:action/:bookerId" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
-              <HRApprovalPage />
-            </PrivateRoute>
+            <PrivateRoute path="/:action/:bookingInforId" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
+
+            </PrivateRoute> */}
           </Switch>
         </Router>
       </ErrorBoundary>
@@ -57,28 +66,28 @@ function App() {
 }
 export default App;
 
-function PrivateRoute({ children, ...rest }) {
-  const employee = useSelector(state => state.app.employee);
-  const { roles, path } = rest;
-  let isAuth = null;
-  if (!roles.length) {
-    isAuth = false;
-  }
-  else {
-    for (let r of roles) {
-      if (r === employee.role) {
-        isAuth = true;
-        break;
-      }
-    }
-  }
-  if (!isAuth) console.log("Not have permission");
-  return (
-    <Route
-      path={path}
-      render={() => {
-        return isAuth ? (children) : (<Redirect to="/" />)
-      }}
-    />
-  );
-}
+// function PrivateRoute({ children, ...rest }) {
+//   const employee = useSelector(state => state.app.employee);
+//   const { roles, path } = rest;
+//   let isAuth = null;
+//   if (!roles.length) {
+//     isAuth = false;
+//   }
+//   else {
+//     for (let r of roles) {
+//       if (r === employee.role) {
+//         isAuth = true;
+//         break;
+//       }
+//     }
+//   }
+//   if (!isAuth) console.log("Not have permission");
+//   return (
+//     <Route
+//       path={path}
+//       render={() => {
+//         return isAuth ? (children) : (<Redirect to="/" />)
+//       }}
+//     />
+//   );
+// }
