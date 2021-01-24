@@ -16,9 +16,10 @@ export const TicketContainer = (props) => {
     const ticketInformation = useSelector(state => state.ticketReducer.ticketInformation);
     const ticketDetail = useSelector(state => state.ticketReducer.ticketDetail);
     const locations = useSelector(state => state.ticketReducer.locations);
+    const employee = useSelector(state => state.appReducer.employee);
     function handleSaveAndSend() {
         if (isEmpty(action)) {
-            var ticketAddRequest = {
+            const ticketAddRequest = {
                 employeeId: ticketInformation.employeeId,
                 employeeName: ticketInformation.employeeName,
                 employeeLineManagerId: ticketInformation.employeeLineManagerId,
@@ -36,13 +37,22 @@ export const TicketContainer = (props) => {
                 reasonBooking: ticketDetail.reasonBooking,
                 Status: TICKET_STATUS.WAITING,
                 locations: locations,
-                relatedPeoples: ticketDetail.relatedPeoples
+                relatedPeoples: ticketDetail.relatedPeoples,
+                // relatedPeoples: [...ticketDetail.relatedPeoples, {
+                //     employeeId: employee.lineManagerId,
+                //     employeeName: employee.lineManagerName,
+                //     employeeEmail: employee.lineManagerEmail
+                // }
+                // ]
+
+
             }
+            console.log("ticketAddRequest", ticketAddRequest);
             dispatch(addTicketRequest(ticketAddRequest));
         }
         else {
             if (action === "duplicate") {
-                var ticketAddRequest = {
+                const ticketAddRequest = {
                     employeeId: ticketInformation.employeeId,
                     employeeName: ticketInformation.employeeName,
                     employeeLineManagerId: ticketInformation.employeeLineManagerId,
@@ -61,10 +71,16 @@ export const TicketContainer = (props) => {
                     Status: TICKET_STATUS.WAITING,
                     locations: locations,
                     relatedPeoples: ticketDetail.relatedPeoples
+                    // relatedPeoples: [...ticketDetail.relatedPeoples, {
+                    //     employeeId: employee.lineManagerId,
+                    //     employeeName: employee.lineManagerName,
+                    //     employeeEmail: employee.lineManagerEmail
+                    // }
+                    // ]
                 }
                 dispatch(addTicketRequest(ticketAddRequest));
             } else if (action === "update") {
-                var ticketUpdate = {
+                const ticketUpdate = {
                     id: ticketId,
                     employeeId: ticketInformation.employeeId,
                     employeeName: ticketInformation.employeeName,
@@ -84,6 +100,12 @@ export const TicketContainer = (props) => {
                     Status: TICKET_STATUS.WAITING,
                     locations: locations,
                     relatedPeoples: ticketDetail.relatedPeoples
+                    // relatedPeoples: [...ticketDetail.relatedPeoples, {
+                    //     employeeId: employee.lineManagerId,
+                    //     employeeName: employee.lineManagerName,
+                    //     employeeEmail: employee.lineManagerEmail
+                    // }
+                    // ]
                 }
                 dispatch(updateTicketRequest(ticketUpdate))
             }
@@ -110,7 +132,13 @@ export const TicketContainer = (props) => {
                 reasonBooking: ticketDetail.reasonBooking,
                 Status: TICKET_STATUS.DRAFT,
                 locations: locations,
-                relatedPeoples: ticketDetail.relatedPeoples
+                // relatedPeoples: ticketDetail.relatedPeoples,
+                // relatedPeoples: [...ticketDetail.relatedPeoples, {
+                //     employeeId: employee.lineManagerId,
+                //     employeeName: employee.lineManagerName,
+                //     employeeEmail: employee.lineManagerEmail
+                // }
+                // ]
             }
             dispatch(addTicketRequest(ticketAddRequest));
         }
@@ -134,7 +162,13 @@ export const TicketContainer = (props) => {
                     reasonBooking: ticketDetail.reasonBooking,
                     Status: TICKET_STATUS.DRAFT,
                     locations: locations,
-                    relatedPeoples: ticketDetail.relatedPeoples
+                    // relatedPeoples: ticketDetail.relatedPeoples,
+                    // relatedPeoples: [...ticketDetail.relatedPeoples, {
+                    //     employeeId: employee.lineManagerId,
+                    //     employeeName: employee.lineManagerName,
+                    //     employeeEmail: employee.lineManagerEmail
+                    // }
+                    // ]
                 }
                 dispatch(addTicketRequest(ticketAddRequest));
             } else if (action === "update") {
@@ -157,7 +191,13 @@ export const TicketContainer = (props) => {
                     reasonBooking: ticketDetail.reasonBooking,
                     Status: TICKET_STATUS.DRAFT,
                     locations: locations,
-                    relatedPeoples: ticketDetail.relatedPeoples
+                    relatedPeoples: ticketDetail.relatedPeoples,
+                    // rrelatedPeoples: [...ticketDetail.relatedPeoples, {
+                    //     employeeId: employee.lineManagerId,
+                    //     employeeName: employee.lineManagerName,
+                    //     employeeEmail: employee.lineManagerEmail
+                    // }
+                    // ]
                 }
                 dispatch(updateTicketRequest(ticketUpdate));
             }

@@ -4,7 +4,7 @@ import './MultipleSelect.scss';
 import { useEffect } from "react";
 
 export const MultipleSelect = (props) => {
-    const { onChange, className, name, onSelectedItem, onDeleteItem, isDisabled, icon } = props;
+    const { onChange, className, name, onSelectedItem, onDeleteItem, isDisabled, icon, isMultipleSelected } = props;
     const [isShowSuggestions, setIsShowSuggestions] = useState(false);
     const [isShowSearch, setIsShowSearch] = useState(false);
     const [items, setItems] = useState([]);
@@ -20,7 +20,7 @@ export const MultipleSelect = (props) => {
             </div>
         )
     })
-    
+
     const displaySuggestions =
         <div className="suggestions-wrapper">
             <div className="multiple-selected">
@@ -49,17 +49,27 @@ export const MultipleSelect = (props) => {
         }
     }
     function handleSelectedItem(suggestionId, suggestionContent) {
-        const index = activeIdItems.findIndex(activeIdItem => {
-            return activeIdItem === suggestionId
-        });
-        if (index > -1) return;
+        if (isMultipleSelected) {
+            const index = activeIdItems.findIndex(activeIdItem => {
+                return activeIdItem === suggestionId
+            });
+            if (index > -1) return;
+            const suggestion = {
+                id: suggestionId,
+                content: suggestionContent
+            }
+            onSelectedItem(suggestion)
+            setItems([...items, suggestion])
+            setActiveIdItems([...activeIdItems, suggestionId]);
+            return;
+        }
         const suggestion = {
             id: suggestionId,
             content: suggestionContent
         }
         onSelectedItem(suggestion)
-        setItems([...items, suggestion])
-        setActiveIdItems([...activeIdItems, suggestionId]);
+        setItems([suggestion])
+        setActiveIdItems([suggestionId]);
     }
     function handleKeyDown(e) {
         if (e.keyCode === 8) {
@@ -74,22 +84,27 @@ export const MultipleSelect = (props) => {
         setIsShowSuggestions(true);
     }
     function handleDeleteItem(itemId) {
+        if (isMultipleSelected) {
+            onDeleteItem(itemId);
+            const cloneItems = [...items];
+            remove(cloneItems, (item) => {
+                return item.id === itemId;
+            });
+            setItems(cloneItems);
+            const cloneActiveIdItems = [...activeIdItems];
+            remove(cloneActiveIdItems, (activeIdItem) => {
+                return activeIdItem === itemId;
+            });
+            setActiveIdItems(cloneActiveIdItems);
+            return;
+        }
         onDeleteItem(itemId);
-        const cloneItems = [...items];
-        remove(cloneItems, (item) => {
-            return item.id === itemId;
-        });
-        setItems(cloneItems);
-        const cloneActiveIdItems = [...activeIdItems];
-        remove(cloneActiveIdItems, (activeIdItem) => {
-            return activeIdItem === itemId;
-        });
-        setActiveIdItems(cloneActiveIdItems);
+        setItems([]);
+        setActiveIdItems([]);
     }
     function handleExit() {
         setIsShowSuggestions(false);
         setIsShowSearch(false);
-        // setItems([]);
         setSuggestions([]);
     }
     useEffect(() => {
@@ -118,7 +133,8 @@ export const MultipleSelect = (props) => {
                             <img className="input-group-text" src={icon} />
                         </div>
                         <div
-                            className={isDisabled ? "form-control multiple-items-container disabled" : "form-control multiple-items-container"}
+                            className={isDisabled ? `${className} multiple-items-container disabled` : `${className} multiple-items-container`}
+                            // className={isDisabled ? `multiple-items-container disabled` : `multiple-items-container`}
                             onKeyDown={handleKeyDown}
                             onClick={handleClickSearch}
                         >
@@ -127,7 +143,9 @@ export const MultipleSelect = (props) => {
                         </div>
                     </div> :
                     <div
-                        className={isDisabled ? "form-control multiple-items-container disabled" : "form-control multiple-items-container"}
+                        // className={isDisabled ? "form-control multiple-items-container disabled" : "form-control multiple-items-container"}
+                        className={isDisabled ? `${className} multiple-items-container disabled` : `${className} multiple-items-container`}
+                        // className={isDisabled ? `multiple-items-container disabled` : `multiple-items-container`}
                         onKeyDown={handleKeyDown}
                         onClick={handleClickSearch}
                     >

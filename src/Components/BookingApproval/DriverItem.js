@@ -1,5 +1,7 @@
+import { isEmpty } from "lodash";
 import { Fragment, useState } from "react"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { setMoveCar, setReturnCar } from "../../ActionCreators/bookingApprovalActionCreator";
 
 export const DriverItem = (props) => {
@@ -7,7 +9,12 @@ export const DriverItem = (props) => {
     const { driver, no } = props;
     const [isSelectedMoveCar, setIsSelectedMoveCar] = useState(false);
     const [isSelectedReturnCar, setIsSelectedReturnCar] = useState(false);
+    const {ticketId} = useParams();
+    const ticket = useSelector(state => state.adminReducer.ticketRequests).find(ticket => {
+        return +ticket.id === +ticketId;
+    });
     console.log("driver", driver);
+    console.log("ticket", ticket);
     function handleMoveCarChange(){
         const moveCar = {
             driverId: driver.id,
@@ -45,6 +52,7 @@ export const DriverItem = (props) => {
                         type="checkbox"
                         onChange={handleReturnCarChange}
                         checked={isSelectedReturnCar}
+                        disabled={isEmpty(ticket.endDate)}
                     />
                 </td>
                 <td></td>

@@ -1,4 +1,4 @@
-import { SET_EMPLOYEE } from "../Constants/AppConstants"
+import { SET_EMPLOYEE, SET_LINE_MANAGER } from "../Constants/AppConstants"
 import { END_POINT, HTTP_METHOD } from "../Constants/CommonsConstants"
 import { callApi } from "../Helpers/callApi"
 

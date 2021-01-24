@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NOT_EMPTY, ONLY_NUMBER, validation } from './../../Helpers/validation';
 import { callApi } from './../../Helpers/callApi';
 import remove from 'lodash/remove';
-import { HTTP_METHOD, END_POINT, LOCATION_DEFAULT } from './../../Constants/CommonsConstants';
+import { HTTP_METHOD, END_POINT, LOCATION_DEFAULT } from '../../Constants/CommonsConstants';
 import { MultipleSelect } from './../Commons/MultipleSelect';
 import { Tooltip } from './../Commons/Tooltip';
 import { toggleModalAddLocation } from '../../ActionCreators/ticketActionCreator';
@@ -286,6 +286,7 @@ export const ModalAddLocation = (props) => {
                             onSelectedItem={handleSelectedEmployee}
                             onDeleteItem={handleDeleteEmployee}
                             isDisabled={isDisabledEmployeeNameInput}
+                            isMultipleSelected={true}
                         />
                     </Tooltip>
                 </div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { HTTP_METHOD, END_POINT } from "./../../Constants/CommonsConstants";
+import { HTTP_METHOD, END_POINT } from "../../Constants/CommonsConstants";
 import { callApi } from "./../../Helpers/callApi";
 import isEmpty from "lodash/isEmpty";
 import { ModalAddLocation } from "./ModalAddLocation";
@@ -19,18 +19,19 @@ export const LocationTable = (props) => {
     const diplayLocation = locationLocals.map((location, index) => {
         return <LocationItem
             key={index}
+            no={index + 1}
             location={location}
             onSaveUpdate={handleUpdateLocation}
             onDelete={handleDeleteLocation}
         />
     });
     function handleModalSave(location) {
-        location.stt = locationLocals.length + 1;
+        location.id = locationLocals.length;
         setLocationLocals([...locationLocals, location]);
     }
     function handleUpdateLocation(location) {
         const index = locationLocals.findIndex((item) => {
-            return item.stt === location.stt;
+            return item.id === location.id;
         });
         if (index > -1) {
             const newLocationLocals = [...locationLocals];
@@ -41,10 +42,10 @@ export const LocationTable = (props) => {
     function handleDeleteLocation(location) {
         const newLocationLocals = [...locationLocals];
         remove(newLocationLocals, item => {
-            return item.stt === location.stt;
+            return item.id === location.id;
         });
         for (let i = 0; i < newLocationLocals.length; i++) {
-            newLocationLocals[i].stt = i + 1;
+            newLocationLocals[i].id = i;
         }
         setLocationLocals(newLocationLocals);
 
@@ -56,8 +57,13 @@ export const LocationTable = (props) => {
         const ticket = tickets.find(item => {
             return item.id === +ticketId
         })
-        if(ticket){
-            const locations = ticket.locations
+        if (ticket) {
+            const locations = ticket.locations.map((location, index) => {
+                return {
+                    ...location,
+                    id: index
+                }
+            });
             setLocationLocals(locations);
         }
     }, [tickets]);

@@ -12,13 +12,13 @@ import { TICKET_STATUS } from "../../Constants/CommonsConstants";
 export const BookingApprovalContainer = () => {
     const { ticketId } = useParams();
     const employee = useSelector(state => state.appReducer.employee);
-    const ticket = useSelector(state => state.adminReducer.tickets).find(ticket => {
+    const ticket = useSelector(state => state.adminReducer.ticketRequests).find(ticket => {
         return +ticket.id === +ticketId;
     });
     const moveCar = useSelector(state => state.bookingApprovalReducer.moveCar);
     const returnCar = useSelector(state => state.bookingApprovalReducer.returnCar);
     function handleClickApprove() {
-        if (isEmpty(ticket.startDate)) {
+        if (isEmpty(ticket.endDate)) {
             const moveTrip = {
                 isFinish: false,
                 startDate: ticket.startDate,
@@ -31,10 +31,11 @@ export const BookingApprovalContainer = () => {
             const data = {
                 trips: [moveTrip],
                 ticket: {
+                    id: ticket.id,
                     approverId: employee.employeeId,
                     approverName: employee.name,
                     approvedDate: moment().format("DD/MM/YYYY"),
-                    ticketStatus: TICKET_STATUS.APPROVED
+                    status: TICKET_STATUS.APPROVED
                 }
 
             }

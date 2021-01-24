@@ -198,7 +198,8 @@ export const TicketDetail = () => {
 
     }
     useEffect(() => {
-        if (!isEmpty(errors)) return dispatch(setTicketDetail({}));;
+        if (!isEmpty(errors)) return dispatch(setTicketDetail({}));
+        
         dispatch(setTicketDetail(ticketDetailLocal));
     }, [ticketDetailLocal, errors])
     useEffect(() => {
@@ -353,6 +354,7 @@ export const TicketDetail = () => {
                                     onSelectedItem={handleSelectedEmployee}
                                     onDeleteItem={handleDeleteEmployee}
                                     icon={emailIcon}
+                                    isMultipleSelected={true}
                                     initialValue={
                                         ticketDetailLocal && ticketDetailLocal.relatedPeoples.map((item) => {
                                             return {

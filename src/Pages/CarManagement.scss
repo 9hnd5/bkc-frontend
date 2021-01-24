@@ -1,0 +1,19 @@
+.car-table-responsive{
+    height: 300px;
+    table{
+        thead{
+            tr{
+                th{
+                    width: 13%;
+                }
+            }
+            tr{
+                th:first-child{
+                    width: 9% !important;
+                }
+                
+                
+            }
+        }
+    }
+}

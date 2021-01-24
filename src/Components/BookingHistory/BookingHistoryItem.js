@@ -1,15 +1,18 @@
 import { useTranslation } from "react-i18next";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteTicketByIdRequest } from "../../ActionCreators/bookingHistoryActionCreator";
+import { TICKET_STATUS } from "../../Constants/CommonsConstants";
 
 export const BookingHistoryItem = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { ticket, index } = props;
     const { t } = useTranslation();
+    const [status, setStatus] = useState("");
+    const [classNameForStatus, setClassNameForStatus] = useState("");
     function handleEdit() {
         history.push(`/booking-request/update/${ticket.id}`);
     }
@@ -20,31 +23,31 @@ export const BookingHistoryItem = (props) => {
         history.push(`/booking-request/duplicate/${ticket.id}`);
     }
     useEffect(() => {
-        switch (true) {
-            case "Success": {
-                // setClassNameForStatus("label-custom label-success");
-                // setStatus(t("duocduyet"));
+        switch (ticket.status) {
+            case TICKET_STATUS.APPROVED: {
+                setClassNameForStatus("label-custom label-success");
+                setStatus(t("duocduyet"));
                 break;
             }
-            case "Waiting": {
-                // setClassNameForStatus("label-custom label-info");
-                // setStatus(t("doiduyet"));
+            case TICKET_STATUS.WAITING: {
+                setClassNameForStatus("label-custom label-info");
+                setStatus(t("doiduyet"));
                 break;
             }
-            case "Draft": {
-                // setClassNameForStatus("label-custom label-warning");
-                // setStatus(t("nhap"));
+            case TICKET_STATUS.DRAFT: {
+                setClassNameForStatus("label-custom label-warning");
+                setStatus(t("nhap"));
                 break;
             }
-            case "Reject": {
-                // setClassNameForStatus("label-custom label-danger");
-                // setStatus(t("tuchoi"));
+            case TICKET_STATUS.REJECTED: {
+                setClassNameForStatus("label-custom label-danger");
+                setStatus(t("tuchoi"));
                 break;
             }
             default:
                 break;
         }
-    }, [t])
+    }, [t, ticket])
     return (
         <tr>
             <td>{index}</td>
@@ -53,7 +56,7 @@ export const BookingHistoryItem = (props) => {
             <td>{ticket.fromLocation}</td>
             <td>{ticket.toLocation}</td>
             <td>{ticket.totalParticipant}</td>
-            <td><p>{ticket.ticketStatus }</p></td>
+            <td><p className={classNameForStatus}>{status}</p></td>
             <td>
                 <div className="btn-group" role="group">
                     <button

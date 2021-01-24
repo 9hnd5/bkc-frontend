@@ -16,6 +16,8 @@ import { requestAuthenticated } from "./ActionCreators/appActionCreator";
 import { BookingHistory } from "./Pages/BookingHistory";
 import { Admin } from "./Pages/Admin";
 import { BookingApproval } from "./Pages/BookingApproval";
+import { CarManagement } from "./Pages/CarManagement";
+import { DriverManagement } from "./Pages/DriverManagement";
 export const history = require("history").createBrowserHistory();
 function App() {
   const dispatch = useDispatch();
@@ -46,6 +48,8 @@ function App() {
             <Route path="/booking-history" component={BookingHistory} />
             <Route path="/admin" component={Admin} />
             <Route path="/booking-approval/:ticketId" component={BookingApproval} />
+            <Route path="/car-management/" component={CarManagement} />
+            <Route path="/driver-management/" component={DriverManagement} />
             {/* <PrivateRoute path="/history-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
 
             </PrivateRoute>

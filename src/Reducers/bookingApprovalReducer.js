@@ -1,21 +1,21 @@
 import { SET_MOVE_CAR, SET_RETURN_CAR } from "../Constants/bookingApprovalConstants";
 
 const initialState = {
-    moveTrip: {},
-    returnTrip: {},
+    moveCar: {},
+    returnCar: {},
 }
 export const bookingApprovalReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_MOVE_CAR: {
             return {
                 ...state,
-                moveTrip: action.moveTrip
+                moveCar: action.moveCar
             }
         }
         case SET_RETURN_CAR: {
             return {
                 ...state,
-                returnTrip: action.returnTrip
+                returnCar: action.returnCar
             }
         }
 

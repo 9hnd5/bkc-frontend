@@ -6,6 +6,7 @@ import { BookingHistoryItem } from "./BookingHistoryItem";
 export const BookingHistoryTable = () => {
     const { t } = useTranslation();
     const tickets = useSelector(state => state.bookingHistoryReducer.tickets);
+    console.log("tickets", tickets);
     const display = tickets && tickets.map((ticket, index) => {
         return <BookingHistoryItem
             key={index}

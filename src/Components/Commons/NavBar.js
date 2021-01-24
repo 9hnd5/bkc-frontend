@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBar.scss';
@@ -13,7 +13,7 @@ export const NavBar = () => {
     // const user = useSelector(state => state.app.user);
     // const isAuth = useSelector(state => state.app.isAuth);
     // const pageName = useSelector(state => state.app.pageName);
-    const pageName="";
+    const pageName = "";
     // const employee = useSelector(state => state.app.employee);
     const employee = {};
     // console.log("role", employee.role);
@@ -42,7 +42,7 @@ export const NavBar = () => {
             // dispatch(requestAuthenticate("hoe.ph@greenfeed.com.vn"));
             // dispatch(requestAuthenticate("khiem.nt@greenfeed.com.vn"));
             // dispatch(requestAuthenticate("huy.ndinh@greenfeed.com.vn"));
-            
+
         }
     }
     function handleChangeLanguage(lang) {
@@ -58,7 +58,7 @@ export const NavBar = () => {
                         </button>
                         <Link to="/" className="navbar-brand"><i className="fas fa-home"></i></Link>
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-                            <ul style={{display: isShowNavBar? "": "none"}} className="navbar-nav mr-auto">
+                            <ul style={{ display: isShowNavBar ? "" : "none" }} className="navbar-nav mr-auto">
                                 {/* <li className={pageName === "Home" ? "nav-item active" : "nav-item"}>
                                     <Link className="nav-link" to="/">
                                         <i className="fas fa-home mr-1"></i>
@@ -79,22 +79,24 @@ export const NavBar = () => {
                                 </li>
                                 <li
                                     className={pageName === "Admin" ? "nav-item active" : "nav-item"}
-                                    // style={{ display: isShowBtnAdmin? "": "none" }}
+                                // style={{ display: isShowBtnAdmin? "": "none" }}
                                 >
                                     <Link className="nav-link" to="/admin">
                                         <i className="fas fa-user-cog mr-1"></i>
-                                        {t("admin")}
+                                        Danh Sách Yêu Cầu
                                     </Link>
                                 </li>
-                                {/* <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Ngôn Ngữ
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i className="fas fa-user-cog mr-1"></i>
+                                        {t("admin")}
                                     </a>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a className="dropdown-item" href="#">action</a>
+                                        <Link to="/car-management" className="dropdown-item" href="#">Quản Lí Xe</Link>
+                                        <Link to="/driver-management" className="dropdown-item" href="#">Quản Lí Tài Xế</Link>
+                                        <a className="dropdown-item" href="#">Quản Lí Tài Khoản</a>
                                     </div>
-                                </li> */}
-                                {/* <img className="mr-1" src={VNflag} /> */}
+                                </li>
                                 <div className="btn-group mr-2" role="group">
                                     <button onClick={() => handleChangeLanguage("en")} className="btn btn-sm btn-primary" type="button">
                                         Tiếng Anh

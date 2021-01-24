@@ -29,3 +29,22 @@ export const TICKET_STATUS = {
     DRAFT: "DRAFT",
     WAITING: "WAITING"
 }
+export const CAR_ADD_DEFAULT = {
+    number: "",
+    totalSeat: "",
+    buName: "",
+    buId: "",
+    currentLocation: "",
+    manufactured: "",
+    name: ""
+}
+export const DRIVER_ADD_DEFAULT = {
+    employeeName: "",
+    employeeId: "",
+    employeePhone: "",
+    employeeEmail: "",
+    employeeBuId: "",
+    employeeBuName: "",
+    carId: "",
+    car: {}
+}

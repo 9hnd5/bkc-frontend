@@ -8,7 +8,7 @@ import { Tooltip } from './../Commons/Tooltip';
 import { MultipleSelect } from './../Commons/MultipleSelect';
 import { callApi } from './../../Helpers/callApi';
 import remove from 'lodash/remove';
-import { HTTP_METHOD, END_POINT, LOCATION_DEFAULT } from './../../Constants/CommonsConstants';
+import { HTTP_METHOD, END_POINT, LOCATION_DEFAULT } from '../../Constants/CommonsConstants';
 
 export const LocationItem = (props) => {
     const [location, setLocation] = useState({ ...LOCATION_DEFAULT });
@@ -191,7 +191,7 @@ export const LocationItem = (props) => {
     return (
         <tr>
             <td className="w_4">
-                {location.stt}
+                {props.no}
             </td>
             <td className="w_12">
                 <Tooltip active={errors.place ? true : false} content={errors.place} direction="top">
@@ -226,6 +226,7 @@ export const LocationItem = (props) => {
                                 onDeleteItem={handleDeleteEmployee}
                                 initialValue={location.participants && location.participants.map(participant => { return { id: participant.employeeId, content: participant.employeeName } })}
                                 isDisabled={isDisabledEmployeeNameInput}
+                                isMultipleSelected={true}
                             />
                             :
                             location.participants && location.participants.map(participant => { return participant.employeeName }).join(", ")
