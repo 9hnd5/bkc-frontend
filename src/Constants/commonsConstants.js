@@ -3,7 +3,8 @@ export const HTTP_METHOD = {
     GET: "GET",
     POST: "POST",
     PUT: "PUT",
-    DELETE: "DELETE"
+    DELETE: "DELETE",
+    PATCH: "PATCH"
 }
 export const BOOKING_DETAIL_DEFAULT = {
     startDate: "",

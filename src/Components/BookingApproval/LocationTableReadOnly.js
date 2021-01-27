@@ -7,7 +7,7 @@ export const LocationTableReadOnly = () => {
     const ticket = useSelector(state => state.adminReducer.ticketRequests).find(ticket => {
         return +ticket.id === +ticketId;
     })
-    console.log("ticket", ticket);
+    // console.log("ticket", ticket);
     const displayLocations = ticket && ticket.locations && ticket.locations.map((locationItem, index) => {
         return <LocationItemReadOnly
             key={index}
@@ -20,6 +20,11 @@ export const LocationTableReadOnly = () => {
             <div className="col-12 col-xl-12">
                 <div className="card">
                     <div className="card-body">
+                        <div className="row">
+                            <div className="col-6 col-xl-4">
+                                <h5>Chi Tiết Nơi Đón</h5>
+                            </div>
+                        </div>
                         <div className="table-responsive hra-table-detail">
                             <table className="table table-bordered table-striped table-sm">
                                 <thead>

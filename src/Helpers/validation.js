@@ -1,3 +1,4 @@
+import moment from 'moment';
 export function validation(value, rules) {
     let result = ""
     for (let i = 0; i < rules.length; i++) {
@@ -20,3 +21,4 @@ export function validation(value, rules) {
 }
 export const NOT_EMPTY = "NOT_EMPTY";
 export const ONLY_NUMBER = "ONLY_NUMBER"
+export const NOT_IN_THE_PAST = "NOT_IN_THE_PAST";

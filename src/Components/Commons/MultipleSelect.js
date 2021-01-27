@@ -107,6 +107,24 @@ export const MultipleSelect = (props) => {
         setIsShowSearch(false);
         setSuggestions([]);
     }
+    function handleBlur(e) {
+        if (e.currentTarget === e.target) {
+            console.log('focus left self');
+        } else {
+            console.log("unfocused child", e.target);
+        }
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            // Not triggered when swapping focus between children
+            console.log("focus left self");
+            console.log("unfocused self");
+            setIsShowSuggestions(false);
+            setIsShowSearch(false);
+            setSuggestions([]);
+        }
+
+    }
+
+
     useEffect(() => {
         setIsShowSuggestions(false);
         setIsShowSearch(false);
@@ -125,6 +143,9 @@ export const MultipleSelect = (props) => {
     return (
         <div
             className="wraper-all"
+            tabIndex="1"
+            onBlur={handleBlur}
+            onClick={handleClickSearch}
         >
             {
                 icon ?
@@ -136,7 +157,8 @@ export const MultipleSelect = (props) => {
                             className={isDisabled ? `${className} multiple-items-container disabled` : `${className} multiple-items-container`}
                             // className={isDisabled ? `multiple-items-container disabled` : `multiple-items-container`}
                             onKeyDown={handleKeyDown}
-                            onClick={handleClickSearch}
+                            style={{height: "30.8px"}}
+                        // onClick={handleClickSearch}
                         >
                             {displayItems}
 
@@ -147,8 +169,10 @@ export const MultipleSelect = (props) => {
                         className={isDisabled ? `${className} multiple-items-container disabled` : `${className} multiple-items-container`}
                         // className={isDisabled ? `multiple-items-container disabled` : `multiple-items-container`}
                         onKeyDown={handleKeyDown}
-                        onClick={handleClickSearch}
+                        style={{height: "30.8px"}}
+                    // onClick={handleClickSearch}
                     >
+
                         {displayItems}
 
                     </div>
@@ -167,7 +191,7 @@ export const MultipleSelect = (props) => {
                             </div>
                         </div>
                         <hr></hr>
-                        <i onClick={handleExit} className="fas fa-times-circle fa-lg icon-exit"></i>
+                        {/* <i onClick={handleExit} className="fas fa-times-circle fa-lg icon-exit"></i> */}
                         {displaySuggestions}
                     </div> : ""
             }

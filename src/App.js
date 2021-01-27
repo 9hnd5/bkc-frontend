@@ -14,7 +14,7 @@ import { BookingRequest } from "./Pages/BookingRequest";
 import { useEffect } from "react";
 import { requestAuthenticated } from "./ActionCreators/appActionCreator";
 import { BookingHistory } from "./Pages/BookingHistory";
-import { Admin } from "./Pages/Admin";
+import { TicketManagement } from "./Pages/TicketManagement";
 import { BookingApproval } from "./Pages/BookingApproval";
 import { CarManagement } from "./Pages/CarManagement";
 import { DriverManagement } from "./Pages/DriverManagement";
@@ -46,7 +46,7 @@ function App() {
           <Switch>
             <Route path="/booking-request/:action?/:ticketId?" exact component={BookingRequest} />
             <Route path="/booking-history" component={BookingHistory} />
-            <Route path="/admin" component={Admin} />
+            <Route path="/ticket-management" component={TicketManagement} />
             <Route path="/booking-approval/:ticketId" component={BookingApproval} />
             <Route path="/car-management/" component={CarManagement} />
             <Route path="/driver-management/" component={DriverManagement} />

@@ -24,8 +24,8 @@ function inputDtp(props) {
                 <img alt="" className="input-group-text" src={pickupTimeIcon} />
             </div>
             <input
-                className="form-control"
-                autoComplete="nope"
+                className="form-control form-control-sm"
+                autoComplete="off"
                 {...props}
             />
         </div>
@@ -38,6 +38,7 @@ export const TicketDetail = () => {
     const tickets = useSelector(state => state.bookingHistoryReducer.tickets)
     const [ticketDetailLocal, setTicketDetailLocal] = useState({ ...BOOKING_DETAIL_DEFAULT });
     console.log("ticketDetailLocal", ticketDetailLocal);
+
     const [suggestionsEmail, setSuggestionsEmail] = useState([]);
     const [errors, setErrors] = useState({
         startDate: "",
@@ -45,6 +46,7 @@ export const TicketDetail = () => {
         toLocation: "",
         totalParticipant: ""
     });
+    console.log("errors", errors);
     async function handleChange(e) {
         let validateResult = null;
         switch (e.target.name) {
@@ -114,21 +116,20 @@ export const TicketDetail = () => {
             } else {
                 setErrors({
                     ...errors,
-                    startDate: "This field is not valid"
+                    startDate: "Ngày Không Hợp Lệ"
                 })
                 setTicketDetailLocal({
                     ...ticketDetailLocal,
-                    startDate: startDate.format("DD/MM/YYYY")
+                    startDate: momentObject
                 });
             }
 
         } else {
-            startDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY"], true);
             let { startDate: x, ...rest } = errors;
             setErrors(rest);
             setTicketDetailLocal({
                 ...ticketDetailLocal,
-                startDate: startDate.format("DD/MM/YYYY")
+                startDate: momentObject.format("DD/MM/YYYY")
             });
         }
 
@@ -155,7 +156,7 @@ export const TicketDetail = () => {
             } else {
                 setErrors({
                     ...errors,
-                    endDate: "This field is not valid"
+                    endDate: "Ngày Không Hợp Lệ"
                 })
                 setTicketDetailLocal({
                     ...ticketDetailLocal,
@@ -163,12 +164,11 @@ export const TicketDetail = () => {
                 });
             }
         } else {
-            endDate = moment(momentObject, ["DD/MM/YYYY", "DD-MM-YYYY", "D/M/YYYY", "D-M-YYYY"], true);
             let { endDate: x, ...rest } = errors;
             setErrors(rest);
             setTicketDetailLocal({
                 ...ticketDetailLocal,
-                endDate: endDate.format("DD/MM/YYYY")
+                endDate: momentObject.format("DD/MM/YYYY")
             });
         }
     }
@@ -199,7 +199,7 @@ export const TicketDetail = () => {
     }
     useEffect(() => {
         if (!isEmpty(errors)) return dispatch(setTicketDetail({}));
-        
+
         dispatch(setTicketDetail(ticketDetailLocal));
     }, [ticketDetailLocal, errors])
     useEffect(() => {
@@ -235,6 +235,10 @@ export const TicketDetail = () => {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-6 col-xl-4">
+                                <h5>Thông Tin Đặt Xe</h5>
+                            </div>
+                            <div className="w-100"></div>
+                            <div className="col-6 col-xl-4">
                                 <label className="d-flex align-items-center">
                                     <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
                                     {t("ngaydi")}
@@ -253,7 +257,7 @@ export const TicketDetail = () => {
                                         dateFormat="DD/MM/YYYY"
                                         timeFormat={false}
                                         closeOnSelect={true}
-                                        inputProps={{ name: "startDate", placeholder: "dd/mm/yyyy", value: ticketDetailLocal.startDate }}
+                                        inputProps={{ className: "form-control form-control-sm", name: "startDate", placeholder: "dd/mm/yyyy", value: ticketDetailLocal.startDate }}
                                         onChange={handleChangePickup}
                                     />
 
@@ -266,7 +270,7 @@ export const TicketDetail = () => {
                                         dateFormat="DD/MM/YYYY"
                                         timeFormat={false}
                                         closeOnSelect={true}
-                                        inputProps={{ name: "endDate", placeholder: "dd/mm/yyyy", value: ticketDetailLocal.endDate }}
+                                        inputProps={{ className: "form-control form-control-sm", name: "endDate", placeholder: "dd/mm/yyyy", value: ticketDetailLocal.endDate }}
                                         onChange={handleChangeReturnTime}
                                     />
                                 </Tooltip>
@@ -293,10 +297,10 @@ export const TicketDetail = () => {
                                         </div>
                                         <input
                                             onChange={handleChange}
-                                            className="form-control"
+                                            className="form-control form-control-sm"
                                             name="fromLocation"
                                             value={ticketDetailLocal.fromLocation}
-                                            autoComplete={"nope"}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </Tooltip>
@@ -308,10 +312,10 @@ export const TicketDetail = () => {
                                             <img alt="" className="input-group-text" src={destinationIcon} />
                                         </div>
                                         <input onChange={handleChange}
-                                            className="form-control"
+                                            className="form-control form-control-sm"
                                             name="toLocation"
                                             value={ticketDetailLocal.toLocation}
-                                            autoComplete="nope"
+                                            autoComplete="off"
                                         />
                                     </div>
 
@@ -336,10 +340,10 @@ export const TicketDetail = () => {
                                         </div>
                                         <input
                                             onChange={handleChange}
-                                            className="form-control"
+                                            className="form-control form-control-sm"
                                             name="totalParticipant"
                                             value={ticketDetailLocal.totalParticipant}
-                                            autoComplete="nope"
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </Tooltip>
@@ -349,7 +353,7 @@ export const TicketDetail = () => {
                                 <MultipleSelect
                                     suggestions={suggestionsEmail}
                                     onChange={handleChange}
-                                    className="form-control"
+                                    className="form-control form-control-sm"
                                     name="employeeName"
                                     onSelectedItem={handleSelectedEmployee}
                                     onDeleteItem={handleDeleteEmployee}
@@ -379,10 +383,10 @@ export const TicketDetail = () => {
                                         </div>
                                         <input
                                             onChange={handleChange}
-                                            className="form-control"
+                                            className="form-control form-control-sm"
                                             name="reasonBooking"
                                             value={ticketDetailLocal.reasonBooking}
-                                            autoComplete="nope"
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </Tooltip>

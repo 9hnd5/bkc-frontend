@@ -13,21 +13,25 @@ export const TicketInformationReadOnly = () => {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-6 col-xl-3">
-                                <label>Họ Và Tên: {ticket&&ticket.employeeName}</label>
-                            </div>
-                            <div className="col-6 col-xl-3">
-                                <label>Số Điện Thoại: {ticket&&ticket.employeePhone} </label>
+                                <h5>Thông Tin Người Đặt</h5>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-3">
-                                <label>Tên BU: {ticket&&ticket.employeeBuName} </label>
+                                <label>Họ Và Tên: {ticket && ticket.employeeName}</label>
                             </div>
                             <div className="col-6 col-xl-3">
-                                <label>Phòng Ban: {ticket&&ticket.employeeDepartment}</label>
+                                <label>Số Điện Thoại: {ticket && ticket.employeePhone} </label>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-3">
-                                <label>Quản Lí: {ticket&&ticket.employeeLineManagerName}</label>
+                                <label>Tên BU: {ticket && ticket.employeeBuName} </label>
+                            </div>
+                            <div className="col-6 col-xl-3">
+                                <label>Phòng Ban: {ticket && ticket.employeeDepartment}</label>
+                            </div>
+                            <div className="w-100"></div>
+                            <div className="col-6 col-xl-3">
+                                <label>Quản Lí: {ticket && ticket.employeeLineManagerName}</label>
                             </div>
                         </div>
                     </div>

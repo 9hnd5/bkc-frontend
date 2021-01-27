@@ -81,7 +81,7 @@ export const NavBar = () => {
                                     className={pageName === "Admin" ? "nav-item active" : "nav-item"}
                                 // style={{ display: isShowBtnAdmin? "": "none" }}
                                 >
-                                    <Link className="nav-link" to="/admin">
+                                    <Link className="nav-link" to="/ticket-management">
                                         <i className="fas fa-user-cog mr-1"></i>
                                         Danh Sách Yêu Cầu
                                     </Link>

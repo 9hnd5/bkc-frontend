@@ -64,6 +64,7 @@ export const BookingHistoryItem = (props) => {
                         onClick={() => handleEdit()}
                     // disabled={isDisabledBtnUpdate}
                     >
+                        <i className="fas fa-edit mr-1"></i>
                         {t("suayeucau")}
                     </button>
                     <button
@@ -71,12 +72,14 @@ export const BookingHistoryItem = (props) => {
                         onClick={() => handleDelete()}
                     // disabled={isDisabledBtnDelete}
                     >
+                        <i className="fas fa-trash-alt mr-1"></i>
                         {t("xoayeucau")}
                     </button>
                     <button
                         className="btn btn-outline-info btn-sm"
                         onClick={() => handleDuplicate()}
                     >
+                        <i className="fas fa-clone mr-1"></i>
                         {t("nhanban")}
                     </button>
                 </div>

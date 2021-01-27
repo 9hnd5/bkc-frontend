@@ -15,6 +15,11 @@ export const DriverTable = () => {
             <div className="col-12 col-xl-12">
                 <div className="card">
                     <div className="card-body">
+                        <div className="row">
+                            <div className="col-12 col-xl-12">
+                                <h5>Thông Tin Xe Và Tài Xế</h5>
+                            </div>
+                        </div>
                         <div className="table-responsive">
                             <table className="table table-sm table-bordered table-striped hra-table-car">
                                 <thead>

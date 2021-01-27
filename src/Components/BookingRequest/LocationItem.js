@@ -9,6 +9,7 @@ import { MultipleSelect } from './../Commons/MultipleSelect';
 import { callApi } from './../../Helpers/callApi';
 import remove from 'lodash/remove';
 import { HTTP_METHOD, END_POINT, LOCATION_DEFAULT } from '../../Constants/CommonsConstants';
+import { isEmpty } from 'lodash';
 
 export const LocationItem = (props) => {
     const [location, setLocation] = useState({ ...LOCATION_DEFAULT });
@@ -19,6 +20,7 @@ export const LocationItem = (props) => {
     const [suggestionsEmployee, setSuggestionsEmployee] = useState([]);
     const [isDisabledGuestNameInput, setIsDisabledGuestNameInput] = useState(false);
     const [isDisabledEmployeeNameInput, setIsDisabledEmployeeNameInput] = useState(false);
+    const [employees, setEmployees] = useState([]);
     const dispatch = useDispatch();
     function handleClick(event) {
         switch (event) {
@@ -64,7 +66,6 @@ export const LocationItem = (props) => {
             case "employeeName": {
                 const employeeName = e.target.value;
                 if (employeeName.length >= 3) {
-                    // const res = await callApi(`https://localhost:5001/api/bkc/employees/${employeeName}`, HTTP_METHOD.GET);
                     const res = await callApi(`${END_POINT}/employees/${employeeName}`, HTTP_METHOD.GET, null);
                     if (res.status !== 200) return;
                     const employees = res.data
@@ -76,6 +77,7 @@ export const LocationItem = (props) => {
                             content: employees[i].name
                         });
                     }
+                    setEmployees(employees);
                     setSuggestionsEmployee(suggestionsEmployee);
                 }
                 return;
@@ -151,9 +153,12 @@ export const LocationItem = (props) => {
         }
     }
     function handleSelectedEmployee(item) {
+        const employee = employees&&employees.find(e => +e.id === +item.id)
+        if(isEmpty(employee)) return;
         const participant = {
-            employeeId: item.id,
-            employeeName: item.content
+            employeeId: employee.id,
+            employeeName: employee.name,
+            employeeEmail: employee.email
         }
         const newParticipants = [...location.participants, participant];
         setLocation({
@@ -195,7 +200,7 @@ export const LocationItem = (props) => {
             </td>
             <td className="w_12">
                 <Tooltip active={errors.place ? true : false} content={errors.place} direction="top">
-                    {isUpdate ? <input onChange={handleChange} value={location.place} className="form-control" name="place" /> : location.place}
+                    {isUpdate ? <input onChange={handleChange} value={location.place} className="form-control form-control-sm" name="place" /> : location.place}
 
                 </Tooltip>
             </td>
@@ -208,6 +213,7 @@ export const LocationItem = (props) => {
                                 timeFormat="H:mm"
                                 onChange={handleChangeTime}
                                 initialValue={location.time}
+                                inputProps={{className: "form-control form-control-sm"}}
                             />
                             : location.time
                     }
@@ -241,7 +247,7 @@ export const LocationItem = (props) => {
                             <input disabled={isDisabledGuestNameInput}
                                 onChange={handleChange}
                                 value={location.guestName}
-                                className="form-control" name="guestName"
+                                className="form-control form-control-sm" name="guestName"
                             />
                             : location.guestName
                     }
@@ -250,12 +256,12 @@ export const LocationItem = (props) => {
             </td>
             <td className="w_12">
                 <Tooltip active={errors.phone ? true : false} content={errors.phone} direction="top">
-                    {isUpdate ? <input onChange={handleChange} value={location.phone} className="form-control" name="phone" /> : location.phone}
+                    {isUpdate ? <input onChange={handleChange} value={location.phone} className="form-control form-control-sm" name="phone" /> : location.phone}
                 </Tooltip>
 
             </td>
             <td className="w_12">
-                {isUpdate ? <input onChange={handleChange} value={location.note} className="form-control" name="note" /> : location.note}
+                {isUpdate ? <input onChange={handleChange} value={location.note} className="form-control form-control-sm" name="note" /> : location.note}
 
             </td>
             <td className="w-10">

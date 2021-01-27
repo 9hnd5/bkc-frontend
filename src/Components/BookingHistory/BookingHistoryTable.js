@@ -1,13 +1,18 @@
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { BookingHistoryItem } from "./BookingHistoryItem";
-
+import orderBy from 'lodash/orderBy';
+import moment from 'moment';
 
 export const BookingHistoryTable = () => {
     const { t } = useTranslation();
     const tickets = useSelector(state => state.bookingHistoryReducer.tickets);
     console.log("tickets", tickets);
-    const display = tickets && tickets.map((ticket, index) => {
+    const sortTickets = tickets&&orderBy(tickets, (ticket) => {
+        return moment(ticket.startDate, ["DD/MM/YYYY"], true);
+    }, ['desc']);
+    console.log("sort", sortTickets)
+    const display = sortTickets && sortTickets.map((ticket, index) => {
         return <BookingHistoryItem
             key={index}
             index={index + 1}
@@ -15,7 +20,7 @@ export const BookingHistoryTable = () => {
         />
     });
     return (
-        <div className="table-responsive booking-history-table" style={{ height: "500px" }}>
+        <div className="table-responsive booking-history-table-responsive" style={{ height: "500px" }}>
             <table className="table table-hover table-sm table-striped table-bordered">
                 <thead>
                     <tr>

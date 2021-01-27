@@ -3,22 +3,42 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { TICKET_STATUS } from "../../Constants/CommonsConstants";
 import Modal from 'react-responsive-modal';
+import { updateTicketRequest } from "../../ActionCreators/adminActionCreator";
+import { useDispatch } from "react-redux";
 
 export const TicketRequestItem = (props) => {
+    const dispatch = useDispatch();
     const { t } = useTranslation();
     const history = useHistory();
     const { ticketRequestItem, no } = props;
     const [status, setStatus] = useState("");
     const [classNameForStatus, setClassNameForStatus] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [reasonReject, setReasonReject] = useState("");
+    const [isDisabledButtonReject, setIsDisabledButtonReject] = useState(false);
     function handleClickDetail() {
         history.push(`/booking-approval/${ticketRequestItem.id}`)
     }
     function handleCloseModal() {
         setIsOpenModal(false);
     }
-    function handleReject(){
+    function handleReject() {
         setIsOpenModal(true);
+    }
+    function handleClickAccept() {
+        var data = {
+            id: ticketRequestItem.id,
+            reasonReject: reasonReject,
+            status: TICKET_STATUS.REJECTED
+        }
+        dispatch(updateTicketRequest(data))
+        setIsOpenModal(false);
+    }
+    function handleClickBack(){
+        setIsOpenModal(false);
+    }
+    function handleChange(e){
+        setReasonReject(e.target.value)
     }
     useEffect(() => {
         switch (ticketRequestItem.status) {
@@ -46,6 +66,13 @@ export const TicketRequestItem = (props) => {
                 break;
         }
     }, [t, ticketRequestItem])
+    useEffect(() => {
+        if(ticketRequestItem&&ticketRequestItem.status === TICKET_STATUS.REJECTED){
+            setIsDisabledButtonReject(true);
+        }else{
+            setIsDisabledButtonReject(false);
+        }
+    }, [ticketRequestItem])
     return (
         <Fragment>
             <tr>
@@ -56,14 +83,16 @@ export const TicketRequestItem = (props) => {
                 <td>{ticketRequestItem.totalParticipant}</td>
                 <td><p className={classNameForStatus}>{status}</p></td>
                 <td>
-                    <div className="btn-block">
+                    <div className="btn-group">
                         <button
                             onClick={handleClickDetail}
-                            className="btn btn-outline-primary btn-sm mr-2"
+                            className="btn btn-outline-primary btn-sm mr-1"
                         >
+                            <i className="fas fa-info-circle mr-1"></i>
                             Xem Chi Tiết
                         </button>
-                        <button onClick={handleReject} className="btn btn-outline-danger btn-sm">
+                        <button disabled={isDisabledButtonReject} onClick={handleReject} className="btn btn-outline-danger btn-sm">
+                            <i className="fas fa-times-circle mr-1"></i>
                             Từ Chối
                         </button>
                     </div>
@@ -78,25 +107,29 @@ export const TicketRequestItem = (props) => {
                 <div className="row">
                     <div className="col-12">
                         <textarea
+                            value={reasonReject}
                             name="reasonReject"
                             className="form-control"
                             rows="5"
+                            onChange={handleChange}
                         >
                         </textarea>
                     </div>
                     <div className="w-100" />
                     <div className="col-12 mt-2">
                         <button
+                            onClick={handleClickAccept}
                             className="btn btn-outline-primary btn-sm mr-2"
                         >
                             <i className="fas fa-check-circle mr-1"></i>
-                                XÁC NHẬN
+                                Xác Nhận
                             </button>
                         <button
+                        onClick={handleClickBack}
                             className="btn btn-outline-danger btn-sm"
                         >
                             <i className="fas fa-backspace mr-1"></i>
-                                QUAY LẠI
+                                Quay Lại
                             </button>
                     </div>
                 </div>

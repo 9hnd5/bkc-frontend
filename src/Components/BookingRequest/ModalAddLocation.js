@@ -12,11 +12,13 @@ import { HTTP_METHOD, END_POINT, LOCATION_DEFAULT } from '../../Constants/Common
 import { MultipleSelect } from './../Commons/MultipleSelect';
 import { Tooltip } from './../Commons/Tooltip';
 import { toggleModalAddLocation } from '../../ActionCreators/ticketActionCreator';
+import { isEmpty } from 'lodash';
 export const ModalAddLocation = (props) => {
     const dispatch = useDispatch();
     const isOpenModal = useSelector(state => state.ticketReducer.isOpenModalAddLocation)
     const [suggestionsEmployee, setSuggestionsEmployee] = useState([]);
-    const [location, setLocation] = useState({...LOCATION_DEFAULT})
+    const [employees, setEmployees] = useState([]);
+    const [location, setLocation] = useState({ ...LOCATION_DEFAULT })
     const [errors, setErrors] = useState({
         place: "",
         time: "",
@@ -32,7 +34,7 @@ export const ModalAddLocation = (props) => {
         if (arrayValue.length === 0) {
             props.onSave(location);
             dispatch(toggleModalAddLocation())
-            setLocation({...LOCATION_DEFAULT})
+            setLocation({ ...LOCATION_DEFAULT })
             setErrors({
                 place: "",
                 time: "",
@@ -48,7 +50,7 @@ export const ModalAddLocation = (props) => {
     }
     function handleClickCancel() {
         dispatch(toggleModalAddLocation())
-        setLocation({...LOCATION_DEFAULT})
+        setLocation({ ...LOCATION_DEFAULT })
         setErrors({
             place: "",
             time: "",
@@ -87,6 +89,7 @@ export const ModalAddLocation = (props) => {
                             content: employees[i].name
                         });
                     }
+                    setEmployees(employees);
                     setSuggestionsEmployee(suggestionsEmployee);
                 }
                 return;
@@ -140,7 +143,7 @@ export const ModalAddLocation = (props) => {
     }
     function onCloseModal() {
         dispatch(toggleModalAddLocation());
-        setLocation({...LOCATION_DEFAULT})
+        setLocation({ ...LOCATION_DEFAULT })
         setErrors({
             place: "",
             time: "",
@@ -183,14 +186,17 @@ export const ModalAddLocation = (props) => {
         }
     }
     function handleSelectedEmployee(item) {
-        const employee = {
-            employeeId: item.id,
-            employeeName: item.content
+        const employee = employees&&employees.find(e => +e.id === +item.id);
+        if(isEmpty(employee)) return;
+        const participant = {
+            employeeId: employee.id,
+            employeeName: employee.name,
+            employeeEmail: employee.email
         }
-        const newEmployees = [...location.participants, employee];
+        const newParticipants = [...location.participants, participant];
         setLocation({
             ...location,
-            participants: newEmployees
+            participants: newParticipants
         })
         const { participants: emp, guestName: gn, ...rest } = errors;
         setErrors(rest);
@@ -229,7 +235,7 @@ export const ModalAddLocation = (props) => {
             center
             onClose={onCloseModal}
         >
-            <h4>THÊM CHI TIẾT</h4>
+            <h5>Thêm Chi Tiết</h5>
             <div className="row">
                 <div className="col-6">
                     <label className="d-flex align-items-center">
@@ -250,8 +256,8 @@ export const ModalAddLocation = (props) => {
                             value={location.place}
                             onChange={handleChange}
                             name="place"
-                            className="form-control"
-                            autoComplete="nope"
+                            className="form-control form-control-sm"
+                            autoComplete="off"
                         />
                     </Tooltip>
                 </div>
@@ -262,6 +268,7 @@ export const ModalAddLocation = (props) => {
                             timeFormat="H:mm"
                             onChange={handleChangeTime}
                             initialValue={location.time}
+                            inputProps={{ className: "form-control form-control-sm" }}
                         />
                     </Tooltip>
                 </div>
@@ -297,8 +304,8 @@ export const ModalAddLocation = (props) => {
                             value={location.guestName}
                             onChange={handleChange}
                             name="guestName"
-                            className="form-control"
-                            autoComplete="nope"
+                            className="form-control form-control-sm"
+                            autoComplete="off"
                             disabled={isDisabledGuestNameInput}
                         />
                     </Tooltip>
@@ -321,8 +328,8 @@ export const ModalAddLocation = (props) => {
                             value={location.phone}
                             onChange={handleChange}
                             name="phone"
-                            className="form-control"
-                            autoComplete="nope"
+                            className="form-control form-control-sm"
+                            autoComplete="off"
                         />
                     </Tooltip>
                 </div>
@@ -333,8 +340,8 @@ export const ModalAddLocation = (props) => {
                             value={location.note}
                             onChange={handleChange}
                             name="note"
-                            className="form-control"
-                            autoComplete="nope"
+                            className="form-control form-control-sm"
+                            autoComplete="off"
                         />
                     </Tooltip>
                 </div>

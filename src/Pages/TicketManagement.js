@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTicketsByBuId, fetchDriversByBuId } from "../ActionCreators/adminActionCreator";
 import { TicketRequestContainer } from "../Components/Admin/TicketRequestContainer";
 import "./Admin.scss";
-export const Admin = () => {
+export const TicketManagement = () => {
     const dispatch = useDispatch();
     const employee = useSelector(state => state.appReducer.employee)
     useEffect(() => {

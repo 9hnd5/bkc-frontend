@@ -13,6 +13,10 @@ export const TicketDetailReadOnly = () => {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-6 col-xl-3">
+                                <h5>Thông Tin Đặt Xe</h5>
+                            </div>
+                            <div className="w-100"></div>
+                            <div className="col-6 col-xl-3">
                                 <label>Ngày Đi: {ticket && ticket.startDate}</label>
                             </div>
                             <div className="col-6 col-xl-3">

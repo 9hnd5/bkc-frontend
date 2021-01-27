@@ -213,12 +213,15 @@ export const TicketContainer = (props) => {
             <div className="col-12 col-xl-12">
                 <div className="card">
                     <div className="card-header">
-                        <h4>Thông Tin Đặt Xe</h4>
+                        <h4>Yêu Cầu Đặt Xe</h4>
                     </div>
                     <div className="card-body">
                         <TicketInformation />
+                        <div className="mb-2"></div>
                         <TicketDetail />
+                        <div className="mb-2"></div>
                         <Location />
+                        <div className="mb-2"></div>
                         <TicketContainerButton
                             onHandleSaveAndSend={handleSaveAndSend}
                             onHandleTempSave={handleTempSave}
