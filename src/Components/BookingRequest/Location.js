@@ -10,8 +10,8 @@ export const Location = (props) => {
                 <div className="card">
                     <div className="card-body">
                         <div className="row">
-                            <div className="col-6 col-xl-4">
-                                <h5>Chi Tiết Nơi Đón</h5>
+                            <div className="col-12 col-xl-4">
+                                <h5>{t("chitietnoidon")}</h5>
                             </div>
                         </div>
                         <LocationTable />

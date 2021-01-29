@@ -1,4 +1,6 @@
 export const END_POINT = "https://localhost:5001/api"
+// export const END_POINT = "http://192.168.170.82:5001/api"
+// export const END_POINT = "https://idcgfvnprts01.greenfeed.com.vn:5002/api"
 export const HTTP_METHOD = {
     GET: "GET",
     POST: "POST",
@@ -48,4 +50,9 @@ export const DRIVER_ADD_DEFAULT = {
     employeeBuName: "",
     carId: "",
     car: {}
+}
+export const ROLE = {
+    SUPER_ADMIN: "SUPERADMIN",
+    ADMIN: "ADMIN",
+    MEMBER: "MEMBER"
 }

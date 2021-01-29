@@ -2,7 +2,9 @@ import { useSelector } from 'react-redux';
 import { TicketRequestItem } from './TicketRequestItem';
 import moment from 'moment';
 import orderBy from 'lodash/orderBy';
+import { useTranslation } from 'react-i18next';
 export const TicketRequestTable = (props) => {
+    const { t } = useTranslation();
     const ticketRequests = useSelector(state => state.adminReducer.ticketRequests);
     const ticketSorts = ticketRequests && orderBy(ticketRequests, (ticket) => {
         return moment(ticket.startDate, ["DD/MM/YYYY"], true);
@@ -17,23 +19,32 @@ export const TicketRequestTable = (props) => {
     return (
         <div className="row">
             <div className="col-12 col-xl-12">
-                <div className="table-responsive ticket-request-table-responsive" style={{ height: "500px" }}>
-                    <table className="table table-sm table-bordered table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>Người Đặt</th>
-                                <th>Ngày Đi</th>
-                                <th>Ngày Về</th>
-                                <th>Số Người Đi</th>
-                                <th>Trạng Thái</th>
-                                <th>Hành Động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {displayTicketRequests}
-                        </tbody>
-                    </table>
+                <div className="card">
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-12 col-3">
+                                <h5>{t("danhsachyeucau")}</h5>
+                            </div>
+                        </div>
+                        <div className="table-custom ticket-request-table-responsive">
+                            <table className="table-sm table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>{t("stt")}</th>
+                                        <th>{t("hovaten")}</th>
+                                        <th>{t("ngaydi")}</th>
+                                        <th>{t("ngayve")}</th>
+                                        <th>{t("songuoidi")}</th>
+                                        <th>{t("trangthai")}</th>
+                                        <th>{t("hanhdong")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {displayTicketRequests}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

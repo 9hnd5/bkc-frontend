@@ -1,12 +1,15 @@
 import { Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { deleteDriver, deleteDriverRequest, updateDriverRequest } from "../../ActionCreators/driverManagementActionCreator";
 import { DRIVER_ADD_DEFAULT, END_POINT, HTTP_METHOD } from "../../Constants/CommonsConstants";
 import { callApi } from "../../Helpers/callApi";
+import formatPhoneNumber from "../../Helpers/formatPhoneNumber";
 import { notification, NOTIFICATION_TYPE } from "../../Helpers/notification";
 import { AutoComplete1 } from "../Commons/AutoComplete1";
 
 export const DriverItem = props => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const { no } = props;
     const [isUpdate, setIsUpdate] = useState(false);
@@ -90,8 +93,8 @@ export const DriverItem = props => {
     return (
         <Fragment>
             <tr>
-                <td>{no}</td>
-                <td>
+                <td data-label={t("stt")}>{no}</td>
+                <td data-label={t("tentaixe")}>
                     {
                         isUpdate ?
                             <AutoComplete1
@@ -105,13 +108,13 @@ export const DriverItem = props => {
                             : driverLocal.employeeName
                     }
                 </td>
-                <td>{isUpdate ? <input value={driverLocal.employeePhone} onChange={handleChange} type="text" className="form-control form-control-sm" name="employeePhone" /> : driverLocal.employeePhone}</td>
-                <td>{isUpdate ? <input value={driverLocal.employeeBuName} onChange={handleChange} type="text" className="form-control form-control-sm" name="employeeBuName" /> : driverLocal.employeeBuName}</td>
-                <td>
+                <td data-label={t("sodienthoaitaixe")}>{isUpdate ? <input autoComplete="off" value={formatPhoneNumber(driverLocal.employeePhone)} onChange={handleChange} type="text" className="form-control form-control-sm" name="employeePhone" /> : formatPhoneNumber(driverLocal.employeePhone)}</td>
+                <td data-label={t("tenbu")}>{isUpdate ? <input autoComplete="off" value={driverLocal.employeeBuName} onChange={handleChange} type="text" className="form-control form-control-sm" name="employeeBuName" /> : driverLocal.employeeBuName}</td>
+                <td data-label={t("xedanglai")}>
                     {
                         isUpdate ?
                             <select onChange={handleCarChange} value={driverLocal.carId} className="custom-select custom-select-sm">
-                                <option value="">---Chọn Xe---</option>
+                                <option value="">---{t("chonxe")}---</option>
                                 {
                                     cars && cars.map((car, index) => {
                                         return <option key={index} value={car.id}>{car.number}</option>
@@ -121,28 +124,34 @@ export const DriverItem = props => {
                             driverLocal && driverLocal.car && driverLocal.car.id
                     }
                 </td>
-                <td>
-                    <div className="btn-group">
-                        {
-                            isUpdate ?
-                                <Fragment>
-                                    <button onClick={handleClickAccepted} className="btn btn-outline-primary btn-sm">
-                                        Xác Nhận
+                <td data-label={t("hanhdong")}>
+                    {
+                        isUpdate ?
+                            <Fragment>
+                                <button onClick={handleClickAccepted} className="btn btn-outline-primary btn-sm mr-1">
+                                    <i className="fas fa-check-circle mr-1"></i>
+                                    {t("xacnhan")}
                                 </button>
-                                    <button onClick={handleClickCancel} className="btn btn-outline-danger btn-sm">
-                                        Hủy
+                                {/* <div className="col-12 col-xl-6">
+                                </div>
+                                <div className="col-12 col-xl-6">
+                                </div> */}
+                                <button onClick={handleClickCancel} className="btn btn-outline-info btn-sm">
+                                    <i className="fas fa-backspace mr-1"></i>
+                                    {t("quaylai")}
                                 </button>
-                                </Fragment> :
-                                <Fragment>
-                                    <button onClick={handleClickUpdate} className="btn btn-outline-primary btn-sm">
-                                        Sửa
+                            </Fragment> :
+                            <Fragment>
+                                <button onClick={handleClickUpdate} className="btn btn-outline-primary btn-sm mr-1">
+                                    <i className="fas fa-edit mr-1"></i>
+                                    {t("suayeucau")}
                                 </button>
-                                    <button onClick={handleClickDelete} className="btn btn-outline-danger btn-sm">
-                                        Xóa
+                                <button onClick={handleClickDelete} className="btn btn-outline-danger btn-sm">
+                                    <i className="fas fa-trash-alt mr-1"></i>
+                                    {t("xoayeucau")}
                                 </button>
-                                </Fragment>
-                        }
-                    </div>
+                            </Fragment>
+                    }
                 </td>
             </tr>
         </Fragment>

@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux"
 import { CarItem } from "./CarItem";
 
 export const CarTable = () => {
+    const {t} = useTranslation();
     const cars = useSelector(state => state.carManagementReducer.cars);
     console.log("cars", cars);
     const displayCar = cars && cars.map((car, index) => {
@@ -15,22 +17,24 @@ export const CarTable = () => {
         <div className="row">
             <div className="col-12 col-xl-12">
                 <div className="card">
-                    <div className="card-header">
-                        <h6>Danh Sách Xe</h6>
-                    </div>
                     <div className="card-body">
-                        <div className="table-responsive car-table-responsive">
-                            <table className="table table-sm table-hover table-striped table-bordered">
+                        <div className="row">
+                            <div className="col-12 col-3">
+                            <h5>{t("danhsachxe")}</h5>
+                            </div>
+                        </div>
+                        <div className="table-custom car-table-responsive-add">
+                            <table className="table-sm table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên Bu</th>
-                                        <th>Vị Trí Hiện Tại</th>
-                                        <th>Biển Số</th>
-                                        <th>Số Chổ Ngồi</th>
-                                        <th>Hãng Xe</th>
-                                        <th>Tên Xe</th>
-                                        <th>Hành Động</th>
+                                        <th>{t("stt")}</th>
+                                        <th>{t("tenbu")}</th>
+                                        <th>{t("vitrihientai")}</th>
+                                        <th>{t("biensoxe")}</th>
+                                        <th>{t("socho")}</th>
+                                        <th>{t("hangxe")}</th>
+                                        <th>{t("tenxe")}</th>
+                                        <th>{t("hanhdong")}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

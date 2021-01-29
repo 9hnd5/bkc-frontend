@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchTripByTicketId, setMoveCar, setReturnCar, fetchTripsByIsFinish } from "../ActionCreators/bookingApprovalActionCreator";
-import { BookingApprovalContainer } from "../Components/BookingApproval/BookingApprovalContainer"
+import { fetchTripByTicketId } from "../ActionCreators/bookingApprovalActionCreator";
+import { BookingApprovalContainer } from "../Components/BookingApproval/BookingApprovalContainer";
+import "./BookingApproval.scss";
 
 export const BookingApproval = () => {
     const dispatch = useDispatch();

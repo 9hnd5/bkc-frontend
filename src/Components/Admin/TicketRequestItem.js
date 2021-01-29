@@ -34,10 +34,10 @@ export const TicketRequestItem = (props) => {
         dispatch(updateTicketRequest(data))
         setIsOpenModal(false);
     }
-    function handleClickBack(){
+    function handleClickBack() {
         setIsOpenModal(false);
     }
-    function handleChange(e){
+    function handleChange(e) {
         setReasonReject(e.target.value)
     }
     useEffect(() => {
@@ -67,35 +67,33 @@ export const TicketRequestItem = (props) => {
         }
     }, [t, ticketRequestItem])
     useEffect(() => {
-        if(ticketRequestItem&&ticketRequestItem.status === TICKET_STATUS.REJECTED){
+        if (ticketRequestItem && ticketRequestItem.status === TICKET_STATUS.REJECTED) {
             setIsDisabledButtonReject(true);
-        }else{
+        } else {
             setIsDisabledButtonReject(false);
         }
     }, [ticketRequestItem])
     return (
         <Fragment>
             <tr>
-                <td>{no}</td>
-                <td>{ticketRequestItem.employeeName}</td>
-                <td>{ticketRequestItem.startDate}</td>
-                <td>{ticketRequestItem.endDate}</td>
-                <td>{ticketRequestItem.totalParticipant}</td>
-                <td><p className={classNameForStatus}>{status}</p></td>
-                <td>
-                    <div className="btn-group">
-                        <button
-                            onClick={handleClickDetail}
-                            className="btn btn-outline-primary btn-sm mr-1"
-                        >
-                            <i className="fas fa-info-circle mr-1"></i>
-                            Xem Chi Tiết
-                        </button>
-                        <button disabled={isDisabledButtonReject} onClick={handleReject} className="btn btn-outline-danger btn-sm">
-                            <i className="fas fa-times-circle mr-1"></i>
-                            Từ Chối
-                        </button>
-                    </div>
+                <td data-label={t("stt")}>{no}</td>
+                <td data-label={t("hovaten")}>{ticketRequestItem.employeeName}</td>
+                <td data-label={t("ngaydi")}>{ticketRequestItem.startDate}</td>
+                <td data-label={t("ngayve")}>{ticketRequestItem.endDate}</td>
+                <td data-label={t("songuoidi")}>{ticketRequestItem.totalParticipant}</td>
+                <td data-label={t("trangthai")}><label className={classNameForStatus}>{status}</label></td>
+                <td data-label={t("hanhdong")}>
+                    <button
+                        onClick={handleClickDetail}
+                        className="btn btn-outline-primary btn-sm mr-1"
+                    >
+                        <i className="fas fa-info-circle mr-1"></i>
+                        {t("chitiet")}
+                    </button>
+                    <button disabled={isDisabledButtonReject} onClick={handleReject} className="btn btn-outline-danger btn-sm">
+                        <i className="fas fa-times-circle mr-1"></i>
+                        {t("huybo")}
+                    </button>
                 </td>
             </tr>
             <Modal
@@ -103,7 +101,7 @@ export const TicketRequestItem = (props) => {
                 center
                 onClose={handleCloseModal}
             >
-                <h4>Lí Do Từ Chối</h4>
+                <h4>{t("lido")}</h4>
                 <div className="row">
                     <div className="col-12">
                         <textarea
@@ -122,15 +120,15 @@ export const TicketRequestItem = (props) => {
                             className="btn btn-outline-primary btn-sm mr-2"
                         >
                             <i className="fas fa-check-circle mr-1"></i>
-                                Xác Nhận
-                            </button>
+                            {t("xacnhan")}
+                        </button>
                         <button
-                        onClick={handleClickBack}
+                            onClick={handleClickBack}
                             className="btn btn-outline-danger btn-sm"
                         >
                             <i className="fas fa-backspace mr-1"></i>
-                                Quay Lại
-                            </button>
+                            {t("quaylai")}
+                        </button>
                     </div>
                 </div>
             </Modal>

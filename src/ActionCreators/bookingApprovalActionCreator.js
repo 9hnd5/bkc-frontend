@@ -54,7 +54,7 @@ export const ticketTripsAddRequest = ticketTrips => {
         dispatch(setMoveCar({}));
         dispatch(setReturnCar({}));
         notification(NOTIFICATION_TYPE.SUCCESS, "Success");
-        history.push("/admin");
+        history.push("/ticket-management");
     }
 }
 export const fetchTripByTicketId = ticketId => {
@@ -65,5 +65,15 @@ export const fetchTripByTicketId = ticketId => {
         }
         const bookedTrips = res.data;
         dispatch(setBookedTrips(bookedTrips));
+    }
+}
+
+export const updateTicketTripsRequest = (ticketId, trips) => {
+    console.log("trips", trips);
+    return async dispatch => {
+        trips && trips.forEach(async trip => {
+            const res = await callApi(`${END_POINT}/ticket-approval/tickets/${ticketId}/trip/${trip.id}`, HTTP_METHOD.PUT, trip);
+        });
+
     }
 }

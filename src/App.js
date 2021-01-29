@@ -12,18 +12,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-notifications/lib/notifications.css';
 import { BookingRequest } from "./Pages/BookingRequest";
 import { useEffect } from "react";
-import { requestAuthenticated } from "./ActionCreators/appActionCreator";
 import { BookingHistory } from "./Pages/BookingHistory";
 import { TicketManagement } from "./Pages/TicketManagement";
 import { BookingApproval } from "./Pages/BookingApproval";
 import { CarManagement } from "./Pages/CarManagement";
 import { DriverManagement } from "./Pages/DriverManagement";
+import { ROLE } from "./Constants/CommonsConstants";
 export const history = require("history").createBrowserHistory();
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(requestAuthenticated("hoe.ph@greenfeed.com.vn"));
-  });
   return (
     <div className="App">
       <ErrorBoundary>
@@ -44,12 +40,30 @@ function App() {
           <NavBar />
           <div className="mt-1 mb-1"></div>
           <Switch>
-            <Route path="/booking-request/:action?/:ticketId?" exact component={BookingRequest} />
-            <Route path="/booking-history" component={BookingHistory} />
-            <Route path="/ticket-management" component={TicketManagement} />
-            <Route path="/booking-approval/:ticketId" component={BookingApproval} />
-            <Route path="/car-management/" component={CarManagement} />
-            <Route path="/driver-management/" component={DriverManagement} />
+            <PrivateRoute path="/ticket-request/:action?/:ticketId?" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
+              <BookingRequest />
+            </PrivateRoute>
+
+            <PrivateRoute path="/ticket-history" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
+              <BookingHistory />
+            </PrivateRoute>
+
+            <PrivateRoute path="/ticket-management" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
+              <TicketManagement />
+            </PrivateRoute>
+
+            <PrivateRoute path="/booking-approval/:ticketId" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
+              <BookingApproval />
+            </PrivateRoute>
+
+            <PrivateRoute path="/car-management" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
+              <CarManagement />
+            </PrivateRoute>
+
+            <PrivateRoute path="/driver-management" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
+              <DriverManagement />
+            </PrivateRoute>
+
             {/* <PrivateRoute path="/history-booking" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
 
             </PrivateRoute>
@@ -70,28 +84,28 @@ function App() {
 }
 export default App;
 
-// function PrivateRoute({ children, ...rest }) {
-//   const employee = useSelector(state => state.app.employee);
-//   const { roles, path } = rest;
-//   let isAuth = null;
-//   if (!roles.length) {
-//     isAuth = false;
-//   }
-//   else {
-//     for (let r of roles) {
-//       if (r === employee.role) {
-//         isAuth = true;
-//         break;
-//       }
-//     }
-//   }
-//   if (!isAuth) console.log("Not have permission");
-//   return (
-//     <Route
-//       path={path}
-//       render={() => {
-//         return isAuth ? (children) : (<Redirect to="/" />)
-//       }}
-//     />
-//   );
-// }
+function PrivateRoute({ children, ...rest }) {
+  const employee = useSelector(state => state.appReducer.employee);
+  const { roles, path } = rest;
+  let isAuth = null;
+  if (!roles.length) {
+    isAuth = false;
+  }
+  else {
+    for (let r of roles) {
+      if (r === employee.role) {
+        isAuth = true;
+        break;
+      }
+    }
+  }
+  if (!isAuth) console.log("Not have permission");
+  return (
+    <Route
+      path={path}
+      render={() => {
+        return isAuth ? (children) : (<Redirect to="/" />)
+      }}
+    />
+  );
+}

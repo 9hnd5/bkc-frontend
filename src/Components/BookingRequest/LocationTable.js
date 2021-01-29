@@ -70,12 +70,12 @@ export const LocationTable = (props) => {
     return (
         <div className="row">
             <div className="col-12 col-xl-12">
-                <div className="table-responsive location_table_responsive">
-                    <table className="table table-sm table-striped table-bordered table_detail">
+                <div className="table-custom location_table_responsive">
+                    <table className="table-sm table-striped table-bordered table_detail">
                         <thead>
                             <tr>
                                 <th scope="col" className="w_4" >{t("sothutu")}</th>
-                                <th scope="col" className="w_12" >{t("diadiemdon")}</th>
+                                <th scope="col" className="w_12" >{t("noidon")}</th>
                                 <th scope="col" className="w_12" >{t("giodon")}</th>
                                 <th scope="col" className="w_12" >{t("nhanvien")}</th>
                                 <th scope="col" className="w_12" >{t("khach")}</th>

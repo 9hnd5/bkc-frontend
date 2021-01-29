@@ -1,10 +1,13 @@
 import { isEmpty } from "lodash";
 import { Fragment, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setBookedTrips, setMoveCar, setNoteForDriver, setReturnCar, setTrips } from "../../ActionCreators/bookingApprovalActionCreator";
+import formatPhoneNumber from "../../Helpers/formatPhoneNumber";
 
 export const DriverItem = (props) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const { driver, no } = props;
     const [isSelectedMoveCar, setIsSelectedMoveCar] = useState(false);
@@ -13,6 +16,8 @@ export const DriverItem = (props) => {
     const [noteForDriverLocal, setNoteForDriverLocal] = useState("");
     const [moveCarLocal, setMoveCarLocal] = useState({});
     const [returnCarLocal, setReturnCarLocal] = useState({});
+    const moveCar = useSelector(state => state.bookingApprovalReducer.moveCar);
+    const returnCar = useSelector(state => state.bookingApprovalReducer.returnCar);
     const bookedTrips = useSelector(state => state.bookingApprovalReducer.bookedTrips)
     const trips = useSelector(state => state.bookingApprovalReducer.trips)
     const ticket = useSelector(state => state.adminReducer.ticketRequests).find(ticket => {
@@ -33,14 +38,16 @@ export const DriverItem = (props) => {
                 driverId: driver.id,
                 carId: driver.car.id
             })
-            return setIsSelectedMoveCar(!isSelectedMoveCar);
+            setIsSelectedMoveCar(!isSelectedMoveCar);
+            return;
         }
         setMoveCarLocal({
             ...moveCarLocal,
             driverId: driver.id,
             carId: driver.car.id
         })
-        return setIsSelectedMoveCar(!isSelectedMoveCar);
+        setIsSelectedMoveCar(!isSelectedMoveCar);
+        return;
     }
     function handleReturnCarChange(e) {
         if (e.target.checked) {
@@ -64,10 +71,22 @@ export const DriverItem = (props) => {
         setNoteForDriverLocal(e.target.value);
     }
     useEffect(() => {
-        dispatch(setMoveCar(moveCarLocal))
-        dispatch(setReturnCar(returnCarLocal));
-        dispatch(setNoteForDriver(noteForDriverLocal))
-    }, [moveCarLocal, returnCarLocal, noteForDriverLocal]);
+        if (isSelectedMoveCar) {
+            dispatch(setMoveCar(moveCarLocal));
+        } else {
+            dispatch(setMoveCar({}));
+        }
+    }, [isSelectedMoveCar])
+    useEffect(() => {
+        if (isSelectedReturnCar) {
+            dispatch(setReturnCar(returnCarLocal));
+        } else {
+            dispatch(setReturnCar({}));
+        }
+    }, [isSelectedReturnCar])
+    useEffect(() => {
+        dispatch(setNoteForDriver(noteForDriverLocal));
+    }, [noteForDriverLocal])
     useEffect(() => {
         const filterTrips = bookedTrips && bookedTrips.filter(trip => +trip.carId === +driver.carId);
         if (!isEmpty(filterTrips)) {
@@ -98,20 +117,20 @@ export const DriverItem = (props) => {
     return (
         <Fragment>
             <tr>
-                <td>{no}</td>
-                <td>{driver.employeeName}</td>
-                <td>{driver.employeePhone}</td>
-                <td>{driver.car.number}</td>
-                <td>{driver.car.totalSeat}</td>
-                <td>{ }</td>
-                <td>
+                <td data-label={t("stt")}>{no}</td>
+                <td data-label={t("tentaixe")}>{driver.employeeName}</td>
+                <td data-label={t("sodienthoaitaixe")}>{formatPhoneNumber(driver.employeePhone)}</td>
+                <td data-label={t("biensoxe")}>{driver.car.number}</td>
+                <td data-label={t("socho")}>{driver.car.totalSeat}</td>
+                <td data-label={t("trangthai")}>{""}</td>
+                <td data-label={t("chonxengaydi")}>
                     <input
                         type="checkbox"
                         onChange={handleMoveCarChange}
                         checked={isSelectedMoveCar}
                     />
                 </td>
-                <td>
+                <td data-label={t("chonxengayve")}>
                     <input
                         type="checkbox"
                         onChange={handleReturnCarChange}
@@ -119,7 +138,7 @@ export const DriverItem = (props) => {
                         disabled={isEmpty(ticket.endDate)}
                     />
                 </td>
-                <td>
+                <td data-label={t("ghichuchotaixe")}>
                     <input
                         value={noteForDriverLocal}
                         onChange={handleChangeNoteForDriverchange}

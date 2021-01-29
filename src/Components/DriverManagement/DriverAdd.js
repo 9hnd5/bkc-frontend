@@ -7,7 +7,9 @@ import { DRIVER_ADD_DEFAULT, END_POINT, HTTP_METHOD } from '../../Constants/Comm
 import { notification, NOTIFICATION_TYPE } from '../../Helpers/notification';
 import { useDispatch } from 'react-redux';
 import { addDriverRequest } from './../../ActionCreators/driverManagementActionCreator'
+import { useTranslation } from 'react-i18next';
 export const DriverAdd = props => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [suggestionDriverNames, setSuggestionDriverNames] = useState([]);
@@ -99,7 +101,8 @@ export const DriverAdd = props => {
                     onClick={handleClickAddDriver}
                     className="btn btn-outline-primary btn-sm"
                 >
-                    Thêm Tài Xế Mới
+                    <i className="fas fa-plus mr-1"></i>
+                    {t("themtaixe")}
                 </button>
                 <Modal
                     open={isOpenModal}
@@ -108,10 +111,16 @@ export const DriverAdd = props => {
                 >
                     <div className="row">
                         <div className="col-6">
-                            <label>Tên Tài Xế</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("tentaixe")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="col-6">
-                            <label>Số Điện Thoại</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("sodienthoaitaixe")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="w-100"></div>
                         <div className="col-6">
@@ -125,23 +134,29 @@ export const DriverAdd = props => {
                             />
                         </div>
                         <div className="col-6">
-                            <input value={driverAdd.employeePhone} name="employeePhone" className="form-control form-control-sm" onChange={handleChange} />
+                            <input autoComplete="off" value={driverAdd.employeePhone} name="employeePhone" className="form-control form-control-sm" onChange={handleChange} />
                         </div>
                         <div className="w-100"></div>
                         <div className="col-6">
-                            <label>Tên BU</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("tenbu")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="col-6">
-                            <label>Loại Xe</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("chonxe")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="w-100"></div>
                         <div className="col-6">
-                            <input value={driverAdd.employeeBuName} name="employeeBuName" className="form-control form-control-sm" onChange={handleChange} />
+                            <input autoComplete="off" value={driverAdd.employeeBuName} name="employeeBuName" className="form-control form-control-sm" onChange={handleChange} />
                         </div>
                         <div className="col-6">
                             <select onChange={handleCarChange} value={driverAdd.carId} className="custom-select custom-select-sm">
                                 <option value="">
-                                    ---Chọn Xe---
+                                    ---{t("chonxe")}---
                                 </option>
                                 {
                                     cars && cars.map((car, index) => {
@@ -154,8 +169,14 @@ export const DriverAdd = props => {
 
                         <div className="col-12 mt-2">
                             <div className="btn-group">
-                                <button onClick={handleClickAccepted} className="btn btn-outline-primary btn-sm">Xác Nhận</button>
-                                <button onClick={handleClickCancel} className="btn btn-outline-danger btn-sm">Hủy Bỏ</button>
+                                <button onClick={handleClickAccepted} className="btn btn-outline-primary btn-sm mr-1">
+                                    <i className="fas fa-check-circle mr-1"></i>
+                                    {t("xacnhan")}
+                                </button>
+                                <button onClick={handleClickCancel} className="btn btn-outline-info btn-sm">
+                                    <i className="fas fa-backspace mr-1"></i>
+                                    {t("quaylai")}
+                                </button>
                             </div>
                         </div>
                     </div>

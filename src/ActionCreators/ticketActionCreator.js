@@ -44,17 +44,18 @@ export const toggleModalAddLocation = () => {
 export const addTicketRequest = (ticket) => {
     return async dispatch => {
         const res = await callApi(`${END_POINT}/tickets`, HTTP_METHOD.POST, ticket);
-        if(res.status !== 200){
+        if (res.status !== 200) {
             return notification(NOTIFICATION_TYPE.ERROR, "Thêm ticket thất bại");
         }
         notification(NOTIFICATION_TYPE.SUCCESS, "Thành công");
-        // history.push()
+        history.push("/ticket-history")
     }
 }
 export const updateTicketRequest = ticket => {
     return async dispatch => {
         const res = await callApi(`${END_POINT}/tickets`, HTTP_METHOD.PUT, ticket);
-        if(res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Fail");
+        if (res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Fail");
         notification(NOTIFICATION_TYPE.SUCCESS, "Success");
+        history.push("/ticket-history")
     }
 }

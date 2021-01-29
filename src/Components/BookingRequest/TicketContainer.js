@@ -212,9 +212,6 @@ export const TicketContainer = (props) => {
         <div className="row">
             <div className="col-12 col-xl-12">
                 <div className="card">
-                    <div className="card-header">
-                        <h4>Yêu Cầu Đặt Xe</h4>
-                    </div>
                     <div className="card-body">
                         <TicketInformation />
                         <div className="mb-2"></div>

@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { LocationItemReadOnly } from "./LocationItemReadOnly";
 
 export const LocationTableReadOnly = () => {
+    const { t } = useTranslation();
     const { ticketId } = useParams();
     const ticket = useSelector(state => state.adminReducer.ticketRequests).find(ticket => {
         return +ticket.id === +ticketId;
@@ -21,21 +23,21 @@ export const LocationTableReadOnly = () => {
                 <div className="card">
                     <div className="card-body">
                         <div className="row">
-                            <div className="col-6 col-xl-4">
-                                <h5>Chi Tiết Nơi Đón</h5>
+                            <div className="col-12 col-xl-4">
+                                <h5>{t("chitietnoidon")}</h5>
                             </div>
                         </div>
-                        <div className="table-responsive hra-table-detail">
-                            <table className="table table-bordered table-striped table-sm">
+                        <div className="table-custom location-table-responsive">
+                            <table className="table-bordered table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Địa Điểm Đón</th>
-                                        <th>Giờ Đón</th>
-                                        <th>Nhân Viên</th>
-                                        <th>Khách</th>
-                                        <th>Số Điện Thoại</th>
-                                        <th>Ghi Chú</th>
+                                        <th>{t("stt")}</th>
+                                        <th>{t("noidon")}</th>
+                                        <th>{t("giodon")}</th>
+                                        <th>{t("nhanvien")}</th>
+                                        <th>{t("khach")}</th>
+                                        <th>{t("sodienthoai")}</th>
+                                        <th>{t("ghichu")}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

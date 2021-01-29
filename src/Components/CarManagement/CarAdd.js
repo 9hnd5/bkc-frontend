@@ -7,9 +7,11 @@ import { callApi } from '../../Helpers/callApi';
 import { useDispatch } from 'react-redux';
 import { addCarRequest } from '../../ActionCreators/carManagementActionCreator';
 import { AutoComplete1 } from '../Commons/AutoComplete1';
-import { useEffect } from 'react/cjs/react.development';
+import { useEffect } from 'react';
 import { notification, NOTIFICATION_TYPE } from '../../Helpers/notification';
+import { useTranslation } from 'react-i18next';
 export const CarAdd = props => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [errors, setErrors] = useState({});
@@ -67,7 +69,8 @@ export const CarAdd = props => {
                     onClick={handleClickAddCar}
                     className="btn btn-outline-primary btn-sm"
                 >
-                    Thêm Xe Mới
+                    <i className="fas fa-plus mr-1"></i>
+                    {t("themxemoi")}
                 </button>
                 <div className="w-100"></div>
                 <Modal
@@ -77,15 +80,21 @@ export const CarAdd = props => {
                 >
                     <div className="row">
                         <div className="col-6">
-                            <label>Tên BU</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("tenbu")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="col-6">
-                            <label>Vị Trí Hiện Tại</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("vitrihientai")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="w-100"></div>
                         <div className="col-6">
                             <select className="custom-select custom-select-sm" name="buName" onChange={handleBuNameChange}>
-                                <option value="">---Chọn Bu---</option>
+                                <option value="">---{t("chonbu")}---</option>
                                 {
                                     bus && bus.map((bu, index) => {
                                         return <option key={index} value={bu.id}>{bu.name}</option>
@@ -94,41 +103,59 @@ export const CarAdd = props => {
                             </select>
                         </div>
                         <div className="col-6">
-                            <input name="currentLocation" className="form-control form-control-sm" onChange={handleChange} />
+                            <input autoComplete="off" name="currentLocation" className="form-control form-control-sm" onChange={handleChange} />
                         </div>
                         <div className="w-100"></div>
                         <div className="col-6">
-                            <label>Biển Số</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("biensoxe")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="col-6">
-                            <label>Số Chổ Ngồi</label>
-                        </div>
-                        <div className="w-100"></div>
-                        <div className="col-6">
-                            <input name="number" className="form-control form-control-sm" onChange={handleChange} />
-                        </div>
-                        <div className="col-6">
-                            <input type="number" name="totalSeat" className="form-control form-control-sm" onChange={handleChange} />
-                        </div>
-                        <div className="w-100"></div>
-                        <div className="col-6">
-                            <label>Hãng Xe</label>
-                        </div>
-                        <div className="col-6">
-                            <label>Tên Xe</label>
+                            <label className="d-flex align-items-center">
+                                <strong>{t("socho")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
                         </div>
                         <div className="w-100"></div>
                         <div className="col-6">
-                            <input name="manufactured" className="form-control form-control-sm" onChange={handleChange} />
+                            <input autoComplete="off" name="number" className="form-control form-control-sm" onChange={handleChange} />
                         </div>
                         <div className="col-6">
-                            <input name="name" className="form-control form-control-sm" onChange={handleChange} />
+                            <input autoComplete="off" type="number" name="totalSeat" className="form-control form-control-sm" onChange={handleChange} />
+                        </div>
+                        <div className="w-100"></div>
+                        <div className="col-6">
+                            <label className="d-flex align-items-center">
+                                <strong>{t("hangxe")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
+                        </div>
+                        <div className="col-6">
+                            <label className="d-flex align-items-center">
+                                <strong>{t("tenxe")}</strong>
+                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                            </label>
+                        </div>
+                        <div className="w-100"></div>
+                        <div className="col-6">
+                            <input autoComplete="off" name="manufactured" className="form-control form-control-sm" onChange={handleChange} />
+                        </div>
+                        <div className="col-6">
+                            <input autoComplete="off" name="name" className="form-control form-control-sm" onChange={handleChange} />
                         </div>
                         <div className="w-100"></div>
                         <div className="col-12 mt-2">
                             <div className="btn-group">
-                                <button onClick={handleClickAccepted} className="btn btn-outline-primary btn-sm">Xác Nhận</button>
-                                <button onClick={handleClickCancel} className="btn btn-outline-danger btn-sm">Hủy Bỏ</button>
+                                <button onClick={handleClickAccepted} className="btn btn-outline-primary btn-sm mr-1">
+                                    <i className="fas fa-check-circle mr-1"></i>
+                                    {t("xacnhan")}
+                                </button>
+                                <button onClick={handleClickCancel} className="btn btn-outline-info btn-sm">
+                                    <i className="fas fa-backspace mr-1"></i>
+                                    {t("quaylai")}
+                                </button>
                             </div>
                         </div>
                     </div>

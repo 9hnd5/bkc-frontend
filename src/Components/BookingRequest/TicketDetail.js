@@ -234,19 +234,19 @@ export const TicketDetail = () => {
                 <div className="card">
                     <div className="card-body">
                         <div className="row">
-                            <div className="col-6 col-xl-4">
-                                <h5>Thông Tin Đặt Xe</h5>
+                            <div className="col-12 col-xl-4">
+                                <h5>{t("thongtinnoidon")}</h5>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
                                 <label className="d-flex align-items-center">
-                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                                    {t("ngaydi")}
+                                    <strong>{t("ngaydi")}</strong>
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
                                 </label>
                             </div>
                             <div className="col-6 col-xl-4">
                                 <label className="d-flex align-items-center">
-                                    {t("ngayve")}
+                                    <strong>{t("ngayve")}</strong>
                                 </label>
                             </div>
                             <div className="w-100"></div>
@@ -278,14 +278,14 @@ export const TicketDetail = () => {
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
                                 <label className="d-flex align-items-center">
-                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                                    {t("diadiemden")}
+                                    <strong>{t("diadiemden")}</strong>
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
                                 </label>
                             </div>
                             <div className="col-6 col-xl-4">
                                 <label className="d-flex align-items-center">
-                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                                    {t("diadiemdon")}
+                                    <strong>{t("diadiemdon")}</strong>
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
                                 </label>
                             </div>
                             <div className="w-100"></div>
@@ -324,12 +324,12 @@ export const TicketDetail = () => {
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
                                 <label className="d-flex align-items-center">
-                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                                    {t("songuoidi")}
+                                    <strong>{t("songuoidi")}</strong>
+                                    <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
                                 </label>
                             </div>
                             <div className="col-6 col-xl-4">
-                                <label>{t("maildennguoilienquan")}</label>
+                                <label><strong>{t("maildennguoilienquan")}</strong></label>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
@@ -372,7 +372,7 @@ export const TicketDetail = () => {
 
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">
-                                <label>{t("lydodatxe")}</label>
+                                <label><strong>{t("lydodatxe")}</strong></label>
                             </div>
                             <div className="w-100"></div>
                             <div className="col-6 col-xl-4">

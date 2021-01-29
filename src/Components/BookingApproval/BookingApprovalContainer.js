@@ -8,7 +8,7 @@ import { TicketDetailReadOnly } from "./TicketDetailReadOnly"
 import { TicketInformationReadOnly } from "./TicketInformationReadOnly"
 import moment from 'moment';
 import { TICKET_STATUS } from "../../Constants/CommonsConstants";
-import { ticketTripsAddRequest } from "../../ActionCreators/bookingApprovalActionCreator";
+import { ticketTripsAddRequest, updateTicketTripsRequest } from "../../ActionCreators/bookingApprovalActionCreator";
 
 export const BookingApprovalContainer = () => {
     const { ticketId } = useParams();
@@ -20,7 +20,8 @@ export const BookingApprovalContainer = () => {
     const moveCar = useSelector(state => state.bookingApprovalReducer.moveCar);
     const returnCar = useSelector(state => state.bookingApprovalReducer.returnCar);
     const noteForDriver = useSelector(state => state.bookingApprovalReducer.noteForDriver)
-    // console.log('returnCar', returnCar);
+    const bookedTrips = useSelector(state => state.bookingApprovalReducer.bookedTrips)
+    console.log("bookedTrips", bookedTrips);
     function handleClickApprove() {
         if (isEmpty(returnCar)) {
             const ticketTrip1 = {
@@ -93,14 +94,51 @@ export const BookingApprovalContainer = () => {
         }
 
     }
+    function handleUpdateTicket() {
+        if (isEmpty(returnCar)) {
+            const ticketTrip1 = {
+                id: bookedTrips && bookedTrips.find(item => item.type === "MOVE").id,
+                startDate: ticket.startDate,
+                noteForDriver: noteForDriver,
+                driverId: moveCar.driverId,
+                carId: moveCar.carId,
+                type: "MOVE"
 
+            }
+            const data = [ticketTrip1]
+
+            dispatch(updateTicketTripsRequest(ticketId, data));
+        }
+        else {
+            const ticketTrip1 = {
+                id: bookedTrips && bookedTrips.find(item => item.type === "MOVE").id,
+                isFinish: false,
+                startDate: ticket.startDate,
+                noteForDriver: noteForDriver,
+                driverId: moveCar.driverId,
+                carId: moveCar.carId,
+                type: "MOVE"
+
+            }
+            const ticketTrip2 = {
+                id: bookedTrips && bookedTrips.find(item => item.type === "RETURN").id,
+                isFinish: false,
+                startDate: ticket.endDate,
+                noteForDriver: noteForDriver,
+                driverId: returnCar.driverId,
+                carId: returnCar.carId,
+                type: "RETURN"
+
+            }
+            const data = [ticketTrip1, ticketTrip2]
+
+            dispatch(updateTicketTripsRequest(ticketId, data));
+        }
+    }
     return (
         <div className="row">
             <div className="col-12 col-xl-12">
                 <div className="card">
-                    <div className="card-header">
-                        <h4>Thông Tin Chi Tiết</h4>
-                    </div>
                     <div className="card-body">
                         <TicketInformationReadOnly />
                         <div className="mb-1"></div>
@@ -112,6 +150,7 @@ export const BookingApprovalContainer = () => {
                         <div className="mb-1"></div>
                         <BookingApprovalButton
                             onHandleClickApprove={handleClickApprove}
+                            onHandleUpdateTicket={handleUpdateTicket}
                             ticket={ticket}
                         />
                     </div>

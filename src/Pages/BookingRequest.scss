@@ -1,17 +1,14 @@
 .location_table_responsive{
     height: 200px;
+    overflow-y: auto;
     table{
         thead{
             tr{
-                th{
-                    width: 12.5%;
+                th:first-child{
+                    width: 5%;
                 }
-            }
-        }
-        tbody{
-            tr{
-                td{
-                    
+                th:last-child{
+                    width: 15%;
                 }
             }
         }

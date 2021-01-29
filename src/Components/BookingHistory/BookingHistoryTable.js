@@ -8,7 +8,7 @@ export const BookingHistoryTable = () => {
     const { t } = useTranslation();
     const tickets = useSelector(state => state.bookingHistoryReducer.tickets);
     console.log("tickets", tickets);
-    const sortTickets = tickets&&orderBy(tickets, (ticket) => {
+    const sortTickets = tickets && orderBy(tickets, (ticket) => {
         return moment(ticket.startDate, ["DD/MM/YYYY"], true);
     }, ['desc']);
     console.log("sort", sortTickets)
@@ -20,24 +20,33 @@ export const BookingHistoryTable = () => {
         />
     });
     return (
-        <div className="table-responsive booking-history-table-responsive" style={{ height: "500px" }}>
-            <table className="table table-hover table-sm table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>{t("sothutu")}</th>
-                        <th>{t("ngaydi")}</th>
-                        <th>{t("ngayve")}</th>
-                        <th>{t("diadiemdon")}</th>
-                        <th>{t("diadiemden")}</th>
-                        <th>{t("songuoidi")}</th>
-                        <th>{t("trangthai")}</th>
-                        <th>{t("hanhdong")}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {display}
-                </tbody>
-            </table>
+        <div className="row">
+            <div className="col-12 col-xl-12">
+                <div className="card">
+                    <div className="card-body">
+                        <h5>{t("lichsu")}</h5>
+                        <div className="table-custom booking-history-table-responsive">
+                            <table className="table-hover table-sm table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>{t("sothutu")}</th>
+                                        <th>{t("ngaydi")}</th>
+                                        <th>{t("ngayve")}</th>
+                                        <th>{t("diadiemdon")}</th>
+                                        <th>{t("diadiemden")}</th>
+                                        <th>{t("songuoidi")}</th>
+                                        <th>{t("trangthai")}</th>
+                                        <th>{t("hanhdong")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {display}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

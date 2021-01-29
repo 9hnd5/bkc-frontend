@@ -13,7 +13,9 @@ import { MultipleSelect } from './../Commons/MultipleSelect';
 import { Tooltip } from './../Commons/Tooltip';
 import { toggleModalAddLocation } from '../../ActionCreators/ticketActionCreator';
 import { isEmpty } from 'lodash';
+import { useTranslation } from 'react-i18next';
 export const ModalAddLocation = (props) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const isOpenModal = useSelector(state => state.ticketReducer.isOpenModalAddLocation)
     const [suggestionsEmployee, setSuggestionsEmployee] = useState([]);
@@ -186,8 +188,8 @@ export const ModalAddLocation = (props) => {
         }
     }
     function handleSelectedEmployee(item) {
-        const employee = employees&&employees.find(e => +e.id === +item.id);
-        if(isEmpty(employee)) return;
+        const employee = employees && employees.find(e => +e.id === +item.id);
+        if (isEmpty(employee)) return;
         const participant = {
             employeeId: employee.id,
             employeeName: employee.name,
@@ -235,18 +237,18 @@ export const ModalAddLocation = (props) => {
             center
             onClose={onCloseModal}
         >
-            <h5>Thêm Chi Tiết</h5>
+            <h5>{t("themchitiet")}</h5>
             <div className="row">
                 <div className="col-6">
                     <label className="d-flex align-items-center">
-                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                        Nơi Đón
+                        <strong>{t("noidon")}</strong>
+                        <i className="fas fa-asterisk fa-xs ml-1 asterisk" />
                     </label>
                 </div>
                 <div className="col-6">
                     <label className="d-flex align-items-center">
-                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                        Giờ Đón
+                        <strong>{t("giodon")}</strong>
+                        <i className="fas fa-asterisk fa-xs ml-1 asterisk" />
                     </label>
                 </div>
                 <div className="w-100" />
@@ -275,12 +277,12 @@ export const ModalAddLocation = (props) => {
                 <div className="w-100" />
                 <div className="col-6">
                     <label className="d-flex align-items-center">
-                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                        Tên Nhân Viên
+                        <strong>{t("nhanvien")}</strong>
+                        <i className="fas fa-asterisk fa-xs ml-1 asterisk" />
                     </label>
                 </div>
                 <div className="col-6">
-                    <label>Tên Khách</label>
+                    <label><strong>{t("khach")}</strong></label>
                 </div>
                 <div className="w-100" />
                 <div className="col-6">
@@ -313,12 +315,12 @@ export const ModalAddLocation = (props) => {
                 <div className="w-100" />
                 <div className="col-6">
                     <label className="d-flex align-items-center">
-                        <i className="fas fa-asterisk fa-xs mr-1 asterisk" />
-                        Số Điện Thoại
+                        <strong>{t("sodienthoai")}</strong>
+                        <i className="fas fa-asterisk fa-xs ml-1 asterisk" />
                     </label>
                 </div>
                 <div className="col-6">
-                    <label>Ghi Chú</label>
+                    <label><strong>{t("ghichu")}</strong></label>
                 </div>
                 <div className="w-100" />
                 <div className="col-6">
@@ -354,15 +356,15 @@ export const ModalAddLocation = (props) => {
                             className="btn btn-outline-primary btn-sm mr-2"
                         >
                             <i className="fas fa-check-circle mr-1"></i>
-                        XÁC NHẬN
+                            {t("xacnhan")}
                         </button>
                         <button
                             onClick={handleClickCancel}
-                            className="btn btn-outline-danger btn-sm"
+                            className="btn btn-outline-info btn-sm"
                         >
-                            <i className="fas fa-window-close mr-1"></i>
-                        HỦY
-                    </button>
+                            <i className="fas fa-backspace mr-1"></i>
+                            {t("quaylai")}
+                        </button>
                     </div>
                 </div>
             </div>

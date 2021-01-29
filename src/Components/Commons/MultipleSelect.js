@@ -157,7 +157,7 @@ export const MultipleSelect = (props) => {
                             className={isDisabled ? `${className} multiple-items-container disabled` : `${className} multiple-items-container`}
                             // className={isDisabled ? `multiple-items-container disabled` : `multiple-items-container`}
                             onKeyDown={handleKeyDown}
-                            style={{height: "30.8px"}}
+                            style={{ height: "30.8px" }}
                         // onClick={handleClickSearch}
                         >
                             {displayItems}
@@ -169,7 +169,7 @@ export const MultipleSelect = (props) => {
                         className={isDisabled ? `${className} multiple-items-container disabled` : `${className} multiple-items-container`}
                         // className={isDisabled ? `multiple-items-container disabled` : `multiple-items-container`}
                         onKeyDown={handleKeyDown}
-                        style={{height: "30.8px"}}
+                        style={{ height: "30.8px" }}
                     // onClick={handleClickSearch}
                     >
 
@@ -187,7 +187,13 @@ export const MultipleSelect = (props) => {
                                 <div className="input-group-prepend">
                                     <i className="fas fa-search input-group-text icon-search"></i>
                                 </div>
-                                <input placeholder="Search name" name={name} onChange={handleChangeSearch} className="form-control form-control-sm" />
+                                <input
+                                    placeholder="Search name"
+                                    name={name}
+                                    onChange={handleChangeSearch}
+                                    className="form-control form-control-sm"
+                                    autoComplete="off"
+                                />
                             </div>
                         </div>
                         <hr></hr>

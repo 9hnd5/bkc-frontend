@@ -52,6 +52,7 @@ export const AutoComplete1 = (props) => {
                     value={value}
                     className={className}
                     name={name}
+                    autoComplete="off"
                     // onBlur={handleBlur}
                 />
             }

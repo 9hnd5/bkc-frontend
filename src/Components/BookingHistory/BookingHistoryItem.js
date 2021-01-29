@@ -13,20 +13,24 @@ export const BookingHistoryItem = (props) => {
     const { t } = useTranslation();
     const [status, setStatus] = useState("");
     const [classNameForStatus, setClassNameForStatus] = useState("");
+    const [isDisabledBtnUpdate, setIsDisabledBtnUpdate] = useState(false);
+    const [isDisabledBtnDelete, setIsDisabledBtnDelete] = useState(false);
     function handleEdit() {
-        history.push(`/booking-request/update/${ticket.id}`);
+        history.push(`/ticket-request/update/${ticket.id}`);
     }
     function handleDelete() {
         dispatch(deleteTicketByIdRequest(ticket.id));
     }
     function handleDuplicate() {
-        history.push(`/booking-request/duplicate/${ticket.id}`);
+        history.push(`/ticket-request/duplicate/${ticket.id}`);
     }
     useEffect(() => {
         switch (ticket.status) {
             case TICKET_STATUS.APPROVED: {
                 setClassNameForStatus("label-custom label-success");
                 setStatus(t("duocduyet"));
+                setIsDisabledBtnUpdate(true);
+                setIsDisabledBtnDelete(true);
                 break;
             }
             case TICKET_STATUS.WAITING: {
@@ -42,6 +46,8 @@ export const BookingHistoryItem = (props) => {
             case TICKET_STATUS.REJECTED: {
                 setClassNameForStatus("label-custom label-danger");
                 setStatus(t("tuchoi"));
+                setIsDisabledBtnUpdate(true);
+                setIsDisabledBtnDelete(true);
                 break;
             }
             default:
@@ -50,19 +56,19 @@ export const BookingHistoryItem = (props) => {
     }, [t, ticket])
     return (
         <tr>
-            <td>{index}</td>
-            <td>{ticket.startDate}</td>
-            <td>{ticket.endDate}</td>
-            <td>{ticket.fromLocation}</td>
-            <td>{ticket.toLocation}</td>
-            <td>{ticket.totalParticipant}</td>
-            <td><p className={classNameForStatus}>{status}</p></td>
-            <td>
-                <div className="btn-group" role="group">
+            <td data-label="STT">{index}</td>
+            <td data-label="Ngày Đi">{ticket.startDate}</td>
+            <td data-label="Ngày Về">{ticket.endDate}</td>
+            <td data-label="Địa Điểm Đón">{ticket.fromLocation}</td>
+            <td data-label="Địa Điểm Đến">{ticket.toLocation}</td>
+            <td data-label="Số Người Đi">{ticket.totalParticipant}</td>
+            <td data-label="Trạng Thái"><label className={classNameForStatus}>{status}</label></td>
+            <td data-label="Hành Động">
+                <div className="d-flex flex-wrap">
                     <button
                         className="btn btn-outline-primary btn-sm mr-2"
                         onClick={() => handleEdit()}
-                    // disabled={isDisabledBtnUpdate}
+                        disabled={isDisabledBtnUpdate}
                     >
                         <i className="fas fa-edit mr-1"></i>
                         {t("suayeucau")}
@@ -70,7 +76,7 @@ export const BookingHistoryItem = (props) => {
                     <button
                         className="btn btn-outline-danger btn-sm mr-2"
                         onClick={() => handleDelete()}
-                    // disabled={isDisabledBtnDelete}
+                        disabled={isDisabledBtnDelete}
                     >
                         <i className="fas fa-trash-alt mr-1"></i>
                         {t("xoayeucau")}

@@ -10,8 +10,10 @@ import { callApi } from './../../Helpers/callApi';
 import remove from 'lodash/remove';
 import { HTTP_METHOD, END_POINT, LOCATION_DEFAULT } from '../../Constants/CommonsConstants';
 import { isEmpty } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 export const LocationItem = (props) => {
+    const {t} = useTranslation();
     const [location, setLocation] = useState({ ...LOCATION_DEFAULT });
     const [prevLocation, setPrevLocation] = useState({ ...location });
     const [isUpdate, setIsUpdate] = useState(false);
@@ -153,8 +155,8 @@ export const LocationItem = (props) => {
         }
     }
     function handleSelectedEmployee(item) {
-        const employee = employees&&employees.find(e => +e.id === +item.id)
-        if(isEmpty(employee)) return;
+        const employee = employees && employees.find(e => +e.id === +item.id)
+        if (isEmpty(employee)) return;
         const participant = {
             employeeId: employee.id,
             employeeName: employee.name,
@@ -195,16 +197,16 @@ export const LocationItem = (props) => {
     }, [props.location]);
     return (
         <tr>
-            <td className="w_4">
+            <td data-label={t("stt")}>
                 {props.no}
             </td>
-            <td className="w_12">
+            <td data-label={t("noidon")}>
                 <Tooltip active={errors.place ? true : false} content={errors.place} direction="top">
                     {isUpdate ? <input onChange={handleChange} value={location.place} className="form-control form-control-sm" name="place" /> : location.place}
 
                 </Tooltip>
             </td>
-            <td className="w_12">
+            <td data-label={t("giodon")}>
                 <Tooltip active={errors.time ? true : false} content={errors.time} direction="top">
                     {
                         isUpdate ?
@@ -213,13 +215,13 @@ export const LocationItem = (props) => {
                                 timeFormat="H:mm"
                                 onChange={handleChangeTime}
                                 initialValue={location.time}
-                                inputProps={{className: "form-control form-control-sm"}}
+                                inputProps={{ className: "form-control form-control-sm" }}
                             />
                             : location.time
                     }
                 </Tooltip>
             </td>
-            <td className="w_12">
+            <td data-label={t("nhanvien")}>
                 <Tooltip active={errors.participants ? true : false} content={errors.participants} direction="top">
                     {
                         isUpdate ?
@@ -240,7 +242,7 @@ export const LocationItem = (props) => {
                 </Tooltip>
 
             </td>
-            <td className="w_12">
+            <td data-label={t("khach")}>
                 <Tooltip active={errors.guestName ? true : false} content={errors.guestName} direction="top">
                     {
                         isUpdate ?
@@ -254,34 +256,32 @@ export const LocationItem = (props) => {
                 </Tooltip>
 
             </td>
-            <td className="w_12">
+            <td data-label={t("sodienthoai")}>
                 <Tooltip active={errors.phone ? true : false} content={errors.phone} direction="top">
                     {isUpdate ? <input onChange={handleChange} value={location.phone} className="form-control form-control-sm" name="phone" /> : location.phone}
                 </Tooltip>
 
             </td>
-            <td className="w_12">
+            <td data-label={t("ghichu")}>
                 {isUpdate ? <input onChange={handleChange} value={location.note} className="form-control form-control-sm" name="note" /> : location.note}
 
             </td>
-            <td className="w-10">
-                <div className="d-flex justify-content-center">
-                    <button
-                        disabled={Object.keys(errors).length === 0 ? false : true}
-                        onClick={() => handleClick(isUpdate ? "save" : "update")}
-                        className="btn btn-outline-primary btn-sm mr-2">
-                        <i className="fas fa-edit mr-1"></i>
-                        {isUpdate ? "LƯU" : "SỬA"}
+            <td data-label={t("hanhdong")}>
+                <button
+                    disabled={Object.keys(errors).length === 0 ? false : true}
+                    onClick={() => handleClick(isUpdate ? "save" : "update")}
+                    className="btn btn-outline-primary btn-sm mr-2">
+                    <i className="fas fa-edit mr-1"></i>
+                    {isUpdate ? t("luu") : t("suayeucau")}
 
-                    </button>
-                    <button
-                        onClick={() => handleClick(isUpdate ? "cancel" : "delete")}
-                        className="btn btn-outline-danger btn-sm">
-                        <i className="fas fa-trash-alt mr-1"></i>
-                        {isUpdate ? "HỦY" : "XÓA"}
+                </button>
+                <button
+                    onClick={() => handleClick(isUpdate ? "cancel" : "delete")}
+                    className="btn btn-outline-danger btn-sm">
+                    <i className="fas fa-trash-alt mr-1"></i>
+                    {isUpdate ? t("huybo") : t("xoayeucau")}
 
-                    </button>
-                </div>
+                </button>
             </td>
         </tr>
     );
