@@ -1,29 +1,42 @@
+import { remove } from "lodash";
 import {
-    SET_MOVE_CAR, SET_RETURN_CAR,
-    SET_NOTE_FOR_DRIVER,
-    SET_BOOKED_TRIPS,
-    SET_TRIPS
+    SET_NOTE_FOR_DRIVER, 
+    SET_SELECTED_CAR, 
+    SET_TICKET,
+    SET_TICKET_CARS
+
 } from "../Constants/bookingApprovalConstants";
 
 const initialState = {
-    trips: [],
-    bookedTrips: [],
-    moveCar: {},
-    returnCar: {},
-    noteForDriver: ""
+    noteForDriver: "",
+    selectedCars: [],
+    ticket: {},
+    ticketCars: []
 }
 export const bookingApprovalReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_MOVE_CAR: {
+        case SET_TICKET: {
             return {
                 ...state,
-                moveCar: action.moveCar
+                ticket: action.ticket
             }
         }
-        case SET_RETURN_CAR: {
+        case SET_TICKET_CARS: {
             return {
                 ...state,
-                returnCar: action.returnCar
+                ticketCars: action.ticketCars
+            }
+        }
+        case SET_SELECTED_CAR: {
+            const cloneSelectedCars = [...state.selectedCars];
+            if(action.selectedCar.type === "moveCar"){
+                cloneSelectedCars[0] = action.selectedCar
+            }else{
+                cloneSelectedCars[1] = action.selectedCar
+            }
+            return {
+                ...state,
+                selectedCars: cloneSelectedCars
             }
         }
         case SET_NOTE_FOR_DRIVER: {
@@ -32,18 +45,7 @@ export const bookingApprovalReducer = (state = initialState, action) => {
                 noteForDriver: action.noteForDriver
             }
         }
-        case SET_BOOKED_TRIPS: {
-            return {
-                ...state,
-                bookedTrips: action.bookedTrips
-            }
-        }
-        case SET_TRIPS: {
-            return {
-                ...state,
-                trips: action.trips
-            }
-        }
+
         default:
             return {
                 ...state

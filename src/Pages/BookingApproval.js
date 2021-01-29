@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchTripByTicketId } from "../ActionCreators/bookingApprovalActionCreator";
 import { BookingApprovalContainer } from "../Components/BookingApproval/BookingApprovalContainer";
+import { fetchTicketCarsByTicketId, fetchTicketsById } from './../ActionCreators/bookingApprovalActionCreator'
 import "./BookingApproval.scss";
 
 export const BookingApproval = () => {
-    const dispatch = useDispatch();
     const { ticketId } = useParams();
+    const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchTripByTicketId(ticketId));
-    });
+        dispatch(fetchTicketsById(ticketId))
+        dispatch(fetchTicketCarsByTicketId(ticketId));
+    }, [ticketId])
     return (
         <div className="container-fluid">
             <BookingApprovalContainer />

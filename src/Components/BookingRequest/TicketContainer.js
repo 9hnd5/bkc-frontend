@@ -38,16 +38,7 @@ export const TicketContainer = (props) => {
                 Status: TICKET_STATUS.WAITING,
                 locations: locations,
                 relatedPeoples: ticketDetail.relatedPeoples,
-                // relatedPeoples: [...ticketDetail.relatedPeoples, {
-                //     employeeId: employee.lineManagerId,
-                //     employeeName: employee.lineManagerName,
-                //     employeeEmail: employee.lineManagerEmail
-                // }
-                // ]
-
-
             }
-            console.log("ticketAddRequest", ticketAddRequest);
             dispatch(addTicketRequest(ticketAddRequest));
         }
         else {
@@ -71,12 +62,6 @@ export const TicketContainer = (props) => {
                     Status: TICKET_STATUS.WAITING,
                     locations: locations,
                     relatedPeoples: ticketDetail.relatedPeoples
-                    // relatedPeoples: [...ticketDetail.relatedPeoples, {
-                    //     employeeId: employee.lineManagerId,
-                    //     employeeName: employee.lineManagerName,
-                    //     employeeEmail: employee.lineManagerEmail
-                    // }
-                    // ]
                 }
                 dispatch(addTicketRequest(ticketAddRequest));
             } else if (action === "update") {
@@ -100,12 +85,6 @@ export const TicketContainer = (props) => {
                     Status: TICKET_STATUS.WAITING,
                     locations: locations,
                     relatedPeoples: ticketDetail.relatedPeoples
-                    // relatedPeoples: [...ticketDetail.relatedPeoples, {
-                    //     employeeId: employee.lineManagerId,
-                    //     employeeName: employee.lineManagerName,
-                    //     employeeEmail: employee.lineManagerEmail
-                    // }
-                    // ]
                 }
                 dispatch(updateTicketRequest(ticketUpdate))
             }

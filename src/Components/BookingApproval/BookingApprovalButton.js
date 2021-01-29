@@ -1,10 +1,8 @@
 import { useHistory } from "react-router-dom";
 import Modal from 'react-responsive-modal';
-import { updateTicketRequest } from "../../ActionCreators/adminActionCreator";
 import { useEffect, useState } from "react";
 import { TICKET_STATUS } from "../../Constants/CommonsConstants";
 import { useDispatch } from "react-redux";
-import { setBookedTrips, setMoveCar, setReturnCar, setTrips } from "../../ActionCreators/bookingApprovalActionCreator";
 import { useTranslation } from "react-i18next";
 export const BookingApprovalButton = (props) => {
     const { t } = useTranslation();
@@ -15,10 +13,6 @@ export const BookingApprovalButton = (props) => {
     const [reasonReject, setReasonReject] = useState("");
     const [isUpdate, setIsUpdate] = useState(false);
     function handleClickBack() {
-        dispatch(setBookedTrips([]));
-        dispatch(setTrips([]));
-        dispatch(setMoveCar({}));
-        dispatch(setReturnCar({}));
         history.push("/ticket-management");
     }
     function handleCloseModal() {
@@ -30,29 +24,12 @@ export const BookingApprovalButton = (props) => {
     function handleChange(e) {
         setReasonReject(e.target.value)
     }
-    function handleClickAccept() {
-        var data = {
-            id: props.ticket.id,
-            reasonReject: reasonReject,
-            status: TICKET_STATUS.REJECTED
-        }
-        setIsOpenModal(false);
-        dispatch(updateTicketRequest(data))
-        dispatch(setBookedTrips([]));
-        dispatch(setTrips([]));
-        dispatch(setMoveCar({}));
-        dispatch(setReturnCar({}));
-    }
     function handleClickBackModal() {
         setIsOpenModal(false);
     }
     function handleUpdate() {
         props.onHandleUpdateTicket();
         setIsOpenModal(false);
-        dispatch(setBookedTrips([]));
-        dispatch(setTrips([]));
-        dispatch(setMoveCar({}));
-        dispatch(setReturnCar({}));
         history.push("/ticket-management");
     }
     useEffect(() => {
@@ -68,7 +45,6 @@ export const BookingApprovalButton = (props) => {
                 {
                     isUpdate ?
                         <button
-                            disabled
                             className="btn btn-outline-primary btn-sm mr-1"
                             onClick={handleUpdate}
                         >
@@ -113,7 +89,7 @@ export const BookingApprovalButton = (props) => {
                     <div className="w-100" />
                     <div className="col-12 mt-2">
                         <button
-                            onClick={handleClickAccept}
+                            onClick={props.onHandleDeleteTicket}
                             className="btn btn-outline-primary btn-sm mr-1"
                         >
                             <i className="fas fa-check-circle mr-1"></i>

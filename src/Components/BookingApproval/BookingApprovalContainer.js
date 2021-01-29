@@ -1,139 +1,97 @@
 import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { BookingApprovalButton } from "./BookingApprovalButton";
 import { DriverTable } from "./DriverTable";
 import { LocationTableReadOnly } from "./LocationTableReadOnly"
 import { TicketDetailReadOnly } from "./TicketDetailReadOnly"
 import { TicketInformationReadOnly } from "./TicketInformationReadOnly"
 import moment from 'moment';
-import { TICKET_STATUS } from "../../Constants/CommonsConstants";
-import { ticketTripsAddRequest, updateTicketTripsRequest } from "../../ActionCreators/bookingApprovalActionCreator";
+import { END_POINT, HTTP_METHOD, TICKET_STATUS } from "../../Constants/CommonsConstants";
+import { notification, NOTIFICATION_TYPE } from "../../Helpers/notification";
+import { callApi } from "../../Helpers/callApi";
 
 export const BookingApprovalContainer = () => {
-    const { ticketId } = useParams();
+    const history = useHistory();
     const dispatch = useDispatch();
     const employee = useSelector(state => state.appReducer.employee);
-    const ticket = useSelector(state => state.adminReducer.ticketRequests).find(ticket => {
-        return +ticket.id === +ticketId;
-    });
-    const moveCar = useSelector(state => state.bookingApprovalReducer.moveCar);
-    const returnCar = useSelector(state => state.bookingApprovalReducer.returnCar);
+    const ticket = useSelector(state => state.bookingApprovalReducer.ticket)
+    const ticketCars = useSelector(state => state.bookingApprovalReducer.ticketCars);
     const noteForDriver = useSelector(state => state.bookingApprovalReducer.noteForDriver)
-    const bookedTrips = useSelector(state => state.bookingApprovalReducer.bookedTrips)
-    console.log("bookedTrips", bookedTrips);
-    function handleClickApprove() {
-        if (isEmpty(returnCar)) {
-            const ticketTrip1 = {
-                ticket: {
-                    id: ticket.id,
-                    approverId: employee.id,
-                    approverName: employee.name,
-                    approvedDate: moment().format("DD/MM/YYYY"),
-                    status: TICKET_STATUS.APPROVED
-                },
-                trip: {
-                    isFinish: false,
-                    startDate: ticket.startDate,
-                    // fromLocation: ticket.fromLocation,
-                    // toLocation: ticket.toLocation,
-                    noteForDriver: noteForDriver,
-                    driverId: moveCar.driverId,
-                    carId: moveCar.carId,
-                    type: "MOVE"
-                }
+    const selectedCars = useSelector(state => state.bookingApprovalReducer.selectedCars);
+    async function handleClickApprove() {
+        selectedCars && selectedCars.forEach(async selectedCar => {
+            const ticketUpdate = {
+                ...ticket,
+                handlerId: employee.id,
+                handlerName: employee.name,
+                handledDate: moment().format("DD/MM/YYYY"),
+                status: TICKET_STATUS.APPROVED
             }
-            const data = {
-                ticketTripRequests: [ticketTrip1]
+            const ticketUpdateResponse = await callApi(`${END_POINT}/tickets`, HTTP_METHOD.PUT, ticketUpdate);
+            if (ticketUpdateResponse.status !== 200) {
+                notification(NOTIFICATION_TYPE.ERROR, "Update ticket fail");
+                return;
             }
-            dispatch(ticketTripsAddRequest(data));
-        }
-        else {
-            const ticketTrip1 = {
-                ticket: {
-                    id: ticket.id,
-                    approverId: employee.id,
-                    approverName: employee.name,
-                    approvedDate: moment().format("DD/MM/YYYY"),
-                    status: TICKET_STATUS.APPROVED
-                },
-                trip: {
-                    isFinish: false,
-                    startDate: ticket.startDate,
-                    // fromLocation: ticket.fromLocation,
-                    // toLocation: ticket.toLocation,
-                    noteForDriver: noteForDriver,
-                    driverId: moveCar.driverId,
-                    carId: moveCar.carId,
-                    type: "MOVE"
-                }
+            const car = {
+                ...selectedCar,
+                isBooked: true,
             }
-            const ticketTrip2 = {
-                ticket: {
-                    id: ticket.id,
-                    approverId: employee.id,
-                    approverName: employee.name,
-                    approvedDate: moment().format("DD/MM/YYYY"),
-                    status: TICKET_STATUS.APPROVED
-                },
-                trip: {
-                    isFinish: false,
-                    startDate: ticket.endDate,
-                    // fromLocation: ticket.toLocation,
-                    // toLocation: ticket.fromLocation,
-                    noteForDriver: noteForDriver,
-                    driverId: returnCar.driverId,
-                    carId: returnCar.carId,
-                    type: "RETURN"
-                }
+            const ticketId = ticketUpdateResponse.data.id;
+            const carUpdateResponse = await callApi(`${END_POINT}/cars/`, HTTP_METHOD.PUT, car)
+            if (carUpdateResponse.status !== 200) {
+                return;
             }
-            const data = {
-                ticketTripRequests: [ticketTrip1, ticketTrip2]
+            const ticketCar = {
+                ticketId: ticketId,
+                carId: selectedCar.id
             }
-            dispatch(ticketTripsAddRequest(data));
-        }
+            const ticketCarUpdateResponse = await callApi(`${END_POINT}/ticket-car`, HTTP_METHOD.POST, ticketCar)
+            if (ticketCarUpdateResponse.status !== 200) {
+                return
+            }
+        });
+        notification(NOTIFICATION_TYPE.SUCCESS, "Thành Công");
+        history.push("/ticket-management");
 
     }
-    function handleUpdateTicket() {
-        if (isEmpty(returnCar)) {
-            const ticketTrip1 = {
-                id: bookedTrips && bookedTrips.find(item => item.type === "MOVE").id,
-                startDate: ticket.startDate,
-                noteForDriver: noteForDriver,
-                driverId: moveCar.driverId,
-                carId: moveCar.carId,
-                type: "MOVE"
-
+    async function handleUpdateTicket() {
+        for (let i = 0; i < selectedCars.length; i++) {
+            const ticketCarUpdate = {
+                id: ticketCars[i].id,
+                ticketId: ticket.id,
+                carId: selectedCars[i].id
             }
-            const data = [ticketTrip1]
-
-            dispatch(updateTicketTripsRequest(ticketId, data));
+            const ticketCarUpdateResponse = await callApi(`${END_POINT}/ticket-car`, HTTP_METHOD.PUT, ticketCarUpdate);
+            if (ticketCarUpdateResponse.status !== 200) {
+                return notification(NOTIFICATION_TYPE.ERROR, "Cập Nhật Thất Bại");
+            }
         }
-        else {
-            const ticketTrip1 = {
-                id: bookedTrips && bookedTrips.find(item => item.type === "MOVE").id,
-                isFinish: false,
-                startDate: ticket.startDate,
-                noteForDriver: noteForDriver,
-                driverId: moveCar.driverId,
-                carId: moveCar.carId,
-                type: "MOVE"
-
-            }
-            const ticketTrip2 = {
-                id: bookedTrips && bookedTrips.find(item => item.type === "RETURN").id,
-                isFinish: false,
-                startDate: ticket.endDate,
-                noteForDriver: noteForDriver,
-                driverId: returnCar.driverId,
-                carId: returnCar.carId,
-                type: "RETURN"
-
-            }
-            const data = [ticketTrip1, ticketTrip2]
-
-            dispatch(updateTicketTripsRequest(ticketId, data));
+        notification(NOTIFICATION_TYPE.SUCCESS, "Cập Nhật Thành Công");
+        history.push("/ticket-management");
+    }
+    async function handleCancelTicket() {
+        const ticketUpdate = {
+            ...ticket,
+            handlerId: employee.id,
+            handlerName: employee.name,
+            handledDate: moment().format("DD/MM/YYYY"),
+            status: TICKET_STATUS.REJECTED
         }
+        const ticketUpdateResponse = await callApi(`${END_POINT}/tickets`, HTTP_METHOD.PUT, ticketUpdate);
+        if (ticketUpdateResponse.status !== 200) {
+            notification(NOTIFICATION_TYPE.ERROR, "Update ticket fail");
+            return;
+        }
+        ticketCars.forEach(async ticketCar => {
+            const ticketCarDeleteResponse = await callApi(`${END_POINT}/ticket-car`, HTTP_METHOD.DELETE, ticketCar);
+            if (ticketCarDeleteResponse.status !== 200) {
+                notification(NOTIFICATION_TYPE.ERROR, "Delete ticket car fail");
+                return;
+            }
+        });
+        notification(NOTIFICATION_TYPE.SUCCESS, "Thành Công");
+        history.push("/ticket-management");
     }
     return (
         <div className="row">
@@ -151,6 +109,7 @@ export const BookingApprovalContainer = () => {
                         <BookingApprovalButton
                             onHandleClickApprove={handleClickApprove}
                             onHandleUpdateTicket={handleUpdateTicket}
+                            onHandleDeleteTicket={handleCancelTicket}
                             ticket={ticket}
                         />
                     </div>

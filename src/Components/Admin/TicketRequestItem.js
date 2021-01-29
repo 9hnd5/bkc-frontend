@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { TICKET_STATUS } from "../../Constants/CommonsConstants";
 import Modal from 'react-responsive-modal';
-import { updateTicketRequest } from "../../ActionCreators/adminActionCreator";
 import { useDispatch } from "react-redux";
 
 export const TicketRequestItem = (props) => {
@@ -25,14 +24,8 @@ export const TicketRequestItem = (props) => {
     function handleReject() {
         setIsOpenModal(true);
     }
-    function handleClickAccept() {
-        var data = {
-            id: ticketRequestItem.id,
-            reasonReject: reasonReject,
-            status: TICKET_STATUS.REJECTED
-        }
-        dispatch(updateTicketRequest(data))
-        setIsOpenModal(false);
+    function handleCancelTicket() {
+        
     }
     function handleClickBack() {
         setIsOpenModal(false);
@@ -116,7 +109,7 @@ export const TicketRequestItem = (props) => {
                     <div className="w-100" />
                     <div className="col-12 mt-2">
                         <button
-                            onClick={handleClickAccept}
+                            onClick={handleCancelTicket}
                             className="btn btn-outline-primary btn-sm mr-2"
                         >
                             <i className="fas fa-check-circle mr-1"></i>

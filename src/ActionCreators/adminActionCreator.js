@@ -8,24 +8,13 @@ export const setTicketRequests = (ticketRequests) => {
         ticketRequests
     }
 }
-export const updateTicket = ticket => {
-    return {
-        type: UPDATE_TICKET_REQUEST,
-        ticket
-    }
-}
 export const setDrivers = (drivers) => {
     return {
         type: SET_DRIVERS,
         drivers
     }
 }
-export const setTrips = trips => {
-    return {
-        type: SET_TRIPS,
-        trips
-    }
-}
+
 
 
 
@@ -47,15 +36,5 @@ export const fetchDriversByBuId = buId => {
         if(res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Loading Driver Fail");
         const drivers = res.data;
         dispatch(setDrivers(drivers));
-    }
-}
-
-export const updateTicketRequest = data => {
-    return async dispatch => {
-        const res = await callApi(`${END_POINT}/ticket-approval/tickets`, HTTP_METHOD.PATCH, data);
-        if(res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Reject Fail");
-        notification(NOTIFICATION_TYPE.SUCCESS, "Succcess");
-        const ticket = res.data;
-        dispatch(updateTicket(ticket));
     }
 }

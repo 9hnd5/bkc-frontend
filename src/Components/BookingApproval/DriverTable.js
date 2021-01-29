@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { DriverItem } from "./DriverItem";
@@ -5,11 +6,23 @@ import { DriverItem } from "./DriverItem";
 export const DriverTable = () => {
     const {t} = useTranslation();
     const drivers = useSelector(state => state.adminReducer.drivers);
+    const [moveCarId, setMoveCarId] = useState("");
+    const [returnCarId, setReturnCarId] = useState("");
+    function handleCheckedMoveCar(moveCarId){
+        setMoveCarId(moveCarId);
+    }
+    function handleCheckReturnCar(returnCarId){
+        setReturnCarId(returnCarId);
+    }
     const displayDriver = drivers && drivers.map((driver, index) => {
         return <DriverItem
             key={index}
             no={index + 1}
             driver={driver}
+            moveCarId={moveCarId}
+            returnCarId={returnCarId}
+            onHandleCheckedMoveCar={handleCheckedMoveCar}
+            onHandleCheckReturnCar={handleCheckReturnCar}
         />
     });
     return (

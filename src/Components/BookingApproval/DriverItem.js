@@ -3,117 +3,35 @@ import { Fragment, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { setBookedTrips, setMoveCar, setNoteForDriver, setReturnCar, setTrips } from "../../ActionCreators/bookingApprovalActionCreator";
+import { setNoteForDriver, setSelectedCar } from "../../ActionCreators/bookingApprovalActionCreator";
 import formatPhoneNumber from "../../Helpers/formatPhoneNumber";
+import remove from 'lodash/remove';
 
 export const DriverItem = (props) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { driver, no } = props;
-    const [isSelectedMoveCar, setIsSelectedMoveCar] = useState(false);
-    const [isSelectedReturnCar, setIsSelectedReturnCar] = useState(false);
-    const { ticketId } = useParams();
-    const [noteForDriverLocal, setNoteForDriverLocal] = useState("");
-    const [moveCarLocal, setMoveCarLocal] = useState({});
-    const [returnCarLocal, setReturnCarLocal] = useState({});
-    const moveCar = useSelector(state => state.bookingApprovalReducer.moveCar);
-    const returnCar = useSelector(state => state.bookingApprovalReducer.returnCar);
-    const bookedTrips = useSelector(state => state.bookingApprovalReducer.bookedTrips)
-    const trips = useSelector(state => state.bookingApprovalReducer.trips)
-    const ticket = useSelector(state => state.adminReducer.ticketRequests).find(ticket => {
-        return +ticket.id === +ticketId;
-    });
-    // console.log("driver", driver);
-    // console.log("ticket", ticket);
-    console.log("bookedTrips", bookedTrips);
-    console.log("car Id, isSelectedMoveCar", driver.carId + ", " + isSelectedMoveCar);
-    function handleMoveCarChange(e) {
-        if (e.target.checked) {
-            const index = trips && trips.findIndex(trip => +trip.carId === +driver.carId)
-            if (index >= 0) {
-                alert("Xe này đã được đặt");
-            }
-            setMoveCarLocal({
-                ...moveCarLocal,
-                driverId: driver.id,
-                carId: driver.car.id
-            })
-            setIsSelectedMoveCar(!isSelectedMoveCar);
-            return;
+    const ticket = useSelector(state => state.bookingApprovalReducer.ticket)
+    const ticketCars = useSelector(state => state.bookingApprovalReducer.ticketCars);
+    const noteForDriver = useSelector(state => state.bookingApprovalReducer.noteForDriver);
+    function handleCheckedCar(e) {
+        if (e.target.name === "moveCar") {
+            props.onHandleCheckedMoveCar(driver.car.id);
+        }else{
+            props.onHandleCheckReturnCar(driver.car.id);
         }
-        setMoveCarLocal({
-            ...moveCarLocal,
-            driverId: driver.id,
-            carId: driver.car.id
-        })
-        setIsSelectedMoveCar(!isSelectedMoveCar);
-        return;
-    }
-    function handleReturnCarChange(e) {
-        if (e.target.checked) {
-            const index = trips && trips.findIndex(trip => +trip.carId === +driver.carId)
-            if (index >= 0) alert("Xe này đã được đặt");
-            setReturnCarLocal({
-                ...returnCarLocal,
-                driverId: driver.id,
-                carId: driver.car.id
-            })
-            return setIsSelectedReturnCar(!isSelectedReturnCar);
+        const car = {
+            type: e.target.name,
+            ...driver.car
         }
-        setReturnCarLocal({
-            ...returnCarLocal,
-            driverId: driver.id,
-            carId: driver.car.id
-        })
-        setIsSelectedReturnCar(!isSelectedReturnCar);
+        dispatch(setSelectedCar(car));
     }
     function handleChangeNoteForDriverchange(e) {
-        setNoteForDriverLocal(e.target.value);
+        dispatch(setNoteForDriver(e.target.value));
     }
     useEffect(() => {
-        if (isSelectedMoveCar) {
-            dispatch(setMoveCar(moveCarLocal));
-        } else {
-            dispatch(setMoveCar({}));
-        }
-    }, [isSelectedMoveCar])
-    useEffect(() => {
-        if (isSelectedReturnCar) {
-            dispatch(setReturnCar(returnCarLocal));
-        } else {
-            dispatch(setReturnCar({}));
-        }
-    }, [isSelectedReturnCar])
-    useEffect(() => {
-        dispatch(setNoteForDriver(noteForDriverLocal));
-    }, [noteForDriverLocal])
-    useEffect(() => {
-        const filterTrips = bookedTrips && bookedTrips.filter(trip => +trip.carId === +driver.carId);
-        if (!isEmpty(filterTrips)) {
-            filterTrips.forEach(trip => {
-                if (trip.type === "MOVE") {
-                    setIsSelectedMoveCar(!isSelectedMoveCar);
-                    setMoveCarLocal({
-                        ...moveCarLocal,
-                        driverId: driver.id,
-                        carId: driver.car.id
-                    })
-                }
-                if (trip.type === "RETURN") {
-                    setIsSelectedReturnCar(!isSelectedReturnCar);
-                    setReturnCarLocal({
-                        ...returnCarLocal,
-                        driverId: driver.id,
-                        carId: driver.car.id
-                    })
-                }
-            })
-        }
-        else {
-            setIsSelectedMoveCar(false);
-            setIsSelectedReturnCar(false);
-        }
-    }, [bookedTrips])
+       
+    }, [ticketCars])
     return (
         <Fragment>
             <tr>
@@ -125,24 +43,29 @@ export const DriverItem = (props) => {
                 <td data-label={t("trangthai")}>{""}</td>
                 <td data-label={t("chonxengaydi")}>
                     <input
-                        type="checkbox"
-                        onChange={handleMoveCarChange}
-                        checked={isSelectedMoveCar}
+                        type="radio"
+                        name="moveCar"
+                        onChange={handleCheckedCar}
+                        value={driver.car.id}
+                        checked={props.moveCarId === driver.car.id}
+
                     />
                 </td>
                 <td data-label={t("chonxengayve")}>
                     <input
-                        type="checkbox"
-                        onChange={handleReturnCarChange}
-                        checked={isSelectedReturnCar}
-                        disabled={isEmpty(ticket.endDate)}
+                        type="radio"
+                        name="returnCar"
+                        onChange={handleCheckedCar}
+                        value={driver.car.id}
+                        checked={props.returnCarId===driver.car.id}
                     />
                 </td>
                 <td data-label={t("ghichuchotaixe")}>
                     <input
-                        value={noteForDriverLocal}
+                        type="text"
+                        name="noteForDriver" type="text"
                         onChange={handleChangeNoteForDriverchange}
-                        name="noteForDriverLocal" type="text"
+                        value={noteForDriver}
                         className="form-control form-control-sm"
                         autoComplete="off"
                     />
