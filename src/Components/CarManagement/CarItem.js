@@ -14,7 +14,6 @@ export const CarItem = props => {
     const [carItemLocal, setCarItemLocal] = useState({ ...CAR_ADD_DEFAULT });
     const [prevCarItemLocal, setPrevCarItemLocal] = useState({ ...CAR_ADD_DEFAULT });
     const [bus, setBus] = useState([]);
-    console.log("carItem", carItemLocal);
     function handleClickUpdate() {
         setIsUpdate(true);
     }
@@ -104,10 +103,10 @@ export const CarItem = props => {
                                     <i className="fas fa-edit mr-1"></i>
                                     {t("suayeucau")}
                                 </button>
-                                <button onClick={handleClickDelete} className="btn btn-outline-danger btn-sm">
+                                {/* <button onClick={handleClickDelete} className="btn btn-outline-danger btn-sm">
                                     <i className="fas fa-trash-alt mr-1"></i>
                                     {t("xoayeucau")}
-                                </button>
+                                </button> */}
                             </Fragment>
                     }
                 </td>

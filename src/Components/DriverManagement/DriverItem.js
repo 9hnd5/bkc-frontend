@@ -1,12 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteDriver, deleteDriverRequest, updateDriverRequest } from "../../ActionCreators/driverManagementActionCreator";
 import { DRIVER_ADD_DEFAULT, END_POINT, HTTP_METHOD } from "../../Constants/CommonsConstants";
 import { callApi } from "../../Helpers/callApi";
 import formatPhoneNumber from "../../Helpers/formatPhoneNumber";
 import { notification, NOTIFICATION_TYPE } from "../../Helpers/notification";
 import { AutoComplete1 } from "../Commons/AutoComplete1";
+import isEmpty from 'lodash/isEmpty';
 
 export const DriverItem = props => {
     const { t } = useTranslation();
@@ -17,7 +18,8 @@ export const DriverItem = props => {
     const [suggestionDriverNames, setSuggestionDriverNames] = useState([]);
     const [driverLocal, setDriverLocal] = useState({ ...DRIVER_ADD_DEFAULT })
     const [prevDriverLocal, setPrevDriverLocal] = useState({ ...DRIVER_ADD_DEFAULT })
-    const [cars, setCars] = useState([])
+    const cars = useSelector(state => state.driverManagementReducer.cars);
+    console.log("cars", cars);
     console.log("driverLocal", driverLocal);
     async function handleChange(e) {
         if (e.target.name === "employeeName") {
@@ -77,15 +79,15 @@ export const DriverItem = props => {
             car: car
         })
     }
-    useEffect(() => {
-        async function fetchCars() {
-            const res = await callApi(`${END_POINT}/cars`, HTTP_METHOD.GET, null);
-            if (res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Load car fail");
-            const cars = res.data;
-            setCars(cars);
-        }
-        fetchCars();
-    }, []);
+    // useEffect(() => {
+    //     async function fetchCars() {
+    //         const res = await callApi(`${END_POINT}/cars/?buId=${employee.buId}`, HTTP_METHOD.GET, null);
+    //         if (res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Load car fail");
+    //         const cars = res.data;
+    //         setCars(cars);
+    //     }
+    //     fetchCars();
+    // }, []);
     useEffect(() => {
         setDriverLocal(props.driver);
         setPrevDriverLocal(props.driver);
@@ -110,20 +112,21 @@ export const DriverItem = props => {
                 </td>
                 <td data-label={t("sodienthoaitaixe")}>{isUpdate ? <input autoComplete="off" value={formatPhoneNumber(driverLocal.employeePhone)} onChange={handleChange} type="text" className="form-control form-control-sm" name="employeePhone" /> : formatPhoneNumber(driverLocal.employeePhone)}</td>
                 <td data-label={t("tenbu")}>{isUpdate ? <input autoComplete="off" value={driverLocal.employeeBuName} onChange={handleChange} type="text" className="form-control form-control-sm" name="employeeBuName" /> : driverLocal.employeeBuName}</td>
-                <td data-label={t("xedanglai")}>
+                <td data-label={t("biensoxe")}>
                     {
                         isUpdate ?
                             <select onChange={handleCarChange} value={driverLocal.carId} className="custom-select custom-select-sm">
-                                <option value="">---{t("chonxe")}---</option>
+                                <option value="">---{isEmpty(cars) ? "Hết xe" : t("chonxe")}---</option>
                                 {
                                     cars && cars.map((car, index) => {
                                         return <option key={index} value={car.id}>{car.number}</option>
                                     })
                                 }
                             </select> :
-                            driverLocal && driverLocal.car && driverLocal.car.id
+                            driverLocal && driverLocal.car && driverLocal.car.number ? driverLocal.car.number : "Chưa gán xe"
                     }
                 </td>
+                <td data-label={t("socho")}>{driverLocal.car && driverLocal.car.totalSeat}</td>
                 <td data-label={t("hanhdong")}>
                     {
                         isUpdate ?

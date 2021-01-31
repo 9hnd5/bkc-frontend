@@ -1,4 +1,0 @@
-export const SET_NOTE_FOR_DRIVER = "SET_NOTE_FOR_DRIVER";
-export const SET_SELECTED_CAR = "SET_SELECTED_CAR";
-export const SET_TICKET = "SET_TICKET";
-export const SET_TICKET_CARS = "SET_TICKET_CARS";

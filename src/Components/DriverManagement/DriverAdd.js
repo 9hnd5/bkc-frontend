@@ -5,19 +5,19 @@ import { AutoComplete1 } from '../Commons/AutoComplete1';
 import { callApi } from '../../Helpers/callApi';
 import { DRIVER_ADD_DEFAULT, END_POINT, HTTP_METHOD } from '../../Constants/CommonsConstants';
 import { notification, NOTIFICATION_TYPE } from '../../Helpers/notification';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addDriverRequest } from './../../ActionCreators/driverManagementActionCreator'
 import { useTranslation } from 'react-i18next';
+import isEmpty from 'lodash/isEmpty';
 export const DriverAdd = props => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [suggestionDriverNames, setSuggestionDriverNames] = useState([]);
-    const [cars, setCars] = useState([]);
+    const cars = useSelector(state => state.driverManagementReducer.cars);
     const [driverAdd, setDriverAdd] = useState({ ...DRIVER_ADD_DEFAULT })
     const [employees, setEmployees] = useState([]);
     console.log("driverAdd", driverAdd);
-    // console.log("cars", cars);
     function handleClickAddDriver() {
         setIsOpenModal(true);
     }
@@ -76,24 +76,21 @@ export const DriverAdd = props => {
         setIsOpenModal(false);
     }
     function handleCarChange(e) {
-        const car = cars.find(car => {
-            return +car.id === +e.target.value
-        });
         setDriverAdd({
             ...driverAdd,
             carId: e.target.value,
-            car: car
+            car: cars.find(car => +car.id === +e.target.value)
         })
     }
-    useEffect(() => {
-        async function fetchCars() {
-            const res = await callApi(`${END_POINT}/cars`, HTTP_METHOD.GET, null);
-            if (res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Load car fail");
-            const cars = res.data;
-            setCars(cars);
-        }
-        fetchCars();
-    }, []);
+    // useEffect(() => {
+    //     async function fetchCars() {
+    //         const res = await callApi(`${END_POINT}/cars/?buId=${employee.buId}`, HTTP_METHOD.GET, null);
+    //         if (res.status !== 200) return notification(NOTIFICATION_TYPE.ERROR, "Load car fail");
+    //         const cars = res.data;
+    //         setCars(cars);
+    //     }
+    //     fetchCars();
+    // }, []);
     return (
         <div className="row">
             <div className="col-12 col-xl-12">
@@ -146,7 +143,7 @@ export const DriverAdd = props => {
                         <div className="col-6">
                             <label className="d-flex align-items-center">
                                 <strong>{t("chonxe")}</strong>
-                                <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" />
+                                {/* <i className="fas fa-asterisk fa-xs mr-1 asterisk ml-1" /> */}
                             </label>
                         </div>
                         <div className="w-100"></div>
@@ -156,7 +153,7 @@ export const DriverAdd = props => {
                         <div className="col-6">
                             <select onChange={handleCarChange} value={driverAdd.carId} className="custom-select custom-select-sm">
                                 <option value="">
-                                    ---{t("chonxe")}---
+                                    ---{isEmpty(cars)? "Hết xe": t("chonxe")}---
                                 </option>
                                 {
                                     cars && cars.map((car, index) => {

@@ -10,11 +10,11 @@ import { NotificationContainer } from 'react-notifications';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-notifications/lib/notifications.css';
-import { BookingRequest } from "./Pages/BookingRequest";
+import { TicketRequest } from "./Pages/TicketRequest";
 import { useEffect } from "react";
-import { BookingHistory } from "./Pages/BookingHistory";
+import { TicketHistory } from "./Pages/TicketHistory";
 import { TicketManagement } from "./Pages/TicketManagement";
-import { BookingApproval } from "./Pages/BookingApproval";
+import { TicketHandle } from "./Pages/TicketHandle";
 import { CarManagement } from "./Pages/CarManagement";
 import { DriverManagement } from "./Pages/DriverManagement";
 import { ROLE } from "./Constants/CommonsConstants";
@@ -41,11 +41,11 @@ function App() {
           <div className="mt-1 mb-1"></div>
           <Switch>
             <PrivateRoute path="/ticket-request/:action?/:ticketId?" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
-              <BookingRequest />
+              <TicketRequest />
             </PrivateRoute>
 
             <PrivateRoute path="/ticket-history" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN, ROLE.MEMBER]}>
-              <BookingHistory />
+              <TicketHistory />
             </PrivateRoute>
 
             <PrivateRoute path="/ticket-management" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
@@ -53,7 +53,7 @@ function App() {
             </PrivateRoute>
 
             <PrivateRoute path="/booking-approval/:ticketId" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>
-              <BookingApproval />
+              <TicketHandle />
             </PrivateRoute>
 
             <PrivateRoute path="/car-management" roles={[ROLE.SUPER_ADMIN, ROLE.ADMIN]}>

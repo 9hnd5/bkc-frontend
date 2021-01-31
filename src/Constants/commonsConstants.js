@@ -8,6 +8,10 @@ export const HTTP_METHOD = {
     DELETE: "DELETE",
     PATCH: "PATCH"
 }
+export const CAR_STATUS = {
+    BOOKED: "Booked",
+    FREE: "Free"
+}
 export const BOOKING_DETAIL_DEFAULT = {
     startDate: "",
     endDate: "",
@@ -32,6 +36,9 @@ export const TICKET_STATUS = {
     DRAFT: "DRAFT",
     WAITING: "WAITING"
 }
+export const TICKET_IS_FINISH = {
+    
+}
 export const CAR_ADD_DEFAULT = {
     number: "",
     totalSeat: "",
@@ -48,8 +55,8 @@ export const DRIVER_ADD_DEFAULT = {
     employeeEmail: "",
     employeeBuId: "",
     employeeBuName: "",
-    carId: "",
-    car: {}
+    carId: -1,
+    car: undefined
 }
 export const ROLE = {
     SUPER_ADMIN: "SUPERADMIN",

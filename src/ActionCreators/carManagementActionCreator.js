@@ -29,9 +29,9 @@ export const deleteCar = car => {
 }
 
 
-export const fetchCar = () => {
+export const fetchAllCarByBuId = (buId) => {
     return async dispatch => {
-        const res = await callApi(`${END_POINT}/cars`, HTTP_METHOD.GET, null);
+        const res = await callApi(`${END_POINT}/all-car/${buId}`, HTTP_METHOD.GET, null);
         if(res.status !== 200){
             return notification(NOTIFICATION_TYPE.ERROR, "Load Car Fail");
         }

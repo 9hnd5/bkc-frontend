@@ -1,14 +1,15 @@
 import { useEffect } from "react"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPageName } from "../ActionCreators/appActionCreator";
-import { fetchCar } from "../ActionCreators/carManagementActionCreator";
+import { fetchAllCarByBuId } from "../ActionCreators/carManagementActionCreator";
 import { CarManagementContainer } from "../Components/CarManagement/CarManagementContainer"
 import './CarManagement.scss';
 
 export const CarManagement = () => {
     const dispatch = useDispatch();
+    const employee = useSelector(state => state.appReducer.employee);
     useEffect(() => {
-        dispatch(fetchCar());
+        dispatch(fetchAllCarByBuId(employee.buId));
         dispatch(setPageName("CarManagement"));
     });
     return(

@@ -1,6 +1,6 @@
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
-import { END_POINT, HTTP_METHOD } from './../../Constants/CommonsConstants';
+import { END_POINT, HTTP_METHOD } from '../../Constants/CommonsConstants';
 import { useState } from 'react';
 import { CAR_ADD_DEFAULT } from '../../Constants/CommonsConstants';
 import { callApi } from '../../Helpers/callApi';
@@ -17,12 +17,10 @@ export const CarAdd = props => {
     const [errors, setErrors] = useState({});
     const [carAdd, setCarAdd] = useState({ ...CAR_ADD_DEFAULT });
     const [bus, setBus] = useState([]);
-    console.log("carAdd", carAdd);
     function handleCloseModal() {
         setIsOpenModal(false);
         setCarAdd(CAR_ADD_DEFAULT)
     }
-
     function handleClickAddCar() {
         setIsOpenModal(true);
     }

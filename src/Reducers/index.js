@@ -1,18 +1,18 @@
 import { combineReducers } from "redux"
 import { appReducer } from "./appReducer"
 import { ticketReducer } from './ticketReducer'
-import { bookingHistoryReducer } from './bookingHistoryReducer'
-import { adminReducer } from './adminReducer'
+import { ticketHistoryReducer } from './ticketHistoryReducer'
+import { ticketManagementReducer } from './ticketManagementReducer'
 import { carManagementReducer } from './carManagementReducer'
 import { driverManagementReducer } from './driverManagementReducer';
-import { bookingApprovalReducer } from './bookingApprovalReducer'
+import { ticketHandleReducer } from './ticketHandleReducer'
 
 export const rootReducer = combineReducers({
     appReducer,
     ticketReducer,
-    bookingHistoryReducer,
-    adminReducer,
+    ticketHistoryReducer,
+    ticketManagementReducer,
     carManagementReducer,
     driverManagementReducer,
-    bookingApprovalReducer
+    ticketHandleReducer
 })

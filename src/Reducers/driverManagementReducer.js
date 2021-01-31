@@ -1,7 +1,8 @@
-import { DELETE_DRIVER, SET_DRIVER, SET_DRIVERS, UPDATE_DRIVER } from "../Constants/DriverManagementConstants";
+import { DELETE_DRIVER, SET_CARS, SET_DRIVER, SET_DRIVERS, UPDATE_DRIVER } from "../Constants/DriverManagementConstants";
 
 const initialState = {
-    drivers: []
+    drivers: [],
+    cars: [],
 }
 export const driverManagementReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -21,7 +22,7 @@ export const driverManagementReducer = (state = initialState, action) => {
             return {
                 ...state,
                 drivers: [...state.drivers].map(driver => {
-                    if(driver.id !== action.driver.id){
+                    if (driver.id !== action.driver.id) {
                         return driver;
                     }
                     return action.driver;
@@ -34,6 +35,12 @@ export const driverManagementReducer = (state = initialState, action) => {
                 drivers: [...state.drivers].filter(driver => {
                     return +driver.id !== +action.driver.id;
                 })
+            }
+        }
+        case SET_CARS: {
+            return {
+                ...state,
+                cars: action.cars
             }
         }
         default:

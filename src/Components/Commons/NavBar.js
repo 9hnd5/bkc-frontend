@@ -8,6 +8,7 @@ import { login, logout } from '../../Helpers/login';
 import { notification, NOTIFICATION_TYPE } from '../../Helpers/notification';
 import vnFlag from './../../Assets/Bootstrap-icon/vnFlag.jpg';
 import usaFlag from './../../Assets/Bootstrap-icon/usaFlag.jpg';
+import { useState } from 'react';
 export const NavBar = () => {
     const { t, i18n } = useTranslation();
     const history = useHistory();
@@ -18,9 +19,11 @@ export const NavBar = () => {
     const isShowNavBar = Object.keys(employee).length !== 0 ? true : false;
     const isShowAdmin = employee && (employee.role === ROLE.SUPER_ADMIN || employee.role === ROLE.ADMIN);
     const isShowTicketManagement = (employee.role === ROLE.SUPER_ADMIN || employee.role === ROLE.ADMIN) ? true : false;
+
+    const [tempEmailLogin, setTempEmailLogin] = useState("");
     async function handleClick(e) {
         if (e === "logout") {
-            logout();
+            // logout();
             dispatch(setEmployee({}));
             dispatch(setIsAuth(false));
             history.push("/");
@@ -36,12 +39,15 @@ export const NavBar = () => {
 
             // dispatch(requestAuthenticate("hoe.ph@greenfeed.com.vn"));
             // dispatch(requestAuthenticate("khiem.nt@greenfeed.com.vn"));
-            dispatch(requestAuthenticated("huy.ndinh@greenfeed.com.vn"));
-
+            // dispatch(requestAuthenticated("huy.ndinh@greenfeed.com.vn"));
+            dispatch(requestAuthenticated(tempEmailLogin));
         }
     }
     function handleChangeLanguage(lang) {
         i18n.changeLanguage(lang);
+    }
+    function handleChange(e) {
+        setTempEmailLogin(e.target.value)
     }
     return (
         <div className="container-fluid">
@@ -84,25 +90,35 @@ export const NavBar = () => {
                                         {t("admin")}
                                     </a>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <Link to="/car-management" className="dropdown-item" href="#">{t("quanlixe")}</Link>
                                         <Link to="/driver-management" className="dropdown-item" href="#">{t("quanlitaixe")}</Link>
+                                        <Link to="/car-management" className="dropdown-item" href="#">{t("quanlixe")}</Link>
                                         {/* <a className="dropdown-item" href="#">Quản Lí Tài Khoản</a> */}
                                     </div>
                                 </li>
                                 <li className="nav-item d-flex align-items-center ml-2">
-                                    {/* <button onClick={() => handleChangeLanguage("en")} className="btn btn-sm btn-primary" type="button">
-                                        {t("tienganh")}
-                                    </button>
-                                    <button onClick={() => handleChangeLanguage("vn")} className="btn btn-sm btn-primary" type="button">
-                                        {t("tiengviet")}
-                                    </button> */}
                                     <img onClick={() => handleChangeLanguage("vn")} className="mr-2" style={{ height: "26px", cursor: "pointer" }} src={vnFlag} />
                                     <img onClick={() => handleChangeLanguage("en")} style={{ height: "25px", cursor: "pointer" }} src={usaFlag} />
                                 </li>
                             </ul>
 
                         </div>
-                        <div className="btn__login">
+                        <form className="form-inline mr-150">
+                            <input
+                                onChange={handleChange}
+                                className="form-control mr-sm-2 form-control-sm"
+                                name="email"
+                                value={tempEmailLogin}
+                                placeholder="Type your email here"
+                            />
+                            <button
+                                className="btn btn-light my-2 my-sm-0 btn-sm"
+                                type="button"
+                                onClick={() => handleClick(!isAuth ? "login" : "logout")}
+                            >
+                                {!isAuth ? t("dangnhap") : t("dangxuat")}
+                            </button>
+                        </form>
+                        {/* <div className="btn__login">
                             <button
                                 onClick={() => handleClick(!isAuth ? "login" : "logout")}
                                 className="btn btn-light btn-sm my-2 my-sm-0"
@@ -110,7 +126,7 @@ export const NavBar = () => {
                                 <i className={!isAuth ? "fas fa-arrow-alt-circle-right mr-1" : "fas fa-arrow-alt-circle-left mr-1"}></i>
                                 {!isAuth ? t("dangnhap") : t("dangxuat")}
                             </button>
-                        </div>
+                        </div> */}
                     </nav>
                 </div>
             </div>
